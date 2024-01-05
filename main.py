@@ -1,30 +1,51 @@
 from pprint import pprint
+from datetime import datetime
 
 import requests
-import datetime
+
+now = datetime.now()
+current_timestamp = datetime.timestamp(now)
+
 url = "http://127.0.0.1:9503/api/messages.searchGlobal"
 
-payload = { "params": {
+payload = {"params": {
     "flags": 0,
-    "filter": { "_": "inputMessagesFilterEmpty" },
+    "filter": {"_": "inputMessagesFilterEmpty"},
     "folder_id": None,
-    "q": "Example json",
-    "offset_date": 1703877600,
-    "offset_peer": { "_": "inputPeerEmpty" },
+    "q": "#report",
+    "min_date": 1704450000,
+
+    "max_date": f"{current_timestamp}",
+    "offset_peer": {"_": "inputPeerEmpty"},
     "offset_id": 0,
-    "limit": 1
-  } }
+    "limit": 100
+}}
 headers = {"content-type": "application/json"}
 
 response = requests.get(url, json=payload, headers=headers).json()
 # type = response['response']['chats'][0]["_"]
 # url = response['response']['messages'][0]["entities"][3]["url"]
 #
-pprint(response)
-#
-# for i in :
-#     pprint(i)
+users = response['response']['users']
+for user in users:
 
+    lname = user.get("last_name",' ')
+
+    name = f'{user["first_name"]} {lname}'
+    username = user['username']
+    print(name)
+    print(username)
+
+# --------------------------------------------------------------
+"""extracting text from_id timestamp from response['messages']"""
+
+# msgs = response['response']['messages']
+# for msg in msgs:
+#     text = msg['message']
+#     from_id = msg['from_id']
+#     timestamp = msg['date']
+#     # print(msg)
+# --------------------------------------------------------------
 
 # --------------------------------------------------------------------------------------------------
 # import requests
@@ -39,11 +60,11 @@ pprint(response)
 #             "_": "inputMessagesFilterEmpty"
 #         },
 #         "folder_id": None,
-#         "q": "smarts software",
+#         "q": "#report",
 #         "offset_date": 0,
 #         "offset_peer": {
-#             "_": "inputPeerChannel",
-#             "channel_id": -1001896684971
+#             "_": "inputPeerChat",
+#             "chat_id": -1002109564785
 #         },
 #         "offset_id": 0,
 #         "limit": 10
