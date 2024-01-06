@@ -39,11 +39,11 @@ payload = json.dumps({
             "_": "inputMessagesFilterEmpty"
         },
         "folder_id": None,
-        "q": "smarts software",
+        "q": "#Report",
         "offset_date": 0,
         "offset_peer": {
-            "_": "inputPeerChannel",
-            "channel_id": -1001896684971
+            "_": "inputPeerChat",
+            "chat_id": -1002109564785
         },
         "offset_id": 0,
         "limit": 10
