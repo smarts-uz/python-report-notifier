@@ -1,6 +1,5 @@
-from pprint import pprint
-from parser.parser import Parser
+from Parsing.parser import Parser
 
 p = Parser()
 
-p.chats()
+p.messages()

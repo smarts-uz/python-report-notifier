@@ -6,6 +6,9 @@ now = datetime.now()
 current_timestamp = datetime.timestamp(now)
 
 class Parser:
+    def __init__(self):
+        pass
+
 
     def parsing(self):
         url = "http://192.168.3.54:9503/api/messages.searchGlobal"
@@ -30,11 +33,23 @@ class Parser:
     
     
     def chats(self):
+        info = []
         response = self.parsing()
         chats = response['response']['chats']
 
         for chat in chats:
-            pprint(chat)
+            pass
+
         
-        # return chats
-    
+        return chats
+
+    def messages(self):
+        respone = self.parsing()
+        messages = respone['response']['messages']
+
+        for message in messages:
+            pprint(message)
+            text = message['message']
+            from_id = message['from_id']
+            timestamp = message['date']
+
