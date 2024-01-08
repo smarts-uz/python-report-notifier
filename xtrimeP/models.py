@@ -17,6 +17,7 @@ class AuthGroup(models.Model):
 
 
 class AuthGroupPermissions(models.Model):
+    id = models.BigAutoField(primary_key=True)
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
     permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
 
@@ -27,9 +28,9 @@ class AuthGroupPermissions(models.Model):
 
 
 class AuthPermission(models.Model):
+    name = models.CharField(max_length=255)
     content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
     codename = models.CharField(max_length=100)
-    name = models.CharField(max_length=255)
 
     class Meta:
         managed = False
@@ -42,12 +43,12 @@ class AuthUser(models.Model):
     last_login = models.DateTimeField(blank=True, null=True)
     is_superuser = models.BooleanField()
     username = models.CharField(unique=True, max_length=150)
+    first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.CharField(max_length=254)
     is_staff = models.BooleanField()
     is_active = models.BooleanField()
     date_joined = models.DateTimeField()
-    first_name = models.CharField(max_length=150)
 
     class Meta:
         managed = False
@@ -55,6 +56,7 @@ class AuthUser(models.Model):
 
 
 class AuthUserGroups(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
 
@@ -65,6 +67,7 @@ class AuthUserGroups(models.Model):
 
 
 class AuthUserUserPermissions(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
     permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
 
@@ -75,13 +78,13 @@ class AuthUserUserPermissions(models.Model):
 
 
 class DjangoAdminLog(models.Model):
+    action_time = models.DateTimeField()
     object_id = models.TextField(blank=True, null=True)
     object_repr = models.CharField(max_length=200)
-    action_flag = models.PositiveSmallIntegerField()
+    action_flag = models.SmallIntegerField()
     change_message = models.TextField()
     content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
     user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    action_time = models.DateTimeField()
 
     class Meta:
         managed = False
@@ -99,6 +102,7 @@ class DjangoContentType(models.Model):
 
 
 class DjangoMigrations(models.Model):
+    id = models.BigAutoField(primary_key=True)
     app = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
     applied = models.DateTimeField()
@@ -116,3 +120,140 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+class Keyword(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    last_checked = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'keyword'
+
+
+class Message(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    datetime = models.DateField(blank=True, null=True)
+    author = models.CharField(max_length=255, blank=True, null=True)
+    keyword = models.ForeignKey(Keyword, models.DO_NOTHING)
+    content = models.TextField(blank=True, null=True)
+    files = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'message'
+
+
+class Source(models.Model):
+    id = models.IntegerField(primary_key=True)
+
+    class Meta:
+        managed = False
+        db_table = 'source'
+
+
+class TgGroupTexts(models.Model):
+    id = models.IntegerField(primary_key=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    full_url = models.CharField(max_length=255, blank=True, null=True)
+    tg_channel_text_id = models.IntegerField(blank=True, null=True)
+    out = models.SmallIntegerField(blank=True, null=True)
+    mentioned = models.SmallIntegerField(blank=True, null=True)
+    media_unread = models.SmallIntegerField(blank=True, null=True)
+    silent = models.SmallIntegerField(blank=True, null=True)
+    post = models.SmallIntegerField(blank=True, null=True)
+    from_scheduled = models.SmallIntegerField(blank=True, null=True)
+    legacy = models.SmallIntegerField(blank=True, null=True)
+    edit_hide = models.SmallIntegerField(blank=True, null=True)
+    pinned = models.SmallIntegerField(blank=True, null=True)
+    noforwards = models.SmallIntegerField(blank=True, null=True)
+    tg_group_id = models.IntegerField(blank=True, null=True)
+    tg_id = models.IntegerField(blank=True, null=True)
+    from_id_field = models.CharField(db_column='from_id__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    from_id_user_id = models.BinaryField(blank=True, null=True)
+    peer_id_field = models.CharField(db_column='peer_id__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    peer_id_channel_id = models.IntegerField(blank=True, null=True)
+    fwd_from_field = models.CharField(db_column='fwd_from__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    fwd_from_imported = models.SmallIntegerField(blank=True, null=True)
+    fwd_from_from_id = models.TextField(blank=True, null=True)
+    fwd_from_date = models.DateTimeField(blank=True, null=True)
+    fwd_from_channel_post = models.IntegerField(blank=True, null=True)
+    fwd_from_saved_from_peer = models.TextField(blank=True, null=True)
+    fwd_from_saved_from_msg_id = models.IntegerField(blank=True, null=True)
+    entities = models.TextField(blank=True, null=True)
+    views = models.IntegerField(blank=True, null=True)
+    reply_to_field = models.CharField(db_column='reply_to__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    reply_to_reply_to_scheduled = models.SmallIntegerField(blank=True, null=True)
+    reply_to_reply_to_msg_id = models.CharField(max_length=11, blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+    message = models.TextField(blank=True, null=True)
+    replies_field = models.CharField(db_column='replies__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    replies_replies = models.IntegerField(blank=True, null=True)
+    replies_comments = models.SmallIntegerField(blank=True, null=True)
+    replies_replies_pts = models.IntegerField(blank=True, null=True)
+    replies_max_id = models.IntegerField(blank=True, null=True)
+    replies_read_max_id = models.IntegerField(blank=True, null=True)
+    to_id_field = models.CharField(db_column='to_id__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    to_id_channel_id = models.IntegerField(blank=True, null=True)
+    media_field = models.CharField(db_column='media__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    media = models.TextField(blank=True, null=True)
+    action_field = models.CharField(db_column='action__', max_length=255, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it ended with '_'.
+    action = models.TextField(blank=True, null=True)
+    dl_file_path = models.CharField(max_length=255, blank=True, null=True)
+    dl_file_size = models.FloatField(blank=True, null=True)
+    dl_status = models.SmallIntegerField(blank=True, null=True)
+    replies_channel_id = models.IntegerField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
+    mtproto = models.TextField(blank=True, null=True)
+    keyword_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tg_group_texts'
+
+
+class TgGroups(models.Model):
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    linked_channel_id = models.IntegerField(blank=True, null=True)
+    tg_id = models.BigIntegerField()
+    type = models.CharField(max_length=255, blank=True, null=True)
+    invite_link = models.CharField(max_length=255, blank=True, null=True)
+    bot_smarts_kick = models.SmallIntegerField(blank=True, null=True)
+    bot_join_remove = models.SmallIntegerField(blank=True, null=True)
+    restricted = models.CharField(max_length=255, blank=True, null=True)
+    access_hash = models.CharField(max_length=255, blank=True, null=True)
+    signatures = models.CharField(max_length=255, blank=True, null=True)
+    read_inbox_max_id = models.CharField(max_length=255, blank=True, null=True)
+    read_outbox_max_id = models.CharField(max_length=255, blank=True, null=True)
+    hidden_prehistory = models.CharField(max_length=255, blank=True, null=True)
+    bot_info = models.TextField(blank=True, null=True)
+    notify_settings = models.TextField(blank=True, null=True)
+    can_set_stickers = models.CharField(max_length=255, blank=True, null=True)
+    can_view_participants = models.CharField(max_length=255, blank=True, null=True)
+    can_set_username = models.CharField(max_length=255, blank=True, null=True)
+    participants_count = models.CharField(max_length=255, blank=True, null=True)
+    admins_count = models.CharField(max_length=255, blank=True, null=True)
+    kicked_count = models.CharField(max_length=255, blank=True, null=True)
+    banned_count = models.CharField(max_length=255, blank=True, null=True)
+    migrated_from_chat_id = models.CharField(max_length=255, blank=True, null=True)
+    migrated_from_max_id = models.CharField(max_length=255, blank=True, null=True)
+    pinned_msg_id = models.CharField(max_length=255, blank=True, null=True)
+    about = models.CharField(max_length=255, blank=True, null=True)
+    can_view_stats = models.CharField(max_length=255, blank=True, null=True)
+    online_count = models.CharField(max_length=255, blank=True, null=True)
+    invite = models.CharField(max_length=255, blank=True, null=True)
+    participants = models.TextField(blank=True, null=True)
+    mtproto = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(blank=True, null=True)
+    updated_at = models.DateTimeField(blank=True, null=True)
+    deleted_at = models.DateTimeField(blank=True, null=True)
+    hrm_project_id = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tg_groups'

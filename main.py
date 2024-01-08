@@ -23,18 +23,24 @@ payload = {"params": {
 headers = {"content-type": "application/json"}
 
 response = requests.get(url, json=payload, headers=headers).json()
+
+pprint(response)
+# for i in response['response']:
+#     print(i)
 # type = response['response']['chats'][0]["_"]
 # url = response['response']['messages'][0]["entities"][3]["url"]
+# from xtrimeP import models
+# users = response['response']['users']
+# pprint(users)
+# for user in users:
 #
-users = response['response']['users']
-for user in users:
-
-    lname = user.get("last_name",' ')
-
-    name = f'{user["first_name"]} {lname}'
-    username = user['username']
-    print(name)
-    print(username)
+#     lname = user.get("last_name",' ')
+#     username = user.get("username",'')
+#
+#     name = f'{user["first_name"]} {lname}'
+#     username = user[f'{username}']
+#     print(name)
+#     print(username)
 # --------------------------------------------------------------
 """extracting text from_id timestamp from response['messages']"""
 
