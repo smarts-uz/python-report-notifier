@@ -6,7 +6,7 @@ import requests
 now = datetime.now()
 current_timestamp = datetime.timestamp(now)
 
-url = "http://127.0.0.1:9503/api/messages.searchGlobal"
+url = "http://192.168.3.54:9503/api/messages.searchGlobal"
 
 payload = {"params": {
     "flags": 0,
@@ -35,7 +35,6 @@ for user in users:
     username = user['username']
     print(name)
     print(username)
-
 # --------------------------------------------------------------
 """extracting text from_id timestamp from response['messages']"""
 
