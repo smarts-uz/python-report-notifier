@@ -1,7 +1,7 @@
 import requests
 from pprint import pprint
 from datetime import datetime
-
+from  database.Database import *
 now = datetime.now()
 current_timestamp = datetime.timestamp(now)
 
@@ -12,13 +12,13 @@ class Parser:
 
     def parsing(self):
         url = "http://192.168.3.54:9503/api/messages.searchGlobal"
-
+        last_checked = get_last_timestamp(1)
         payload = {"params": {
             "flags": 0,
             "filter": {"_": "inputMessagesFilterEmpty"},
             "folder_id": None,
             "q": "#report",
-            "min_date": 1704450000,
+            "min_date": f'{last_checked}',
 
             "max_date": f"{current_timestamp}",
             "offset_peer": {"_": "inputPeerEmpty"},
@@ -28,6 +28,7 @@ class Parser:
         headers = {"content-type": "application/json"}
 
         response = requests.get(url, json=payload, headers=headers).json()
+        update_timestamp(1,current_timestamp)
 
         return response
     
