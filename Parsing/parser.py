@@ -1,10 +1,9 @@
 import requests
 from pprint import pprint
 from datetime import datetime
-
+import json
 now = datetime.now()
 current_timestamp = datetime.timestamp(now)
-
 
 class Parser:
     def __init__(self):
@@ -32,6 +31,7 @@ class Parser:
         return response
 
     def users(self):
+        data = []
         response = self.parsing()
         users = response['response']['users']
         for user in users:
@@ -42,10 +42,15 @@ class Parser:
             #       f"{fullname}"
             #       f"{username}"
             #       )
+            data.append({'user_id':user_id,
+                         'fullname':fullname,
+                         'username':username})
+        with open('users.json', mode='w', encoding='utf-8') as file:
+         json.dump(data, file, indent=4, ensure_ascii=False)
 
 
     def chats(self):
-
+        data = []
         response = self.parsing()
         chats = response['response']['chats']
 
@@ -55,6 +60,12 @@ class Parser:
             title = chat['title']
             type = chat['_']
 
+            data.append({"chat_id":chat_id,
+                         "title":title,
+                         "type":type})
+        with open('chats.json', mode='w', encoding='utf-8') as file:
+         json.dump(data, file, indent=4, ensure_ascii=False)
+
 
 
 
@@ -63,19 +74,18 @@ class Parser:
         response = self.parsing()
         messages = response['response']['messages']
         topic_id = None
+        data = []
         for message in messages:
 
             text = message['message']
             from_id = message.get('from_id', ' ')
             timestamp = message['date']
             peer_id = message['peer_id']
-            # if message.get('reply_to',' ') is not ' ':
-            #     topic_id = message['reply_to']['reply_to_msg_id']
 
 
-#             print(f"""
-#             {text}
-# {from_id}
-# {timestamp}
-# {peer_id}
-# {topic_id}""")
+            data.append({'from_id':from_id,
+                         'timestamp':timestamp,
+                         'peer_id':peer_id,
+                         'text':text})
+        with open('messages.json', mode='w', encoding='utf-8') as file:
+         json.dump(data, file, indent=4, ensure_ascii=False)
