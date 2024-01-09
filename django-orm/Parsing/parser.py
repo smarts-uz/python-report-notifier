@@ -7,13 +7,6 @@ current_timestamp = datetime.timestamp(now)
 
 
 
-
-
-
-
-
-
-
 class Parser:
     def __init__(self):
         pass
@@ -54,7 +47,7 @@ class Parser:
             data.append({'user_id':user_id,
                          'fullname':fullname,
                          'username':username})
-        with open('users.json', mode='w', encoding='utf-8') as file:
+        with open('db/json/users.json', mode='w', encoding='utf-8') as file:
          json.dump(data, file, indent=4, ensure_ascii=False)
 
 
@@ -72,7 +65,7 @@ class Parser:
             data.append({"chat_id":chat_id,
                          "title":title,
                          "type":type})
-        with open('chats.json', mode='w', encoding='utf-8') as file:
+        with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
          json.dump(data, file, indent=4, ensure_ascii=False)
 
 
@@ -96,5 +89,5 @@ class Parser:
                          'timestamp':timestamp,
                          'peer_id':peer_id,
                          'text':text})
-        with open('messages.json', mode='w', encoding='utf-8') as file:
+        with open('db/json/messages.json', mode='w', encoding='utf-8') as file:
          json.dump(data, file, indent=4, ensure_ascii=False)
