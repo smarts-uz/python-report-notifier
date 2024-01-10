@@ -37,3 +37,12 @@ Keyword.objects.create(
 #
 # for u in Keyword.objects.all():
 #     print(f'ID: {u.id} \tUsername: {u.name}')
+
+Users.objects.create(
+    user_id = 32153213,
+    username = 'supreme',
+    fullname = 'huiaskjn',
+)
+
+for u in Users.objects.all():
+    print(f'ID: {u.id} \tUsername: {u.username}')
