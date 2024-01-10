@@ -35,14 +35,26 @@ Keyword.objects.create(
     last_checked = now
 )
 #
-# for u in Keyword.objects.all():
-#     print(f'ID: {u.id} \tUsername: {u.name}')
+for u in Keyword.objects.all():
+    print(f'ID: {u.id} \tUsername: {u.name}')
+#
+# Users.objects.create(
+#     user_id = 32153213,
+#     username = 'supreme',
+#     fullname = 'huiaskjn',
+# )
 
-Users.objects.create(
-    user_id = 32153213,
-    username = 'supreme',
-    fullname = 'huiaskjn',
+Chats.objects.create(
+    id = 11,
+    chat_id = 2124633,
+    type = 'chats',
+    title = 'parser'
+
 )
+#
+# for u in Users.objects.all():
+#     print(f'ID: {u.id} \tUsername: {u.username}')
+#
+# for u in Chats.objects.all():
+#     print(f'ID: {u.id} \ttitle: {u.title}')
 
-for u in Users.objects.all():
-    print(f'ID: {u.id} \tUsername: {u.username}')
