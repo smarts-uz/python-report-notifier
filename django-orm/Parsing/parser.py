@@ -51,6 +51,7 @@ class Parser:
          json.dump(data, file, indent=4, ensure_ascii=False)
 
 
+
     def chats(self):
         data = []
         response = self.parsing()
@@ -67,6 +68,7 @@ class Parser:
                          "type":type})
         with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
          json.dump(data, file, indent=4, ensure_ascii=False)
+
 
 
 
@@ -91,3 +93,5 @@ class Parser:
                          'text':text})
         with open('db/json/messages.json', mode='w', encoding='utf-8') as file:
          json.dump(data, file, indent=4, ensure_ascii=False)
+
+
