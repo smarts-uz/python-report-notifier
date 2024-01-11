@@ -6,12 +6,15 @@ these settings as is, and skip to START OF APPLICATION section below """
 
 # Turn off bytecode generation
 import sys
+
 sys.dont_write_bytecode = True
 
 # Django specific settings
 import os
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
+
 django.setup()
 
 # Import your models for use in your script
@@ -23,6 +26,7 @@ from db.models import *
 """ Replace the code below with your own """
 
 from datetime import datetime
+
 now = datetime.now()
 #
 # # Seed a few users in the database
@@ -38,12 +42,21 @@ now = datetime.now()
 # for u in Keyword.objects.all():
 #     print(f'ID: {u.id} \tUsername: {u.name}')
 #
-# Users.objects.create(
-#     user_id = 32153213,
-#     username = 'supreme',
-#     fullname = 'huiaskjn',
-# )
-#
+Users.objects.create(
+
+    fullname='huiaskjn',
+    username='supreme',
+    user_id=102153213,
+)
+user = Users.objects.all()
+
+
+for i in user:
+
+    print(f'ID: {i.id} \tpeer_id: {i.fullname}')
+
+
+
 
 # Message.objects.create(
 #
@@ -64,8 +77,8 @@ now = datetime.now()
 #     print(f'ID: {u.id} \ttitle: {u.title}')
 
 
-
 from Parsing.parser import Parser
+
 p = Parser()
 # users = p.users()
 # for user in users:
@@ -86,17 +99,17 @@ p = Parser()
 #         username = 'hurihq'
 #     )
 
-
-chats = p.chats()
-for chat in chats:
-    chat_id = chat['chat_id']
-    type = chat['type']
-    title = chat['title']
-    Chats.objects.create(
-
-        chat_id=chat_id,
-        type=type,
-        title=title
-
-    )
-    print(f'success id:{chat_id}')
+#
+# chats = p.chats()
+# for chat in chats:
+#     chat_id = chat['chat_id']
+#     type = chat['type']
+#     title = chat['title']
+#     Chats.objects.create(
+#
+#         chat_id=chat_id,
+#         type=type,
+#         title=title
+#
+#     )
+#     print(f'success id:{chat_id}')

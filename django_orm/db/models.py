@@ -9,8 +9,7 @@ from django.db import models
 
 
 class Chats(models.Model):
-    id = models.AutoField(primary_key=True)
-    chat_id = models.IntegerField(unique=True)
+    chat_id = models.BigIntegerField(unique=True)
     type = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
 
@@ -19,10 +18,17 @@ class Chats(models.Model):
         db_table = 'chats'
 
 
-class Keyword(models.Model):
-    id = models.AutoField(primary_key=True)
+class Example(models.Model):
     name = models.CharField(max_length=255)
-    last_checked = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'example'
+
+
+class Keyword(models.Model):
+    name = models.CharField(max_length=255)
+    last_checked = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -30,9 +36,8 @@ class Keyword(models.Model):
 
 
 class Message(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
-    datetime = models.DateField(blank=True, null=True)
+    datetime = models.DateTimeField(blank=True, null=True)
     keyword_id = models.IntegerField()
     content = models.TextField(blank=True, null=True)
     files = models.CharField(max_length=255, blank=True, null=True)
@@ -46,7 +51,6 @@ class Message(models.Model):
 
 
 class TgGroupTexts(models.Model):
-    id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=255, blank=True, null=True)
     full_url = models.CharField(max_length=255, blank=True, null=True)
     tg_channel_text_id = models.IntegerField(blank=True, null=True)
@@ -108,10 +112,10 @@ class TgGroupTexts(models.Model):
 
 
 class Users(models.Model):
-    id = models.AutoField(primary_key=True)
-    user_id = models.IntegerField()
-    username = models.CharField(max_length=255)
-    fullname = models.CharField(max_length=255)
+    id = models.AutoField(primary_key= True)
+    fullname = models.CharField(max_length=255, blank=True, null=True)
+    username = models.CharField(max_length=255, blank=True, null=True)
+    user_id = models.BigIntegerField()
 
     class Meta:
         managed = False
