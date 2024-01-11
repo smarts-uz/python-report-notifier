@@ -38,3 +38,4 @@ DATABASES = {
 """
 
 INSTALLED_APPS = ("db",)
+# INSTALLED_APPS = ("django_orm.db",)
