@@ -2,9 +2,9 @@ import requests
 from pprint import pprint
 from datetime import datetime
 import json
+
 now = datetime.now()
 current_timestamp = datetime.timestamp(now)
-
 
 
 class Parser:
@@ -38,20 +38,18 @@ class Parser:
         users = response['response']['users']
         for user in users:
             user_id = user['id']
-            fullname = f'{user.get("first_name"," ")} {user.get("last_name"," ")}'
-            username = user.get('username',' ')
+            fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
+            username = user.get('username', ' ')
             # print(f"{user_id}"
             #       f"{fullname}"
             #       f"{username}"
             #       )
-            data.append({'user_id':user_id,
-                         'fullname':fullname,
-                         'username':username})
+            data.append({'user_id': user_id,
+                         'fullname': fullname,
+                         'username': username})
         # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
         return data
-
-
 
     def chats(self):
         data = []
@@ -61,20 +59,18 @@ class Parser:
         for chat in chats:
             # print(chat)
             chat_id = chat['id']
+            peer_id = int("-100" + str(chat_id))
             title = chat['title']
             type = chat['_']
 
-            data.append({"chat_id":chat_id,
-                         "title":title,
-                         "type":type})
+            data.append({"chat_id": chat_id,
+                         "peer_id": peer_id,
+                         "title": title,
+                         "type": type})
         # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
+
         return data
-
-
-
-
-
 
     def messages(self):
         response = self.parsing()
@@ -82,18 +78,16 @@ class Parser:
         topic_id = None
         data = []
         for message in messages:
-
             text = message['message']
             from_id = message.get('from_id', ' ')
             timestamp = message['date']
+            date = datetime.fromtimestamp(timestamp)
             peer_id = message['peer_id']
 
-
-            data.append({'from_id':from_id,
-                         'timestamp':timestamp,
-                         'peer_id':peer_id,
-                         'text':text})
-        with open('db/json/messages.json', mode='w', encoding='utf-8') as file:
-         json.dump(data, file, indent=4, ensure_ascii=False)
-
-
+            data.append({'user_id': from_id,
+                         'datetime': date,
+                         'peer_id': peer_id,
+                         'content': text})
+        # with open('db/json/messages.json', mode='w', encoding='utf-8') as file:
+        #     json.dump(data, file, indent=4, ensure_ascii=False)
+        return data

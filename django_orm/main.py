@@ -47,12 +47,32 @@ from datetime import datetime
 #             )
 #             Keyword.save()
 #             return "True"
+#
+from Parsing.parser import Parser
+parser = Parser()
+# Saving chats data to db
+chats = parser.chats()
+for chat in chats:
+    Chat.objects.get_or_create(**chat)
+    print(f'Data has been saved!: {chat["chat_id"]} || {chat["title"]}')
 
 
+#Saving users data to db
+users = parser.users()
+for user in users:
+    User.objects.get_or_create(**user)
+    print(f'Data has been saved!: {user["user_id"]} || {user["fullname"]}')
 
 
-#     # for i in natija:
+ #Saving messages data to db
+messages = parser.messages()
+for message in messages:
+    Message.objects.get_or_create(**message)
+    print(f'Data has been saved!: {message["content"]}')
+    # print(message)
 
-query = input("Enter query: ")
-response = Keyword.objects.filter(name__icontains=query)
-print(response)
+#
+# query = input("Enter query: ")
+# response = Keyword.objects.filter(name__icontains=query)
+# print(response)
+
