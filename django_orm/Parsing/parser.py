@@ -88,5 +88,4 @@ class Parser:
                          'datetime': date,
                          'peer_id': peer_id,
                          'content': text})
-
         return data
