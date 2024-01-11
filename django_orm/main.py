@@ -26,6 +26,9 @@ from db.models import *
 """ Replace the code below with your own """
 
 from datetime import datetime
+from Parsing.parser import Parser
+
+
 
 def db_check():
     response = ""
@@ -45,11 +48,37 @@ def db_check():
         # print(new_row.last_checked, query)
         return  new_row.last_checked, query
 
-a = db_check()
-print("Time:", a[0],"\nQ:", a[1])
+instance = db_check()
+parser = Parser(instance[0], instance[1])
+# print("Time:", type(instance[0]),"\nQ:", type(instance[1]))
+
+# t = parser.parsing(instance[0], instance[1])
 
 
 # query = input("Enter query: ")
 # response = Keyword.objects.filter(name__icontains=query)
 # fm = response.first()
 # print(response, fm)
+
+
+
+# Saving chats data to db
+chats = parser.chats()
+for chat in chats:
+    print(f'Data has been saved!: {chat["chat_id"]}  {chat["title"]}')
+    Chat.objects.get_or_create(**chat)
+
+
+#Saving users data to db
+users = parser.users()
+for user in users:
+    User.objects.get_or_create(**user)
+    print(f'Data has been saved!: {user["user_id"]}  {user["fullname"]}')
+
+
+ #Saving messages data to db
+messages = parser.messages()
+for message in messages:
+    Message.objects.get_or_create(**message)
+    print(f'Data has been saved!: {message["content"]}')
+    # print(message)

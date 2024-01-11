@@ -8,18 +8,20 @@ current_timestamp = datetime.timestamp(now)
 
 
 class Parser:
-    def __init__(self):
-        pass
+    def __init__(self, min_date, q):
+        self.min_date = min_date
+        self.q = q
 
-    def parsing(self, q, min_date):
+    def parsing(self):
         url = "http://192.168.3.54:9503/api/messages.searchGlobal"
 
         payload = {"params": {
             "flags": 0,
             "filter": {"_": "inputMessagesFilterEmpty"},
             "folder_id": None,
-            "q": q,
-            "min_date": min_date,
+            "q": self.q,
+            # "min_date": datetime.timestamp(self.min_date),
+            "min_date": self.min_date,
 
             "max_date": f"{current_timestamp}",
             "offset_peer": {"_": "inputPeerEmpty"},
@@ -29,6 +31,8 @@ class Parser:
         headers = {"content-type": "application/json"}
 
         response = requests.get(url, json=payload, headers=headers).json()
+
+        print(self.q, self.min_date)
 
         return response
 
@@ -49,6 +53,7 @@ class Parser:
                          'username': username})
         # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
+        print(data)
         return data
 
     def chats(self):
@@ -70,6 +75,7 @@ class Parser:
         # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
 
+        print(data)
         return data
 
     def messages(self):
@@ -88,4 +94,10 @@ class Parser:
                          'datetime': date,
                          'peer_id': peer_id,
                          'content': text})
+        print(data)
         return data
+
+p = Parser(1610376471, "#report")
+p.chats()
+p.messages()
+p.users()
