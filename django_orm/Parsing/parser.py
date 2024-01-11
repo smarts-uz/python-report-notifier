@@ -11,15 +11,15 @@ class Parser:
     def __init__(self):
         pass
 
-    def parsing(self):
+    def parsing(self, q, min_date):
         url = "http://192.168.3.54:9503/api/messages.searchGlobal"
 
         payload = {"params": {
             "flags": 0,
             "filter": {"_": "inputMessagesFilterEmpty"},
             "folder_id": None,
-            "q": "#report",
-            "min_date": 1720129,
+            "q": q,
+            "min_date": min_date,
 
             "max_date": f"{current_timestamp}",
             "offset_peer": {"_": "inputPeerEmpty"},
@@ -95,5 +95,3 @@ class Parser:
                          'text':text})
         with open('db/json/messages.json', mode='w', encoding='utf-8') as file:
          json.dump(data, file, indent=4, ensure_ascii=False)
-
-
