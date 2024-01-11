@@ -8,22 +8,25 @@
 from django.db import models
 
 
-class Chats(models.Model):
-    chat_id = models.BigIntegerField(unique=True)
+class Animal(models.Model):
+    id = models.SmallAutoField(primary_key=True)
+    created_at = models.DateTimeField()
+    name = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'animal'
+
+
+class Chat(models.Model):
+    peer_id = models.BigIntegerField(unique=True)
     type = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
+    chat_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'chats'
-
-
-class Example(models.Model):
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'example'
+        db_table = 'chat'
 
 
 class Keyword(models.Model):
@@ -35,14 +38,22 @@ class Keyword(models.Model):
         db_table = 'keyword'
 
 
+class Max(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'max'
+
+
 class Message(models.Model):
     name = models.CharField(max_length=255, blank=True, null=True)
-    datetime = models.DateTimeField(blank=True, null=True)
+    datetime = models.DateField(blank=True, null=True)
     keyword_id = models.IntegerField()
     content = models.TextField(blank=True, null=True)
     files = models.CharField(max_length=255, blank=True, null=True)
-    from_id = models.BigIntegerField(blank=True, null=True)
-    peer = models.ForeignKey(Chats, models.DO_NOTHING, to_field='chat_id', blank=True, null=True)
+    user = models.ForeignKey('User', models.DO_NOTHING, to_field='user_id', blank=True, null=True)
+    peer = models.ForeignKey(Chat, models.DO_NOTHING, to_field='peer_id', blank=True, null=True)
     topic_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -111,12 +122,11 @@ class TgGroupTexts(models.Model):
         db_table = 'tg_group_texts'
 
 
-class Users(models.Model):
-    id = models.AutoField(primary_key= True)
-    fullname = models.CharField(max_length=255, blank=True, null=True)
+class User(models.Model):
+    user_id = models.BigIntegerField(unique=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-    user_id = models.BigIntegerField()
+    fullname = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = 'user'

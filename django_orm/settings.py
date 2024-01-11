@@ -11,10 +11,10 @@ DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'db.quisabgzxxdppctriqfp.supabase.co',
+        'HOST': 'db.pjspdcoizmoymbnnkjcx.supabase.co',
         'NAME': "postgres",
         'USER': "postgres",
-        'PASSWORD': 'cD9zzwm9tDE7XUra',
+        'PASSWORD': 'Cr5$dgj3w!UP8Dw',
         'PORT':'5432'
     }
 }
