@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Chats(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     chat_id = models.IntegerField(unique=True)
     type = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
@@ -20,6 +20,7 @@ class Chats(models.Model):
 
 
 class Keyword(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
     last_checked = models.DateTimeField()
 
@@ -29,7 +30,7 @@ class Keyword(models.Model):
 
 
 class Message(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, blank=True, null=True)
     datetime = models.DateField(blank=True, null=True)
     keyword_id = models.IntegerField()
@@ -45,7 +46,7 @@ class Message(models.Model):
 
 
 class TgGroupTexts(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     type = models.CharField(max_length=255, blank=True, null=True)
     full_url = models.CharField(max_length=255, blank=True, null=True)
     tg_channel_text_id = models.IntegerField(blank=True, null=True)
@@ -107,7 +108,7 @@ class TgGroupTexts(models.Model):
 
 
 class Users(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     user_id = models.IntegerField()
     username = models.CharField(max_length=255)
     fullname = models.CharField(max_length=255)

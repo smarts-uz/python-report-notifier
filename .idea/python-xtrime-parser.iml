@@ -9,6 +9,7 @@
     <option name="namespacePackageFolders">
       <list>
         <option value="$MODULE_DIR$/django-orm" />
+        <option value="$MODULE_DIR$/Parsing" />
       </list>
     </option>
   </component>

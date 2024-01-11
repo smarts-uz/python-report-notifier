@@ -47,8 +47,9 @@ class Parser:
             data.append({'user_id':user_id,
                          'fullname':fullname,
                          'username':username})
-        with open('db/json/users.json', mode='w', encoding='utf-8') as file:
-         json.dump(data, file, indent=4, ensure_ascii=False)
+        # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
+        #  json.dump(data, file, indent=4, ensure_ascii=False)
+        return data
 
 
 
@@ -66,8 +67,9 @@ class Parser:
             data.append({"chat_id":chat_id,
                          "title":title,
                          "type":type})
-        with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
-         json.dump(data, file, indent=4, ensure_ascii=False)
+        # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
+        #  json.dump(data, file, indent=4, ensure_ascii=False)
+        return data
 
 
 
