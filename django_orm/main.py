@@ -85,8 +85,10 @@ def save_to_db():
 
     update_time = parser.update_date()
     print("last checked time",update_time)
-    key = Keyword.objects.filter(name__icontains=instance[1])
-    print(key)
+    key = Keyword.objects.get(name=instance[1])
+    key.last_checked = update_time
+    key.save()
+    print(f'update time is {update_time}')
 
 
 
