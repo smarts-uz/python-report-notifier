@@ -23,8 +23,8 @@ class Parser:
             "filter": {"_": "inputMessagesFilterEmpty"},
             "folder_id": None,
             "q": self.q,
-            # "min_date": datetime.timestamp(self.min_date),
-            "min_date": self.min_date,
+            "min_date": datetime.timestamp(self.min_date),
+            # "min_date": self.min_date,
 
             "max_date": f"{self.current_timestamp}",
             "offset_peer": {"_": "inputPeerEmpty"},

@@ -49,6 +49,7 @@ def db_check():
 
 
 instance = db_check()
+# print(datetime.timestamp(instance[0]))
 
 
 # print("Time:", type(instance[0]),"\nQ:", type(instance[1]))
@@ -62,7 +63,7 @@ instance = db_check()
 # print(response, fm)
 
 def save_to_db():
-    parser = Parser(16103764, instance[1])
+    parser = Parser(instance[0], instance[1])
     # Saving chats data to db
     chats = parser.chats()
     for chat in chats:
