@@ -40,7 +40,7 @@ def db_check():
     else:
         new = Keyword.objects.create(
             name=query,
-            last_checked=datetime.min
+            last_checked=datetime(2010,1,1)
         )
         new.save()
         new_row = response.first()
@@ -49,6 +49,7 @@ def db_check():
 
 
 instance = db_check()
+# print(instance[0])
 # print(datetime.timestamp(instance[0]))
 
 
