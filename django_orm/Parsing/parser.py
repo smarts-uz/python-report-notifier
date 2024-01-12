@@ -3,11 +3,14 @@ from pprint import pprint
 from datetime import datetime
 import json
 
-now = datetime.now()
-current_timestamp = datetime.timestamp(now)
+
 
 
 class Parser:
+    now = datetime.now()
+    current_timestamp = datetime.timestamp(now)
+
+
     def __init__(self, min_date, q):
         self.min_date = min_date
         self.q = q
@@ -23,7 +26,7 @@ class Parser:
             # "min_date": datetime.timestamp(self.min_date),
             "min_date": self.min_date,
 
-            "max_date": f"{current_timestamp}",
+            "max_date": f"{self.current_timestamp}",
             "offset_peer": {"_": "inputPeerEmpty"},
             "offset_id": 0,
             "limit": 100
@@ -53,7 +56,7 @@ class Parser:
                          'username': username})
         # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
-        print(data)
+
         return data
 
     def chats(self):
@@ -75,7 +78,7 @@ class Parser:
         # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
 
-        print(data)
+
         return data
 
     def messages(self):
@@ -89,15 +92,20 @@ class Parser:
             timestamp = message['date']
             date = datetime.fromtimestamp(timestamp)
             peer_id = message['peer_id']
+            keyword_id = None
 
             data.append({'user_id': from_id,
                          'datetime': date,
                          'peer_id': peer_id,
-                         'content': text})
-        print(data)
+                         'content': text,
+                         'keyword_id': keyword_id})
+
         return data
 
-p = Parser(1610376471, "#report")
-p.chats()
-p.messages()
-p.users()
+    def update_date(self):
+        return self.now
+# #
+# p = Parser(1610376471, "#report")
+# a = p.update_date()
+# # print(a)
+# print(p.chats())
