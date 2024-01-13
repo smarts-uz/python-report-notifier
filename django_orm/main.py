@@ -99,15 +99,15 @@ def save_to_db():
             f'Message has been saved!: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
         # print(message)
 
-        send_msg(str(content).replace("#","\#"), user_id, str(private_chat_link), str(date).replace("-","\."), str(message_full_link))
+        send_msg(str(content), user_id, str(private_chat_link), str(date), str(message_full_link))
         print(content,user_id,private_chat_link,date,message_full_link)
 
-    # update_time = parser.update_date()
-    # print("last checked time", update_time)
-    # key = Keyword.objects.get(name=instance[1])
-    # key.last_checked = update_time
-    # key.save()
-    # print(f'update time is {update_time}')
+    update_time = parser.update_date()
+    print("last checked time", update_time)
+    key = Keyword.objects.get(name=instance[1])
+    key.last_checked = update_time
+    key.save()
+    print(f'update time is {update_time}')
     print("Successfull end!!!!")
 
 # push
