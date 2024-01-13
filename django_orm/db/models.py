@@ -8,28 +8,31 @@
 from django.db import models
 
 
-class Animal(models.Model):
-    id = models.SmallAutoField(primary_key=True)
-    created_at = models.DateTimeField()
-    name = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'animal'
-
-
 class Chat(models.Model):
-    peer_id = models.BigIntegerField(unique=True)
+
+    peer_id = models.BigIntegerField()
     type = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     chat_id = models.BigIntegerField(blank=True, null=True)
+    public_chat_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'chat'
 
 
+class DjangoMigrations(models.Model):
+    app = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    applied = models.DateTimeField()
+
+    class Meta:
+        managed = False
+        db_table = 'django_migrations'
+
+
 class Keyword(models.Model):
+
     name = models.CharField(max_length=255)
     last_checked = models.DateTimeField(blank=True, null=True)
 
@@ -38,23 +41,18 @@ class Keyword(models.Model):
         db_table = 'keyword'
 
 
-class Max(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'max'
-
-
 class Message(models.Model):
-    name = models.CharField(max_length=255, blank=True, null=True)
-    datetime = models.DateField(blank=True, null=True)
-    keyword_id = models.IntegerField()
+
+    datetime = models.DateTimeField(blank=True, null=True)
+    keyword_id = models.IntegerField(blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     files = models.CharField(max_length=255, blank=True, null=True)
-    user = models.ForeignKey('User', models.DO_NOTHING, to_field='user_id', blank=True, null=True)
-    peer = models.ForeignKey(Chat, models.DO_NOTHING, to_field='peer_id', blank=True, null=True)
-    topic_id = models.IntegerField(blank=True, null=True)
+    user_id = models.BigIntegerField(blank=True, null=True)
+    peer_id_id = models.BigIntegerField(blank=True, null=True)
+    message_full_link = models.CharField(max_length=255, blank=True, null=True)
+    public_link_chat = models.CharField(max_length=255, blank=True, null=True)
+    private_link_chat = models.CharField(max_length=255, blank=True, null=True)
+    user_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -62,6 +60,7 @@ class Message(models.Model):
 
 
 class TgGroupTexts(models.Model):
+
     type = models.CharField(max_length=255, blank=True, null=True)
     full_url = models.CharField(max_length=255, blank=True, null=True)
     tg_channel_text_id = models.IntegerField(blank=True, null=True)
@@ -123,10 +122,12 @@ class TgGroupTexts(models.Model):
 
 
 class User(models.Model):
-    user_id = models.BigIntegerField(unique=True)
+
+    user_id = models.BigIntegerField()
     username = models.CharField(max_length=255, blank=True, null=True)
     fullname = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+
         managed = False
         db_table = 'user'
