@@ -38,3 +38,5 @@ def send_msg(content, user_link, private_chat_link, date, message_link):
 
     # send_msg(str(content), user_id, str(private_chat_link), str(date),str(message_full_link))
 # send_msg("123","username","1238321d","2dasd","djsakn")
+
+# push
