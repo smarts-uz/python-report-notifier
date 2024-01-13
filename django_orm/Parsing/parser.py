@@ -4,12 +4,9 @@ from datetime import datetime
 import json
 
 
-
-
 class Parser:
     now = datetime.now()
     current_timestamp = datetime.timestamp(now)
-
 
     def __init__(self, min_date, q):
         self.min_date = min_date
@@ -70,42 +67,58 @@ class Parser:
             peer_id = int("-100" + str(chat_id))
             title = chat['title']
             type = chat['_']
+            username = chat.get('username', 'private chat')
+            if username == "private chat":
+                public_chat_link = "private chat"
+            else:
+                public_chat_link = f"https://t.me/{username}"
 
-            data.append({"chat_id": chat_id,
-                         "peer_id": peer_id,
-                         "title": title,
-                         "type": type})
+        data.append({"chat_id": chat_id,
+                     "peer_id": peer_id,
+                     "title": title,
+                     "type": type,
+                     "public_chat_link": public_chat_link})
+
         # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
-
 
         return data
 
     def messages(self):
+
         response = self.parsing()
         messages = response['response']['messages']
         topic_id = None
         data = []
         for message in messages:
+            msg_id = message['id']
             text = message['message']
             from_id = message.get('from_id', ' ')
             timestamp = message['date']
             date = datetime.fromtimestamp(timestamp)
             peer_id = message['peer_id']
+
+            user_link = f'tg://user?id={from_id}'
             keyword_id = None
+            public_link_chat = None
+            private_link_chat = f"https://t.me/c/{int(str(peer_id)[4:])}"
+            message_full_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
 
             data.append({'user_id': from_id,
-                         'datetime': date,
-                         'peer_id': peer_id,
-                         'content': text,
-                         'keyword_id': keyword_id})
+                     'datetime': date,
+                     'peer_id': peer_id,
+                     'content': text,
+                     'keyword_id': keyword_id,
+                     'privat_chat_link': private_link_chat,
+                     "message_full_link": message_full_link,
+                     "public_chat_link": public_link_chat,
+                         "user_link" : user_link})
 
         return data
 
-    def update_date(self):
-        return self.now
-# #
-# p = Parser(1610376471, "#report")
-# a = p.update_date()
-# # print(a)
-# print(p.chats())
+
+def update_date(self):
+    return self.now
+
+# 
+
