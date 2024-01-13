@@ -82,6 +82,7 @@ def save_to_db():
     for message in messages:
         message['keyword_id'] = instance[2]
         Message.objects.get_or_create(**message)
+
         print(f'Data has been saved!: {message["content"]} , {message["peer_id"]}, {message["user_id"]}, {message["datetime"]}')
         # print(message)
 
