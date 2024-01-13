@@ -32,7 +32,7 @@ class Parser:
 
         response = requests.get(url, json=payload, headers=headers).json()
 
-        print(self.q, self.min_date)
+
 
         return response
 
@@ -62,7 +62,7 @@ class Parser:
         chats = response['response']['chats']
 
         for chat in chats:
-            # print(chat)
+
             chat_id = chat['id']
             peer_id = int("-100" + str(chat_id))
             title = chat['title']
