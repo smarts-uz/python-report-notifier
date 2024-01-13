@@ -42,6 +42,9 @@ class Parser:
         users = response['response']['users']
         for user in users:
             user_id = user['id']
+            if user == 136817688:
+                continue
+
             fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
             username = user.get('username', ' ')
             # print(f"{user_id}"
@@ -64,6 +67,8 @@ class Parser:
         for chat in chats:
 
             chat_id = chat['id']
+            if chat_id == 1949412980:
+                continue
             peer_id = int("-100" + str(chat_id))
             title = chat['title']
             type = chat['_']
@@ -71,7 +76,7 @@ class Parser:
             if username == "private chat":
                 public_chat_link = "private chat"
             else:
-                public_chat_link = f"https://t.me/{username}"
+                public_chat_link = f"t.me/{username}"
 
             data.append({"chat_id": chat_id,
                      "peer_id": peer_id,
@@ -91,25 +96,29 @@ class Parser:
         topic_id = None
         data = []
         for message in messages:
+            peer_id = message['peer_id']
+            if peer_id == -1001949412980:
+                continue
             msg_id = message['id']
             text = message['message']
             from_id = message.get('from_id', ' ')
             timestamp = message['date']
             date = datetime.fromtimestamp(timestamp)
-            peer_id = message['peer_id']
+
 
             user_link = f'tg://user?id={from_id}'
             keyword_id = None
             public_link_chat = None
-            private_link_chat = f"https://t.me/c/{int(str(peer_id)[4:])}"
-            message_full_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
+            private_link_chat = f"t.me/c/{int(str(peer_id)[4:])}"
+            message_full_link = f"t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
 
             data.append({'user_id': from_id,
                          'datetime': date,
                          'peer_id': peer_id,
                          'content': text,
                          'keyword_id': keyword_id,
-                         "private_chat_link": message_full_link,
+                         "private_chat_link": private_link_chat,
+                         "message_full_link": message_full_link,
                          "public_chat_link": public_link_chat,
                          "user_link": user_link})
 
