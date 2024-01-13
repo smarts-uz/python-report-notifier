@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from  TOKEN import *
 from telegram import ParseMode
 from Parsing.parser import Parser
 import telegram
@@ -8,8 +8,8 @@ char = list("_*[]()~`>#+-=|{}.")
 
 
 def send_msg(content, user_link, private_chat_link, date, message_link):
-    token = '6454237457:AAHcoiiJ4gw-Zb9HCbJtHN8HiLkwHlsG474'
-    chat_id = "-1001949412980"
+    token = TOKEN
+    chat_id = CHAT_ID
 
     text = f"""№ ---
     
