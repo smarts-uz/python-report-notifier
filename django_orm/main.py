@@ -44,7 +44,7 @@ def db_check():
         )
         new.save()
         new_row = response.first()
-        # print(new_row.last_checked, query)
+
         return new_row.last_checked, query, new_row.pk
 
 

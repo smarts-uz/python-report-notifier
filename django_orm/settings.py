@@ -6,7 +6,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # SECURITY WARNING: Modify this secret key if using in production!
 SECRET_KEY = "6few3nci_q_o@l1dlbk81%wcxe!*6r29yu629&d97!hiqat9fa"
 
-DEFAULT_AUTO_FIELD='django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 
 DATABASES = {
     'default': {
@@ -15,10 +16,9 @@ DATABASES = {
         'NAME': "postgres",
         'USER': "postgres",
         'PASSWORD': 'Cr5$dgj3w!UP8Dw',
-        'PORT':'5432'
+        'PORT': '5432'
     }
 }
-
 
 """
 To connect to an existing postgres database, first:
@@ -38,5 +38,3 @@ DATABASES = {
 """
 
 INSTALLED_APPS = ("db",)
-# INSTALLED_APPS = ("django_orm.db",)
-

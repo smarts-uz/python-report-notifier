@@ -73,7 +73,7 @@ class Parser:
             else:
                 public_chat_link = f"https://t.me/{username}"
 
-        data.append({"chat_id": chat_id,
+            data.append({"chat_id": chat_id,
                      "peer_id": peer_id,
                      "title": title,
                      "type": type,
@@ -105,20 +105,19 @@ class Parser:
             message_full_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
 
             data.append({'user_id': from_id,
-                     'datetime': date,
-                     'peer_id': peer_id,
-                     'content': text,
-                     'keyword_id': keyword_id,
-                     'privat_chat_link': private_link_chat,
-                     "message_full_link": message_full_link,
-                     "public_chat_link": public_link_chat,
-                         "user_link" : user_link})
+                         'datetime': date,
+                         'peer_id': peer_id,
+                         'content': text,
+                         'keyword_id': keyword_id,
+                         'privat_chat_link': private_link_chat,
+                         "message_full_link": message_full_link,
+                         "public_chat_link": public_link_chat,
+                         "user_link": user_link})
 
         return data
 
 
-def update_date(self):
-    return self.now
+    def update_date(self):
+        return self.now
 
-# 
-
+#
