@@ -109,8 +109,7 @@ class Parser:
                          'peer_id': peer_id,
                          'content': text,
                          'keyword_id': keyword_id,
-                         'privat_chat_link': private_link_chat,
-                         "message_full_link": message_full_link,
+                         "private_chat_link": message_full_link,
                          "public_chat_link": public_link_chat,
                          "user_link": user_link})
 

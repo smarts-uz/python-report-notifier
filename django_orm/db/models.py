@@ -48,10 +48,10 @@ class Message(models.Model):
     content = models.TextField(blank=True, null=True)
     files = models.CharField(max_length=255, blank=True, null=True)
     user_id = models.BigIntegerField(blank=True, null=True)
-    peer_id_id = models.BigIntegerField(blank=True, null=True)
+    peer_id = models.BigIntegerField(blank=True, null=True)
     message_full_link = models.CharField(max_length=255, blank=True, null=True)
-    public_link_chat = models.CharField(max_length=255, blank=True, null=True)
-    private_link_chat = models.CharField(max_length=255, blank=True, null=True)
+    public_chat_link = models.CharField(max_length=255, blank=True, null=True)
+    private_chat_link = models.CharField(max_length=255, blank=True, null=True)
     user_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:

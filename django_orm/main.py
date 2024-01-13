@@ -68,14 +68,14 @@ def save_to_db():
     # Saving chats data to db
     chats = parser.chats()
     for chat in chats:
-        print(f'Data has been saved!: {chat["chat_id"]}  {chat["title"]}')
+        print(f'Chat has been saved!: chat_id:{chat["chat_id"]}  chat_title:{chat["title"]} public_chat_link: {chat["public_chat_link"]}')
         Chat.objects.get_or_create(**chat)
 
     # Saving users data to db
     users = parser.users()
     for user in users:
         User.objects.get_or_create(**user)
-        print(f'Data has been saved!: {user["user_id"]}  {user["fullname"]}')
+        print(f'User has been saved!: user_id: {user["user_id"]}  fullname : {user["fullname"]} username: {user["username"]}')
 
     # Saving messages data to db
     messages = parser.messages()
@@ -83,15 +83,16 @@ def save_to_db():
         message['keyword_id'] = instance[2]
         Message.objects.get_or_create(**message)
 
-        print(f'Data has been saved!: {message["content"]} , {message["peer_id"]}, {message["user_id"]}, {message["datetime"]}')
+        print(f'Message has been saved!: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
         # print(message)
 
-    update_time = parser.update_date()
-    print("last checked time",update_time)
-    key = Keyword.objects.get(name=instance[1])
-    key.last_checked = update_time
-    key.save()
-    print(f'update time is {update_time}')
+    # update_time = parser.update_date()
+    # print("last checked time",update_time)
+    # key = Keyword.objects.get(name=instance[1])
+    # key.last_checked = update_time
+    # key.save()
+    # print(f'update time is {update_time}')
+    print("Successfull end!!!!")
 
 
 
