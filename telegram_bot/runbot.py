@@ -1,5 +1,5 @@
 from datetime import datetime
-from  TOKEN import *
+from .TOKEN import *
 from telegram import ParseMode
 from Parsing.parser import Parser
 import telegram
