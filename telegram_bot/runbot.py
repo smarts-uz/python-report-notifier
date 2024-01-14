@@ -1,10 +1,10 @@
 from telegram import ParseMode
 import telegram
-from dotenv import load_dotenv
+
 import os
+from dotenv import load_dotenv
+
 load_dotenv()
-
-
 
 
 def send_msg(content, user_link, private_chat_link, date, message_link):

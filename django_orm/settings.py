@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,10 +16,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': 'db.pjspdcoizmoymbnnkjcx.supabase.co',
+        'HOST': os.getenv("HOST"),
         'NAME': "postgres",
         'USER': "postgres",
-        'PASSWORD': 'Cr5$dgj3w!UP8Dw',
+        'PASSWORD': os.getenv("PASSWORD"),
         'PORT': '5432'
     }
 }

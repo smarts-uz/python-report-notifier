@@ -31,6 +31,8 @@ from datetime import datetime
 from Parsing.parser import Parser
 
 
+# -----search by query----
+
 # def db_check():
 #     response = ""
 #     query = input("Enter query: ")
@@ -105,6 +107,8 @@ def save_to_db():
         # key.save()
         # print(f'update time is {update_time}')
         # print("Successfull end!!!!")
+
+        time.sleep(5)
 
 
 save_to_db()
