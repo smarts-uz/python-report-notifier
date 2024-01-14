@@ -9,8 +9,8 @@ token = os.getenv("TOKEN")
 chat_id = os.getenv("CHAT_ID")
 
 
-def send_msg(content, user_link, private_chat_link, date, message_link,user_fullname,chat_title):
-    text = f"""№ ---
+def send_msg(content, user_link, private_chat_link, date, message_link,user_fullname,chat_title,pk):
+    text = f"""№:{pk}
     
 📅<b>Date</b> : <u>{date}</u>
 👤<b>User</b> :  <a href="{user_link}">{user_fullname}</a>

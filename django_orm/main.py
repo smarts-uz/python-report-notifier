@@ -74,6 +74,10 @@ def get_user_fullname(user_id):
     return user.fullname
 
 
+def get_msg_id(msg_full_link):
+    message = Message.objects.get(message_full_link=msg_full_link)
+    return message.pk
+
 
 def save_to_db():
     print("[Parsing in progress]")
@@ -100,6 +104,7 @@ def save_to_db():
         for message in messages:
             message['keyword_id'] = item['pk']
             msg_id = message['msg_id_field']
+            Message.objects.get_or_create(**message)
             user_link = message['user_link']
             content = message['content']
             date = message['datetime']
@@ -107,16 +112,18 @@ def save_to_db():
             private_chat_link = message['private_chat_link']
             message_full_link = message['message_full_link']
             user_id = message['user_id']
-            Message.objects.get_or_create(**message)
+
             forward_bool = forward_message_boolen(peer_id)
             chat_title = get_title_chat(peer_id)
             user_fullname = get_user_fullname(user_id)
+            pk = get_msg_id(message_full_link)
 
             print(msg_id)
             print(forward_bool)
             if forward_bool == True:
                 print('---')
-                send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),user_fullname,chat_title)
+                send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
+                         user_fullname, chat_title, pk)
             else:
                 print(peer_id)
                 # forward_msg(user_id,private_chat_link,str(date),message_full_link,msg_id,peer_id)
