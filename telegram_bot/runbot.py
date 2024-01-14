@@ -1,15 +1,15 @@
-from datetime import datetime
-from .TOKEN import *
 from telegram import ParseMode
-from Parsing.parser import Parser
 import telegram
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
-char = list("_*[]()~`>#+-=|{}.")
+
 
 
 def send_msg(content, user_link, private_chat_link, date, message_link):
-    token = TOKEN
-    chat_id = CHAT_ID
+    token = os.getenv("TOKEN")
+    chat_id = os.getenv("CHAT_ID")
 
     text = f"""№ ---
     
