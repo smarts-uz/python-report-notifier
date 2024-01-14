@@ -10,10 +10,11 @@ chat_id = os.getenv("CHAT_ID")
 
 
 def send_msg(content, user_link, private_chat_link, date, message_link,user_fullname,chat_title,pk):
-    text = f"""№:{pk}
+    text = f"""<b>№:{pk}</b>
     
 📅<b>Date</b> : <u>{date}</u>
 👤<b>User</b> :  <a href="{user_link}">{user_fullname}</a>
+🔗<b>User Link</b> : <tg-spoiler>{user_link}</tg-spoiler>
 👥<b>Group/Channel</b> : <a href="{private_chat_link}">{chat_title}</a>
 🔗<b>Link</b>: <a href="{message_link}">Message Link</a>
 
