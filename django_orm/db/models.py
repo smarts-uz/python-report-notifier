@@ -11,10 +11,11 @@ from django.db import models
 class Chat(models.Model):
 
     peer_id = models.BigIntegerField()
-    type = models.CharField(max_length=255)
-    title = models.CharField(max_length=255)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
     chat_id = models.BigIntegerField(blank=True, null=True)
     public_chat_link = models.CharField(max_length=255, blank=True, null=True)
+    forward_message = models.BooleanField()
 
     class Meta:
         managed = False
@@ -35,6 +36,7 @@ class Keyword(models.Model):
 
     name = models.CharField(max_length=255)
     last_checked = models.DateTimeField(blank=True, null=True)
+    topic_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -53,6 +55,7 @@ class Message(models.Model):
     public_chat_link = models.CharField(max_length=255, blank=True, null=True)
     private_chat_link = models.CharField(max_length=255, blank=True, null=True)
     user_link = models.CharField(max_length=255, blank=True, null=True)
+    msg_id_field = models.IntegerField(db_column='msg_id ', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
 
     class Meta:
         managed = False
@@ -128,6 +131,5 @@ class User(models.Model):
     fullname = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-
         managed = False
         db_table = 'user'

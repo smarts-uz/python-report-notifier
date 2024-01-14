@@ -33,8 +33,6 @@ class Parser:
 
         response = requests.get(url, json=payload, headers=headers).json()
 
-
-
         return response
 
     def users(self):
@@ -73,6 +71,7 @@ class Parser:
             peer_id = int("-100" + str(chat_id))
             title = chat['title']
             type = chat['_']
+            forward_message = chat['noforwards']
             username = chat.get('username', 'private chat')
             if username == "private chat":
                 public_chat_link = "private chat"
@@ -80,10 +79,11 @@ class Parser:
                 public_chat_link = f"t.me/{username}"
 
             data.append({"chat_id": chat_id,
-                     "peer_id": peer_id,
-                     "title": title,
-                     "type": type,
-                     "public_chat_link": public_chat_link})
+                         "peer_id": peer_id,
+                         "title": title,
+                         "type": type,
+                         "public_chat_link": public_chat_link,
+                         "forward_message": forward_message})
 
         # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
@@ -98,6 +98,7 @@ class Parser:
         data = []
         for message in messages:
             peer_id = message['peer_id']
+            # content group
             if peer_id == -1001949412980:
                 continue
             msg_id = message['id']
@@ -105,7 +106,6 @@ class Parser:
             from_id = message.get('from_id', ' ')
             timestamp = message['date']
             date = datetime.fromtimestamp(timestamp)
-
 
             user_link = f'tg://user?id={from_id}'
             keyword_id = None
@@ -121,10 +121,11 @@ class Parser:
                          "private_chat_link": private_link_chat,
                          "message_full_link": message_full_link,
                          "public_chat_link": public_link_chat,
-                         "user_link": user_link})
+                         "user_link": user_link,
+                         "msg_id_field" : msg_id
+                         })
 
         return data
-
 
     def update_date(self):
         return self.now
