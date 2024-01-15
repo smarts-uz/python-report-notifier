@@ -22,6 +22,7 @@ def send_msg(content, user_link, private_chat_link, date, message_link,user_full
     print(f"user_link  : {user_link}")
 
     bot = telegram.Bot(token=token)
+
     bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML)
 
 
@@ -37,5 +38,6 @@ def send_msg(content, user_link, private_chat_link, date, message_link,user_full
 #     print(f"user_link  : {user_link}")
 #
 #     bot = telegram.Bot(token=token)
-#     bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id)
+    bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id)
+
 

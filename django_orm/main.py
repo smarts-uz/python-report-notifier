@@ -8,6 +8,8 @@ these settings as is, and skip to START OF APPLICATION section below """
 import sys
 import time
 from telegram_bot.runbot import send_msg
+from telegram_bot.test import send_msg1
+from telegram import TelegramError
 
 sys.dont_write_bytecode = True
 
@@ -121,9 +123,11 @@ def save_to_db():
             print(msg_id)
             print(forward_bool)
             if forward_bool == True:
+
                 print('---')
-                send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                         user_fullname, chat_title, pk)
+                send_msg1(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
+                          user_fullname, chat_title, pk)
+
             else:
                 print(peer_id)
                 # forward_msg(user_id,private_chat_link,str(date),message_full_link,msg_id,peer_id)
@@ -132,7 +136,7 @@ def save_to_db():
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
             # print(message)
 
-            time.sleep(2)
+            # time.sleep(2)
             print(content, user_id, private_chat_link, date, message_full_link)
 
         # update_time = parser.update_date()
