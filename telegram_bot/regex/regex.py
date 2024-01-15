@@ -16,7 +16,7 @@ def retry_after(str):
 
         for i in range(num+1):
             time.sleep(1)
-            print(f"retry after : {i+1}")
+            print(f"retry after : {i}")
 
         # print('success')
         time.sleep(2)

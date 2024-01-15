@@ -7,9 +7,7 @@ these settings as is, and skip to START OF APPLICATION section below """
 # Turn off bytecode generation
 import sys
 import time
-from telegram_bot.runbot import send_msg
-from telegram_bot.test import send_msg1
-from telegram import TelegramError
+from telegram_bot.runbot import send_msg, forward_msg
 
 sys.dont_write_bytecode = True
 
@@ -73,7 +71,7 @@ def get_title_chat(peer_id):
 
 def get_user_fullname(user_id):
     user = User.objects.get(user_id=user_id)
-    return user.fullname
+    return user.fullname, user.username
 
 
 def get_msg_id(msg_full_link):
@@ -117,7 +115,8 @@ def save_to_db():
 
             forward_bool = forward_message_boolen(peer_id)
             chat_title = get_title_chat(peer_id)
-            user_fullname = get_user_fullname(user_id)
+            user_fullname = get_user_fullname(user_id)[0]
+            username = get_user_fullname(user_id)[1]
             pk = get_msg_id(message_full_link)
 
             print(msg_id)
@@ -125,26 +124,31 @@ def save_to_db():
             if forward_bool == True:
 
                 print('---')
-                send_msg1(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                          user_fullname, chat_title, pk)
+                send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
+                         user_fullname, chat_title, pk, username)
 
             else:
                 print(peer_id)
-                # forward_msg(user_id,private_chat_link,str(date),message_full_link,msg_id,peer_id)
+                forward_msg(user_link, user_fullname, chat_title, private_chat_link, str(date), message_full_link,
+                            msg_id, peer_id, pk, username)
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
-            # print(message)
 
-            # time.sleep(2)
-            print(content, user_id, private_chat_link, date, message_full_link)
+            time.sleep(1)
 
-        # update_time = parser.update_date()
-        # print("last checked time", update_time)
-        # key = Keyword.objects.get(name=item[1])
-        # key.last_checked = update_time
-        # key.save()
-        # print(f'update time is {update_time}')
+        update_time = parser.update_date()
+        print("last checked time", update_time)
+
+
+        try:
+            key = Keyword.objects.get(name=item["name"])
+            # Do something with the 'key' object
+        except Keyword.DoesNotExist:
+            print(f"Keyword with name '{item['name']}' does not exist.")
+        key.last_checked = update_time
+        key.save()
+        print(f'update time is {update_time}')
 
         for i in range(5):
             print(i + 1)
