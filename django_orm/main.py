@@ -7,7 +7,7 @@ these settings as is, and skip to START OF APPLICATION section below """
 # Turn off bytecode generation
 import sys
 import time
-from telegram_bot.runbot import send_msg, forward_msg
+from TGBOT.runbot import send_msg, forward_msg
 
 sys.dont_write_bytecode = True
 
@@ -18,41 +18,20 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 
 django.setup()
+from db.models import *
+
+from datetime import datetime
+from Parsing.parser import Parser
 
 # Import your models for use in your script
-from db.models import *
 
 ############################################################################
 ## START OF APPLICATION
 ############################################################################
 """ Replace the code below with your own """
 
-from datetime import datetime
-from Parsing.parser import Parser
 
 
-# -----search by query----
-
-# def db_check():
-#     response = ""
-#     query = input("Enter query: ")
-#     response = Keyword.objects.filter(name__icontains=query)
-#     first_row = response.first()
-#     if response.exists():
-#         # print(first_row.last_checked, query)
-#         return first_row.last_checked, query, first_row.pk
-#     else:
-#         new = Keyword.objects.create(
-#             name=query,
-#             last_checked=datetime(2010, 1, 1)
-#         )
-#         new.save()
-#         new_row = response.first()
-#
-#         return new_row.last_checked, query, new_row.pk
-
-
-# instance = db_check()
 
 def all_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked')
@@ -158,3 +137,5 @@ def save_to_db():
 
 
 save_to_db()
+
+

@@ -4,7 +4,7 @@ import telegram
 import os
 from dotenv import load_dotenv
 
-from telegram_bot.regex.regex import retry_after
+from TGBOT.regex.regex import retry_after
 
 load_dotenv()
 token = os.getenv("TOKEN")

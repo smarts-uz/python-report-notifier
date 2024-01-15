@@ -91,3 +91,26 @@ from django_orm.db.models import *
 # )
 
 
+
+# -----search by query----
+
+# def db_check():
+#     response = ""
+#     query = input("Enter query: ")
+#     response = Keyword.objects.filter(name__icontains=query)
+#     first_row = response.first()
+#     if response.exists():
+#         # print(first_row.last_checked, query)
+#         return first_row.last_checked, query, first_row.pk
+#     else:
+#         new = Keyword.objects.create(
+#             name=query,
+#             last_checked=datetime(2010, 1, 1)
+#         )
+#         new.save()
+#         new_row = response.first()
+#
+#         return new_row.last_checked, query, new_row.pk
+
+
+# instance = db_check()

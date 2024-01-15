@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-telegram_bot/TOKEN.py
+TGBOT/TOKEN.py
 .env/
 vevn/
 .Python
