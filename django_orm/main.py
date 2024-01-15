@@ -1,16 +1,10 @@
-###########################################################################
-## Django ORM Standalone Python Template
-############################################################################
-""" Here we'll import the parts of Django we need. It's recommended to leave
-these settings as is, and skip to START OF APPLICATION section below """
-
-# Turn off bytecode generation
 import sys
 import time
-from TGBOT.runbot import send_msg, forward_msg
+from TGBOT.runbot import *
+import click
 
 sys.dont_write_bytecode = True
-
+# import click
 # Django specific settings
 import os
 
@@ -19,18 +13,36 @@ import django
 
 django.setup()
 from db.models import *
-
 from datetime import datetime
 from Parsing.parser import Parser
 
-# Import your models for use in your script
 
-############################################################################
-## START OF APPLICATION
-############################################################################
-""" Replace the code below with your own """
+@click.command()
+@click.argument('new_keyword', type=str)
+def add_keyword(new_keyword):
+    Keyword.objects.create(name=new_keyword)
+
+    click.echo(f'Keyword "{new_keyword}" added successfully!')
 
 
+@click.command()
+def show_keywords():
+    data = Keyword.objects.values('pk', 'name', 'last_checked')
+    click.echo(list(data))
+
+@click.command()
+def run_parser():
+    save_to_db()
+    click.echo('parser is running')
+
+@click.group()
+def cli():
+    pass
+
+
+cli.add_command(add_keyword)
+cli.add_command(show_keywords)
+cli.add_command(run_parser)
 
 
 def all_keywords():
@@ -119,7 +131,6 @@ def save_to_db():
         update_time = parser.update_date()
         print("last checked time", update_time)
 
-
         try:
             key = Keyword.objects.get(name=item["name"])
             # Do something with the 'key' object
@@ -136,6 +147,7 @@ def save_to_db():
     print("Successfull end!!!!")
 
 
-save_to_db()
 
 
+if __name__ == '__main__':
+    cli()
