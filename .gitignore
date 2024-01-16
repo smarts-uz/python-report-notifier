@@ -7,8 +7,8 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-TGBOT/TOKEN.py
-.env/
+django_orm/TGBOT/TOKEN.py
+
 vevn/
 .Python
 build/

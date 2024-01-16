@@ -1,7 +1,9 @@
 import sys
 import time
-from TGBOT.runbot import *
+# from TGBOT.runbot import *
 import click
+
+from Parsing.craeteTopic import craeteTopic
 
 sys.dont_write_bytecode = True
 # import click
@@ -21,8 +23,9 @@ from Parsing.parser import Parser
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
     Keyword.objects.create(name=new_keyword)
-
     click.echo(f'Keyword "{new_keyword}" added successfully!')
+    craeteTopic(new_keyword)
+    click.echo(f'Topic "{new_keyword}" has created successfully!')
 
 
 @click.command()
@@ -115,13 +118,13 @@ def save_to_db():
             if forward_bool == True:
 
                 print('---')
-                send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                         user_fullname, chat_title, pk, username)
+                # send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
+                #          user_fullname, chat_title, pk, username)
 
             else:
                 print(peer_id)
-                forward_msg(user_link, user_fullname, chat_title, private_chat_link, str(date), message_full_link,
-                            msg_id, peer_id, pk, username)
+                # forward_msg(user_link, user_fullname, chat_title, private_chat_link, str(date), message_full_link,
+                #             msg_id, peer_id, pk, username)
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
