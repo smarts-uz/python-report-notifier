@@ -41,8 +41,8 @@ class Parser:
         users = response['response']['users']
         for user in users:
             user_id = user['id']
-            if user == 136817688:
-                continue
+            # if user == 136817688:
+            #     continue
 
             fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
             username = user.get('username', ' ')
@@ -130,3 +130,11 @@ class Parser:
 
     def update_date(self):
         return self.now
+#
+# a = Parser('12385123',"#myd")
+# b = a.users()
+# c = a.chats()
+# d = a.messages()
+# pprint(b)
+# pprint(c)
+# pprint(d)

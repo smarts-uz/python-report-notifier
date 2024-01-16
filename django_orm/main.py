@@ -1,9 +1,9 @@
 import sys
 import time
-# from TGBOT.runbot import *
 
 
-from Parsing.craeteTopic import CreateTopic
+
+from Parsing.craeteTopic import CreateTopic, sendMessage
 
 sys.dont_write_bytecode = True
 import click
@@ -103,6 +103,7 @@ def save_to_db():
             chat_title = get_title_chat(peer_id)
             user_fullname = get_user_fullname(user_id)[0]
             username = get_user_fullname(user_id)[1]
+            pk = item['pk']
 
 
             print(msg_id)
@@ -110,8 +111,8 @@ def save_to_db():
             if forward_bool == True:
 
                 print('---')
-                # send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                #          user_fullname, chat_title,  username,topic_id)
+                sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
+                         user_fullname, chat_title,  username,topic_id,pk)
 
             else:
                 print(peer_id)

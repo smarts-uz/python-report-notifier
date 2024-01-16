@@ -1,18 +1,19 @@
-from telegram import ParseMode, TelegramError
+from telegram.constants import ParseMode
+from telegram.error import TelegramError
 import telegram
 
 import os
 from dotenv import load_dotenv
 
-from TGBOT.regex.regex import retry_after
+from regFunction import retry_after
 
 load_dotenv()
 token = os.getenv("TOKEN")
 chat_id = os.getenv("CHAT_ID")
 
 
-def send_msg(content, user_link, private_chat_link, date, message_link, user_fullname, chat_title, pk,username):
-    text = f"""(PY)<b>№:{pk}</b>
+def send_msg(content, user_link, private_chat_link, date, message_link, user_fullname, chat_title, username, topic_id):
+    text = f"""(PY)<b>№:</b>
     
 📅<b>Date</b> : <u>{date}</u>
 👤<b>User</b> :  <a href="t.me/{username}">{user_fullname}</a>
@@ -27,17 +28,20 @@ def send_msg(content, user_link, private_chat_link, date, message_link, user_ful
 
     try:
 
-        msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, timeout=10)
+        msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, timeout=10,
+                              message_thread_id=topic_id)
         print(msg)
     except TelegramError as e:
         print((f'[Error] {e}'))
         retry_after(str(e))
-        msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, timeout=10)
+        msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, timeout=10,
+                              message_thread_id=topic_id)
         print(msg)
 
 
-def forward_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id,pk,username):
-    text = f"""(PY)<b>№:{pk}</b>
+def forward_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,
+                username, topic_id):
+    text = f"""(PY)<b>№:</b>
 
 📅<b>Date</b> : <u>{date}</u>
 👤<b>User</b> :  <a href="t.me/{username}">{user_fullname}</a>
@@ -54,24 +58,24 @@ def forward_msg(user_link, user_fullname, chat_title, private_chat_link, date, m
 
         fwr = forward = bot.forward_message(chat_id=chat_id,
                                             from_chat_id=peer_id,
-                                            message_id=msg_id)
+                                            message_id=msg_id, message_thread_id=topic_id, timeout=10)
         print(fwr)
     except TelegramError as e:
         print((f'[Error] {e}'))
         retry_after(str(e))
         fwr = forward = bot.forward_message(chat_id=chat_id,
                                             from_chat_id=peer_id,
-                                            message_id=msg_id)
+                                            message_id=msg_id, message_thread_id=topic_id, timeout=10)
         print(fwr)
 
     fw_msg_id = forward['message_id']
     try:
-        msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, reply_to_message_id=fw_msg_id, timeout=10)
+        msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, reply_to_message_id=fw_msg_id,
+                              timeout=10, message_thread_id=topic_id)
         print(msg)
     except TelegramError as e:
         print((f'[Error] {e}'))
         retry_after(str(e))
         msg = bot.sendMessage(chat_id=chat_id, text=text, parse_mode=ParseMode.HTML, reply_to_message_id=fw_msg_id,
-                              timeout=10)
+                              timeout=10, message_thread_id=topic_id)
         print(msg)
-
