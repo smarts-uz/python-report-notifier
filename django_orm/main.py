@@ -1,12 +1,12 @@
 import sys
 import time
 # from TGBOT.runbot import *
-import click
+
 
 from Parsing.craeteTopic import CreateTopic
 
 sys.dont_write_bytecode = True
-# import click
+import click
 # Django specific settings
 import os
 
@@ -22,10 +22,11 @@ from Parsing.parser import Parser
 @click.command()
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
-    cr_topic=CreateTopic(new_keyword)
+    cr_topic = CreateTopic(new_keyword)
     topic_id = cr_topic.craeteTopic()
     click.echo(f'Topic "{new_keyword}" has created successfully!')
-    Keyword.objects.create(name=new_keyword)
+    Keyword.objects.create(name=new_keyword,
+                           topic_id=topic_id)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
 
 
@@ -34,23 +35,12 @@ def show_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked')
     click.echo(list(data))
 
-@click.command()
-def run_parser():
-    save_to_db()
-    click.echo('parser is running')
-
-@click.group()
-def cli():
-    pass
 
 
-cli.add_command(add_keyword)
-cli.add_command(show_keywords)
-cli.add_command(run_parser)
 
 
 def all_keywords():
-    data = Keyword.objects.values('pk', 'name', 'last_checked')
+    data = Keyword.objects.values('pk', 'name', 'last_checked',"topic_id")
     return list(data)
 
 
@@ -71,7 +61,7 @@ def get_user_fullname(user_id):
 
 def get_msg_id(msg_full_link):
     message = Message.objects.get(message_full_link=msg_full_link)
-    return message.pk
+    return message.first.pk
 
 
 def save_to_db():
@@ -107,12 +97,13 @@ def save_to_db():
             private_chat_link = message['private_chat_link']
             message_full_link = message['message_full_link']
             user_id = message['user_id']
+            topic_id = item['topic_id']
 
             forward_bool = forward_message_boolen(peer_id)
             chat_title = get_title_chat(peer_id)
             user_fullname = get_user_fullname(user_id)[0]
             username = get_user_fullname(user_id)[1]
-            pk = get_msg_id(message_full_link)
+
 
             print(msg_id)
             print(forward_bool)
@@ -120,12 +111,12 @@ def save_to_db():
 
                 print('---')
                 # send_msg(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                #          user_fullname, chat_title, pk, username)
+                #          user_fullname, chat_title,  username,topic_id)
 
             else:
                 print(peer_id)
                 # forward_msg(user_link, user_fullname, chat_title, private_chat_link, str(date), message_full_link,
-                #             msg_id, peer_id, pk, username)
+                #             msg_id, peer_id,  username,topic_id)
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
@@ -150,7 +141,23 @@ def save_to_db():
         print(f"f[*---------{item['name']}-------------- search successfully ended!! *]")
     print("Successfull end!!!!")
 
+# save_to_db()
 
+
+@click.command()
+def run_parser():
+    save_to_db()
+    click.echo('parser successfully finished')
+
+
+@click.group()
+def cli():
+    pass
+
+
+cli.add_command(add_keyword)
+cli.add_command(show_keywords)
+cli.add_command(run_parser)
 
 
 if __name__ == '__main__':

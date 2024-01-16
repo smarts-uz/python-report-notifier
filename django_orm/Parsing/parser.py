@@ -66,7 +66,7 @@ class Parser:
         for chat in chats:
 
             chat_id = chat['id']
-            if chat_id == 1949412980:
+            if chat_id == 2059626462:
                 continue
             peer_id = int("-100" + str(chat_id))
             title = chat['title']
@@ -99,10 +99,11 @@ class Parser:
         for message in messages:
             peer_id = message['peer_id']
             # content group
-            if peer_id == -1001949412980:
+
+            if peer_id == -1002059626462:
                 continue
             msg_id = message['id']
-            text = message['message']
+            text = message.get("message", " ")
             from_id = message.get('from_id', ' ')
             timestamp = message['date']
             date = datetime.fromtimestamp(timestamp)
@@ -122,12 +123,10 @@ class Parser:
                          "message_full_link": message_full_link,
                          "public_chat_link": public_link_chat,
                          "user_link": user_link,
-                         "msg_id_field" : msg_id
+                         "msg_id_field": msg_id
                          })
 
         return data
 
     def update_date(self):
         return self.now
-
-#
