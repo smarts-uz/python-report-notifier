@@ -54,42 +54,25 @@ def sendMessage(content, user_link, private_chat_link, date, message_link, user_
     headers = {"content-type": "application/json"}
     response = requests.get(url, json=payload, headers=headers).json()
 
-    print(response)
+    print(f"Message send : {response['ok']}")
     while not response['ok']:
 
         if "Too Many Requests: retry after" in response['description']:
             retry_after(response['description'])
         response = requests.get(url, json=payload, headers=headers).json()
+        print(f"Message send : {response['ok']}")
         if response['ok'] == True:
             break
-        print(response)
+
 
 
 import requests
 
 
 
-def forward_message(peer_id, message_id, topic_id):
-  url = "https://api.telegram.org/bot6454237457:AAHcoiiJ4gw-Zb9HCbJtHN8HiLkwHlsG474/forwardMessage"
-
-  payload = {
-    "chat_id": "-1002059626462",
-    "from_chat_id": f"{peer_id}",
-    "message_id": f"{message_id}",
-    "message_thread_id": f"{topic_id}"
-  }
-  headers = {"content-type": "application/json"}
-
-  response = requests.post(url, json=payload, headers=headers).json()
-
-  print(response)
-  return response['result']['message_id']
 
 
 
-a = forward_message("-1002098866683", '23', '372')
-print(a)
 
 
 
-# sendMessage()

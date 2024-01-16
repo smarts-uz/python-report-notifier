@@ -1,7 +1,6 @@
 import sys
 import time
-
-
+from Parsing.forward_msg import ForwardMsg
 
 from Parsing.craeteTopic import CreateTopic, sendMessage
 
@@ -25,7 +24,7 @@ def add_keyword(new_keyword):
     cr_topic = CreateTopic(new_keyword)
     topic_id = cr_topic.craeteTopic()
     click.echo(f'Topic "{new_keyword}" has created successfully!')
-    Keyword.objects.create(name=new_keyword,
+    Keyword.objects.get_or_create(name=new_keyword,
                            topic_id=topic_id)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
 
@@ -36,11 +35,8 @@ def show_keywords():
     click.echo(list(data))
 
 
-
-
-
 def all_keywords():
-    data = Keyword.objects.values('pk', 'name', 'last_checked',"topic_id")
+    data = Keyword.objects.values('pk', 'name', 'last_checked', "topic_id")
     return list(data)
 
 
@@ -105,44 +101,48 @@ def save_to_db():
             username = get_user_fullname(user_id)[1]
             pk = item['pk']
 
-
             print(msg_id)
             print(forward_bool)
             if forward_bool == True:
 
                 print('---')
                 sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                         user_fullname, chat_title,  username,topic_id,pk)
+                            user_fullname, chat_title, username, topic_id, pk)
 
             else:
                 print(peer_id)
-                # forward_msg(user_link, user_fullname, chat_title, private_chat_link, str(date), message_full_link,
-                #             msg_id, peer_id,  username,topic_id)
+                forward_message = ForwardMsg(peer_id, msg_id, topic_id, user_link, date, user_fullname,
+                                             private_chat_link, chat_title,
+                                             message_full_link)
+
+                rpl_msg = forward_message.replyMessage()
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
 
-            time.sleep(1)
+        time.sleep(1)
 
         update_time = parser.update_date()
         print("last checked time", update_time)
 
-        try:
-            key = Keyword.objects.get(name=item["name"])
-            # Do something with the 'key' object
-        except Keyword.DoesNotExist:
-            print(f"Keyword with name '{item['name']}' does not exist.")
+        key = Keyword.objects.get(name=item["name"])
+        # Do something with the 'key' object
+
+
         key.last_checked = update_time
         key.save()
         print(f'update time is {update_time}')
-
-        for i in range(5):
-            print(i + 1)
-            time.sleep(1)
         print(f"f[*---------{item['name']}-------------- search successfully ended!! *]")
+
+    for i in range(5):
+        print(i + 1)
+        time.sleep(1)
+
+
     print("Successfull end!!!!")
 
-# save_to_db()
+
+
 
 
 @click.command()
@@ -159,7 +159,6 @@ def cli():
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_parser)
-
 
 if __name__ == '__main__':
     cli()

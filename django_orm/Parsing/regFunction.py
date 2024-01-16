@@ -24,4 +24,3 @@ def retry_after(str):
         time.sleep(1)
 
 
-# retry_after(str1)
