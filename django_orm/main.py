@@ -3,7 +3,7 @@ import time
 # from TGBOT.runbot import *
 import click
 
-from Parsing.craeteTopic import craeteTopic
+from Parsing.craeteTopic import CreateTopic
 
 sys.dont_write_bytecode = True
 # import click
@@ -22,10 +22,11 @@ from Parsing.parser import Parser
 @click.command()
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
+    cr_topic=CreateTopic(new_keyword)
+    topic_id = cr_topic.craeteTopic()
+    click.echo(f'Topic "{new_keyword}" has created successfully!')
     Keyword.objects.create(name=new_keyword)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
-    craeteTopic(new_keyword)
-    click.echo(f'Topic "{new_keyword}" has created successfully!')
 
 
 @click.command()
