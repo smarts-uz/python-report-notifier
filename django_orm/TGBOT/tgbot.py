@@ -2,7 +2,8 @@ from telebot import TeleBot
 
 import os
 from dotenv import load_dotenv
-
+from logx import Logger
+current = Logger('sendMessage', 'w')
 from regexF.regexFunction import retry_after
 
 load_dotenv()
@@ -25,8 +26,10 @@ def sendMsg(content, user_link, private_chat_link, date, message_link, user_full
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
         print('[Message sent]')
+        current.log(a)
     except Exception as e:
         print((f'[Error] {e}'))
+        current.err(e)
         retry_after(str(e))
         a = bot.send_message(chat_id=chat_id, message_thread_id=topic_id, text=text, timeout=10)
         print('[Message sent]')
@@ -50,7 +53,9 @@ def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, messa
 
         fwr_id = a.json['message_id']
         print(f'[Message forward]  id {fwr_id}')
+        current.log(a)
     except Exception as e:
+        current.err(e)
         print((f'[Error] {e}'))
         retry_after(str(e))
 
@@ -59,11 +64,12 @@ def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, messa
 
         fwr_id = a.json['message_id']
         print(f'[Message forwarded]  id {fwr_id}')
-
+        current.log(a)
     try:
         bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
         print('[Message sent]')
     except Exception as e:
+        current.err(e)
         print((f'[Error] {e}'))
         retry_after(str(e))
 

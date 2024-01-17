@@ -19,6 +19,12 @@ from db.models import *
 from datetime import datetime
 from Parsing.parser import Parser
 
+from logx import Logger
+save_to_db = Logger('save_to_db', 'w')
+add_keyword_log = Logger('add_keyword',"a")
+save_to_db_chat = Logger('save_to_db_chat', 'w')
+save_to_db_user = Logger('save_to_db_user', 'w')
+save_to_db_message = Logger('save_to_db_message', 'w')
 
 @click.command()
 @click.argument('new_keyword', type=str)
@@ -27,8 +33,12 @@ def add_keyword(new_keyword):
 
     topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
-    Keyword.objects.get_or_create(name=new_keyword,
+    try:
+        Keyword.objects.get_or_create(name=new_keyword,
                            topic_id=topic_id)
+        add_keyword_log.log(f'{new_keyword} created successfully ')
+    except Exception as e:
+        add_keyword_log.err(e)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
 
 
@@ -74,21 +84,34 @@ def save_to_db():
         for chat in chats:
             print(
                 f'[Keyword: {item["name"]}][Chat has been saved]: chat_id:{chat["chat_id"]}  chat_title:{chat["title"]} public_chat_link: {chat["public_chat_link"]}')
-            Chat.objects.get_or_create(**chat)
+            try:
+                Chat.objects.get_or_create(**chat)
+                save_to_db_chat.log(chat)
+            except Exception as e:
+                save_to_db_chat.err(e)
+
 
         # Saving users data to db
         users = parser.users()
         for user in users:
-            User.objects.get_or_create(**user)
-            print(
+            try:
+                User.objects.get_or_create(**user)
+                print(
                 f'[Keyword: {item["name"]}][User has been saved]: user_id: {user["user_id"]}  fullname : {user["fullname"]} username: {user["username"]}')
+                save_to_db_user.log(user)
+            except Exception as e:
+                save_to_db_user.err(e)
 
         # Saving messages data to db
         messages = parser.messages()
         for message in messages:
             message['keyword_id'] = item['pk']
             msg_id = message['msg_id_field']
-            Message.objects.get_or_create(**message)
+            try:
+                Message.objects.get_or_create(**message)
+                save_to_db_message.log(message)
+            except Exception as e:
+                save_to_db_message.err(e)
             user_link = message['user_link']
             content = message['content']
             date = message['datetime']
@@ -167,3 +190,4 @@ cli.add_command(run_searching)
 
 if __name__ == '__main__':
     cli()
+
