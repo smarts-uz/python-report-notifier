@@ -1,9 +1,10 @@
 import re
 import time
 
+
 # error :
-str = "Flood control exceeded. Retry in 44.0 seconds"
-str1 = "Too Many Requests: retry after 26"
+# str = "Flood control exceeded. Retry in 44.0 seconds"
+# str1 = "Too Many Requests: retry after 26"
 
 
 def retry_after(str):

@@ -1,7 +1,12 @@
 import requests
-from pprint import pprint
 from datetime import datetime
-import json
+import os
+from dotenv import load_dotenv
+
+ip = os.getenv("IP")
+port = os.getenv("PORT")
+
+load_dotenv()
 
 
 class Parser:
@@ -13,8 +18,8 @@ class Parser:
         self.q = q
 
     def parsing(self):
-        url = "http://192.168.3.54:9503/api/messages.searchGlobal"
-        # url = "http://192.168.0.107:9503/api/messages.searchGlobal"
+        url = f"http://{ip}:{port}/api/messages.searchGlobal"
+        # url = "http://192.168.0.106:9503/api/messages.searchGlobal"
 
         payload = {"params": {
             "flags": 0,

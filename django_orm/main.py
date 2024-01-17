@@ -2,7 +2,8 @@ import sys
 import time
 from Parsing.forward_msg import ForwardMsg
 
-from Parsing.craeteTopic import CreateTopic, sendMessage
+from Parsing.craeteTopic import CreateTopic
+from Parsing.send_msg import sendMessage
 
 sys.dont_write_bytecode = True
 import click
@@ -31,7 +32,7 @@ def add_keyword(new_keyword):
 
 @click.command()
 def show_keywords():
-    data = Keyword.objects.values('pk', 'name', 'last_checked')
+    data = Keyword.objects.values('name',)
     click.echo(list(data))
 
 
@@ -101,16 +102,16 @@ def save_to_db():
             username = get_user_fullname(user_id)[1]
             pk = item['pk']
 
-            print(msg_id)
-            print(forward_bool)
+
+            print(f"[Forward]:{forward_bool}")
             if forward_bool == True:
 
-                print('---')
+
                 sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
                             user_fullname, chat_title, username, topic_id, pk)
 
             else:
-                print(peer_id)
+
                 forward_message = ForwardMsg(peer_id, msg_id, topic_id, user_link, date, user_fullname,
                                              private_chat_link, chat_title,
                                              message_full_link)
@@ -139,16 +140,16 @@ def save_to_db():
         time.sleep(1)
 
 
-    print("Successfull end!!!!")
+    print("Successfully end!!!!")
 
 
 
 
 
 @click.command()
-def run_parser():
+def run_searching():
     save_to_db()
-    click.echo('parser successfully finished')
+    click.echo('*----searching successfully finished----*')
 
 
 @click.group()
@@ -158,7 +159,7 @@ def cli():
 
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
-cli.add_command(run_parser)
+cli.add_command(run_searching)
 
 if __name__ == '__main__':
     cli()

@@ -5,7 +5,7 @@ import telegram
 import os
 from dotenv import load_dotenv
 
-from regFunction import retry_after
+from regexF import retry_after
 
 load_dotenv()
 token = os.getenv("TOKEN")

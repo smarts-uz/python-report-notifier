@@ -1,8 +1,15 @@
 import requests
 
-from .regFunction import retry_after
+from regexF.regexFunction import retry_after
+
+import os
+from dotenv import load_dotenv
+
+token = os.getenv("TOKEN")
+chat_idd = os.getenv("CHAT_ID")
 
 
+load_dotenv()
 class ForwardMsg:
 
     def __init__(self, peer_id, message_id, topic_id, userlink, date, user_full_name, chat_link, chat_title,
@@ -18,10 +25,10 @@ class ForwardMsg:
         self.message_full_link = message_full_link
 
     def forward_message(self):
-        url = "https://api.telegram.org/bot6454237457:AAHcoiiJ4gw-Zb9HCbJtHN8HiLkwHlsG474/forwardMessage"
+        url = f"https://api.telegram.org/bot6454237457:AAHcoiiJ4gw-Zb9HCbJtHN8HiLkwHlsG474/forwardMessage"
 
         payload = {
-            "chat_id": "-1002059626462",
+            "chat_id": f"-1002059626462",
             "from_chat_id": f"{self.peer_id}",
             "message_id": f"{self.message_id}",
             "message_thread_id": f"{self.topic_id}"
@@ -30,8 +37,12 @@ class ForwardMsg:
 
         response = requests.post(url, json=payload, headers=headers).json()
 
+
         print(f"Message forward : {response['ok']}")
-        msg_id = response['result']['message_id']
+        if  response['ok'] == False:
+            print(response)
+        if  response['ok'] == True:
+            msg_id = response['result']['message_id']
         while not response['ok']:
 
             if "Too Many Requests: retry after" in response['description']:
@@ -44,10 +55,10 @@ class ForwardMsg:
         return msg_id
 
     def replyMessage(self):
-        url = "https://api.telegram.org/bot6454237457:AAHcoiiJ4gw-Zb9HCbJtHN8HiLkwHlsG474/sendMessage"
+        url = f"https://api.telegram.org/bot6454237457:AAHcoiiJ4gw-Zb9HCbJtHN8HiLkwHlsG474/sendMessage"
 
         payload = {
-            "chat_id": -1002059626462,
+            "chat_id": f"-1002059626462",
             "message_thread_id": self.topic_id,
             "reply_parameters": {
                 "message_id": self.forward_message()
@@ -77,4 +88,4 @@ class ForwardMsg:
 
         return response
 
-
+#
