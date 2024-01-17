@@ -4,6 +4,7 @@ from Parsing.forward_msg import ForwardMsg
 
 from Parsing.craeteTopic import CreateTopic
 from Parsing.send_msg import sendMessage
+from TGBOT.tgbot import sendMsg
 
 sys.dont_write_bytecode = True
 import click
@@ -106,9 +107,10 @@ def save_to_db():
             print(f"[Forward]:{forward_bool}")
             if forward_bool == True:
 
-
-                sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                            user_fullname, chat_title, username, topic_id, pk)
+                sendMsg(content, user_link, private_chat_link, date, message_full_link, user_fullname, chat_title, username,
+                        topic_id, pk)
+                # sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
+                #             user_fullname, chat_title, username, topic_id, pk)
 
             else:
 
