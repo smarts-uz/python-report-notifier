@@ -24,17 +24,17 @@ def sendMsg(content, user_link, private_chat_link, date, message_link, user_full
     📩<b>Text</b>: <i>{content}</i> """
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
-        print(a)
+        print('[Message sent]')
     except Exception as e:
         print((f'[Error] {e}'))
         retry_after(str(e))
         a = bot.send_message(chat_id=chat_id, message_thread_id=topic_id, text=text, timeout=10)
-        print(a)
+        print('[Message sent]')
 
 
 
-def fvr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,username, topic_id):
-    text = f"""(PY)<b>№:</b>
+def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,username, topic_id):
+    text = f"""<b>🔢:{pk}</b>
 
     📅<b>Date</b> : <u>{date}</u>
     👤<b>User</b> :  <a href="t.me/{username}">{user_fullname}</a>
@@ -45,18 +45,41 @@ def fvr_msg(user_link, user_fullname, chat_title, private_chat_link, date, messa
 
     """
     # print(f"user_link  : {user_link}")
+    try:
+        a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,message_thread_id=topic_id)
 
-    a = bot.forward_message(chat_id=chat_id, from_chat_id=-1002098866683, message_id=63, timeout=10)
+        fwr_id = a.json['message_id']
+        print(f'[Message forward]  id {fwr_id}')
+    except Exception as e:
+        print((f'[Error] {e}'))
+        retry_after(str(e))
 
-    fvr_id = a.json['message_id']
+        a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,
+                                message_thread_id=topic_id)
+
+        fwr_id = a.json['message_id']
+        print(f'[Message forwarded]  id {fwr_id}')
+
+    try:
+        bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
+        print('[Message sent]')
+    except Exception as e:
+        print((f'[Error] {e}'))
+        retry_after(str(e))
+
+        bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
+        print('[Message sent]')
 
 
-    bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fvr_id, timeout=10)
 
 
 
 
+def creatTopic(name):
 
+    a = bot.create_forum_topic(chat_id=chat_id,name=name)
+    topic_id = a.message_thread_id
+    return topic_id
 
 
 

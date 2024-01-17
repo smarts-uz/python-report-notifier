@@ -4,7 +4,7 @@ from Parsing.forward_msg import ForwardMsg
 
 from Parsing.craeteTopic import CreateTopic
 from Parsing.send_msg import sendMessage
-from TGBOT.tgbot import sendMsg
+from TGBOT.tgbot import sendMsg,fwr_msg,creatTopic
 
 sys.dont_write_bytecode = True
 import click
@@ -23,8 +23,9 @@ from Parsing.parser import Parser
 @click.command()
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
-    cr_topic = CreateTopic(new_keyword)
-    topic_id = cr_topic.craeteTopic()
+    create_topic = creatTopic(new_keyword)
+
+    topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
     Keyword.objects.get_or_create(name=new_keyword,
                            topic_id=topic_id)
@@ -110,15 +111,16 @@ def save_to_db():
                 sendMsg(content, user_link, private_chat_link, date, message_full_link, user_fullname, chat_title, username,
                         topic_id, pk)
                 # sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                #             user_fullname, chat_title, username, topic_id, pk)
+                #             user_fullname, chat_title, username, topic_id, pk)  #python requests
 
             else:
-
-                forward_message = ForwardMsg(peer_id, msg_id, topic_id, user_link, date, user_fullname,
-                                             private_chat_link, chat_title,
-                                             message_full_link)
-
-                rpl_msg = forward_message.replyMessage()
+                fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
+                        pk, username, topic_id)
+                # forward_message = ForwardMsg(peer_id, msg_id, topic_id, user_link, date, user_fullname,
+                #                              private_chat_link, chat_title,
+                #                              message_full_link)
+                #
+                # rpl_msg = forward_message.replyMessage()   #python requests
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
