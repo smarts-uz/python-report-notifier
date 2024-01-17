@@ -20,11 +20,9 @@ from datetime import datetime
 from Parsing.parser import Parser
 
 from logx import Logger
-save_to_db = Logger('save_to_db', 'w')
+save_to_db_log = Logger('save_to_db', 'a')
 add_keyword_log = Logger('add_keyword',"a")
-save_to_db_chat = Logger('save_to_db_chat', 'w')
-save_to_db_user = Logger('save_to_db_user', 'w')
-save_to_db_message = Logger('save_to_db_message', 'w')
+
 
 @click.command()
 @click.argument('new_keyword', type=str)
@@ -86,9 +84,9 @@ def save_to_db():
                 f'[Keyword: {item["name"]}][Chat has been saved]: chat_id:{chat["chat_id"]}  chat_title:{chat["title"]} public_chat_link: {chat["public_chat_link"]}')
             try:
                 Chat.objects.get_or_create(**chat)
-                save_to_db_chat.log(chat)
+                save_to_db_log.log(chat)
             except Exception as e:
-                save_to_db_chat.err(e)
+                save_to_db_log.err(e)
 
 
         # Saving users data to db
@@ -98,9 +96,9 @@ def save_to_db():
                 User.objects.get_or_create(**user)
                 print(
                 f'[Keyword: {item["name"]}][User has been saved]: user_id: {user["user_id"]}  fullname : {user["fullname"]} username: {user["username"]}')
-                save_to_db_user.log(user)
+                save_to_db_log.log(user)
             except Exception as e:
-                save_to_db_user.err(e)
+                save_to_db_log.err(e)
 
         # Saving messages data to db
         messages = parser.messages()
@@ -109,9 +107,9 @@ def save_to_db():
             msg_id = message['msg_id_field']
             try:
                 Message.objects.get_or_create(**message)
-                save_to_db_message.log(message)
+                save_to_db_log.log(message)
             except Exception as e:
-                save_to_db_message.err(e)
+                save_to_db_log.err(e)
             user_link = message['user_link']
             content = message['content']
             date = message['datetime']
@@ -187,7 +185,16 @@ def cli():
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_searching)
+try:
+    if __name__ == '__main__':
+        cli()
+        msg = "Searching successfully ended!"
+        save_to_db_log.log(msg)
+except Exception as e:
+    msg = "Some kind of error, check log file"
+    print(msg)
+    save_to_db_log.log(msg)
+    save_to_db_log.err(e)
 
-if __name__ == '__main__':
-    cli()
+
 

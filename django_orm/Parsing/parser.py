@@ -3,6 +3,11 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
+
+from logx import Logger
+save_parser_to_log = Logger('parser_log', 'a')
+
+
 ip = os.getenv("IP")
 port = os.getenv("PORT")
 
@@ -35,29 +40,43 @@ class Parser:
             "limit": 100
         }}
         headers = {"content-type": "application/json"}
+        try:
+            response = requests.get(url, json=payload, headers=headers).json()
+            msg = "Parsing is starting"
+            save_parser_to_log.log(msg)
 
-        response = requests.get(url, json=payload, headers=headers).json()
+        except Exception as e:
+            msg = 'Some kind of error. check log file'
+            print(msg)
+            save_parser_to_log.log(msg)
+            save_parser_to_log.err(e)
 
         return response
 
     def users(self):
         data = []
-        response = self.parsing()
-        users = response['response']['users']
-        for user in users:
-            user_id = user['id']
-            # if user == 136817688:
-            #     continue
+        try:
+            response = self.parsing()
+            users = response['response']['users']
+            for user in users:
+                user_id = user['id']
+                if user == 136817688:
+                    continue
 
-            fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
-            username = user.get('username', ' ')
-            # print(f"{user_id}"
-            #       f"{fullname}"
-            #       f"{username}"
-            #       )
-            data.append({'user_id': user_id,
+                fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
+                username = user.get('username', ' ')
+
+                data.append({'user_id': user_id,
                          'fullname': fullname,
                          'username': username})
+                save_parser_to_log.log(user)
+        except Exception as e:
+            msg = '[Parser][User]Some kind of error. check log file'
+            print(msg)
+            save_parser_to_log.log(msg)
+            save_parser_to_log.err(e)
+
+
         # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
 
@@ -65,30 +84,38 @@ class Parser:
 
     def chats(self):
         data = []
-        response = self.parsing()
-        chats = response['response']['chats']
+        try:
+            response = self.parsing()
+            chats = response['response']['chats']
 
-        for chat in chats:
+            for chat in chats:
 
-            chat_id = chat['id']
-            if chat_id == 2059626462:
-                continue
-            peer_id = int("-100" + str(chat_id))
-            title = chat['title']
-            type = chat['_']
-            forward_message = chat['noforwards']
-            username = chat.get('username', 'private chat')
-            if username == "private chat":
-                public_chat_link = "private chat"
-            else:
-                public_chat_link = f"t.me/{username}"
+                chat_id = chat['id']
+                if chat_id == 2059626462:
+                    continue
+                peer_id = int("-100" + str(chat_id))
+                title = chat['title']
+                type = chat['_']
+                forward_message = chat['noforwards']
+                username = chat.get('username', 'private chat')
+                if username == "private chat":
+                    public_chat_link = "private chat"
+                else:
+                    public_chat_link = f"t.me/{username}"
 
-            data.append({"chat_id": chat_id,
+                data.append({"chat_id": chat_id,
                          "peer_id": peer_id,
                          "title": title,
                          "type": type,
                          "public_chat_link": public_chat_link,
                          "forward_message": forward_message})
+                save_parser_to_log.log(chat)
+        except Exception as e:
+            msg = '[Parser][Chat]Some kind of error. check log file'
+            print(msg)
+            save_parser_to_log.log(msg)
+            save_parser_to_log.err(e)
+
 
         # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
@@ -96,30 +123,31 @@ class Parser:
         return data
 
     def messages(self):
-
-        response = self.parsing()
-        messages = response['response']['messages']
-        topic_id = None
         data = []
-        for message in messages:
-            peer_id = message['peer_id']
-            # content group
+        try:
+            response = self.parsing()
+            messages = response['response']['messages']
+            topic_id = None
 
-            if peer_id == -1002059626462:
-                continue
-            msg_id = message['id']
-            text = message.get("message", " ")
-            from_id = message.get('from_id', ' ')
-            timestamp = message['date']
-            date = datetime.fromtimestamp(timestamp)
+            for message in messages:
+                peer_id = message['peer_id']
+                # content group
 
-            user_link = f'tg://user?id={from_id}'
-            keyword_id = None
-            public_link_chat = None
-            private_link_chat = f"t.me/c/{int(str(peer_id)[4:])}"
-            message_full_link = f"t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
+                if peer_id == -1002059626462:
+                    continue
+                msg_id = message['id']
+                text = message.get("message", " ")
+                from_id = message.get('from_id', ' ')
+                timestamp = message['date']
+                date = datetime.fromtimestamp(timestamp)
 
-            data.append({'user_id': from_id,
+                user_link = f'tg://user?id={from_id}'
+                keyword_id = None
+                public_link_chat = None
+                private_link_chat = f"t.me/c/{int(str(peer_id)[4:])}"
+                message_full_link = f"t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
+
+                data.append({'user_id': from_id,
                          'datetime': date,
                          'peer_id': peer_id,
                          'content': text,
@@ -130,16 +158,15 @@ class Parser:
                          "user_link": user_link,
                          "msg_id_field": msg_id
                          })
+                save_parser_to_log.log(message)
+        except Exception as e:
+            msg = '[Parser][Message]: Some kind of error. check log file'
+            print(msg)
+            save_parser_to_log.log(msg)
+            save_parser_to_log.err(e)
+
 
         return data
 
     def update_date(self):
         return self.now
-#
-# a = Parser('12385123',"#myd")
-# b = a.users()
-# c = a.chats()
-# d = a.messages()
-# pprint(b)
-# pprint(c)
-# pprint(d)

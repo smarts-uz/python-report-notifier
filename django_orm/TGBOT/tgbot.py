@@ -3,7 +3,9 @@ from telebot import TeleBot
 import os
 from dotenv import load_dotenv
 from logx import Logger
-current = Logger('sendMessage', 'w')
+sendM = Logger('sendMessage', 'a')
+forwM = Logger('forwardMessage', 'a')
+creatT = Logger('creatTopic', 'a')
 from regexF.regexFunction import retry_after
 
 load_dotenv()
@@ -26,12 +28,13 @@ def sendMsg(content, user_link, private_chat_link, date, message_link, user_full
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
         print('[Message sent]')
-        current.log(a)
+        sendM.log(f'[Send Message] : {a}')
     except Exception as e:
-        print((f'[Error] {e}'))
-        current.err(e)
+        print(f'[Send Error] {e}')
+        sendM.err(f'[Send Error] {e}')
         retry_after(str(e))
         a = bot.send_message(chat_id=chat_id, message_thread_id=topic_id, text=text, timeout=10)
+        sendM.log(f'[Send Message] : {a}')
         print('[Message sent]')
 
 
@@ -53,28 +56,32 @@ def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, messa
 
         fwr_id = a.json['message_id']
         print(f'[Message forward]  id {fwr_id}')
-        current.log(a)
+        forwM.log(f'[Forward Message]{a}')
     except Exception as e:
-        current.err(e)
-        print((f'[Error] {e}'))
+        forwM.err(f'[Forward Error] {e}')
+        print(f'[Forward Error] {e}')
         retry_after(str(e))
 
         a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,
                                 message_thread_id=topic_id)
 
+
         fwr_id = a.json['message_id']
         print(f'[Message forwarded]  id {fwr_id}')
-        current.log(a)
+        forwM.log(f'[Forward Message]{a}')
     try:
-        bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
+        a = bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
         print('[Message sent]')
+        forwM.log(f'[Reply Message] : {a}')
+
     except Exception as e:
-        current.err(e)
+        forwM.err(f'[Reply Error] : {e}')
         print((f'[Error] {e}'))
         retry_after(str(e))
 
         bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
         print('[Message sent]')
+        forwM.log(f'[Reply Message] : {a}')
 
 
 
@@ -82,9 +89,14 @@ def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, messa
 
 
 def creatTopic(name):
+    try:
+        a = bot.create_forum_topic(chat_id=chat_id,name=name)
+        topic_id = a.message_thread_id
+        creatT.log(f'[Create Topic] : {a}')
+    except Exception as e:
+        print(f'[Creat Topic Error]')
+        creatT.err(f'[Error] : {e}')
 
-    a = bot.create_forum_topic(chat_id=chat_id,name=name)
-    topic_id = a.message_thread_id
     return topic_id
 
 
