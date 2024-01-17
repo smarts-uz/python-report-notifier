@@ -36,3 +36,8 @@ def sendMsg(content, user_link, private_chat_link, date, message_link, user_full
 
 
 
+
+
+
+
+
