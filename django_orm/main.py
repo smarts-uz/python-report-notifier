@@ -160,9 +160,9 @@ def save_to_db():
         print(f'update time is {update_time}')
         print(f"f[*---------{item['name']}-------------- search successfully ended!! *]")
 
-    for i in range(5):
-        print(i + 1)
-        time.sleep(1)
+        for i in range(5):
+            print(i + 1)
+            time.sleep(1)
 
 
     print("Successfully end!!!!")

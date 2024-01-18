@@ -59,8 +59,8 @@ class Parser:
             response = self.parsing()
             users = response['response']['users']
             for user in users:
-                user_id = user['id']
-                if user == 136817688:
+                user_id = user.get("id","This is not user")
+                if user == [136817688,211246197]:
                     continue
 
                 fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
