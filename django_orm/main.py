@@ -1,11 +1,7 @@
 import sys
 import time
-from Parsing.forward_msg import ForwardMsg
 
-from Parsing.craeteTopic import CreateTopic
-from Parsing.send_msg import sendMessage
 from TGBOT.tgbot import sendMsg,fwr_msg,creatTopic
-
 sys.dont_write_bytecode = True
 import click
 # Django specific settings
@@ -18,6 +14,7 @@ django.setup()
 from db.models import *
 from datetime import datetime
 from Parsing.parser import Parser
+from Parsing.Telegram_RSS import Rss
 
 from logx import Logger
 save_to_db_log = Logger('save_to_db', 'a')
@@ -182,9 +179,22 @@ def cli():
     pass
 
 
+@click.command()
+
+def save_topic():
+    chat_id = -1002109564785
+    topics = Rss(chat_id).topic()
+    for topic in topics:
+        TgTopic.objects.get_or_create(**topic)
+
+        click.echo(topic)
+
+
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_searching)
+cli.add_command(save_topic)
+
 try:
     if __name__ == '__main__':
         cli()
@@ -195,6 +205,11 @@ except Exception as e:
     print(msg)
     save_to_db_log.log(msg)
     save_to_db_log.err(e)
+
+
+
+
+
 
 
 
