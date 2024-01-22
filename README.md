@@ -9,4 +9,6 @@ Then install requirements
 pip install -r requirements.txt
 
 cd django_orm
+
+
 py main.py run-searching
