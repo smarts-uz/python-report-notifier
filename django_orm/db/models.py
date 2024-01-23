@@ -236,10 +236,39 @@ class TgGroup(models.Model):
         db_table = 'tg_group'
 
 
+class TgGroupMessage(models.Model):
+    content = models.TextField(blank=True, null=True)
+    noforwards = models.BooleanField(blank=True, null=True)
+    msg_id = models.IntegerField(blank=True, null=True)
+    from_id = models.BigIntegerField(blank=True, null=True)
+    peer_id = models.BigIntegerField(blank=True, null=True)
+    date = models.DateTimeField(blank=True, null=True)
+    forum_topic = models.BooleanField(blank=True, null=True)
+    reply_to_msg_id = models.IntegerField(blank=True, null=True)
+    topic_id = models.IntegerField(blank=True, null=True)
+    mtproto = models.JSONField(blank=True, null=True)
+    tg_group_id = models.IntegerField(blank=True, null=True)
+    edit_date = models.DateTimeField(blank=True, null=True)
+    message_private_link = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    pinned = models.BooleanField(blank=True, null=True)
+    media = models.JSONField(blank=True, null=True)
+    post = models.BooleanField(blank=True, null=True)
+    out = models.BooleanField(blank=True, null=True)
+    replies_count = models.IntegerField(blank=True, null=True)
+    max_id = models.IntegerField(blank=True, null=True)
+    read_max_id = models.IntegerField(blank=True, null=True)
+    comments = models.BooleanField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tg_group_message'
+
+
 class TgGroupText(models.Model):
 
     type = models.CharField(max_length=255, blank=True, null=True)
-    full_url = models.CharField(max_length=255, blank=True, null=True)
+    message_private_link = models.CharField(max_length=255, blank=True, null=True)
     tg_channel_text_id = models.IntegerField(blank=True, null=True)
     out = models.SmallIntegerField(blank=True, null=True)
     mentioned = models.SmallIntegerField(blank=True, null=True)
@@ -300,7 +329,6 @@ class TgGroupText(models.Model):
 
 
 class TgGroupUser(models.Model):
-    id = models.IntegerField(primary_key=True)
     contact = models.BooleanField(blank=True, null=True)
     bot = models.BooleanField(blank=True, null=True)
     tg_group_user_id = models.BigIntegerField(blank=True, null=True)
@@ -396,6 +424,7 @@ class TgUserRole(models.Model):
 
 
 class TgUserText(models.Model):
+
     tg_id = models.IntegerField(blank=True, null=True)
     field_field = models.CharField(db_column='_', max_length=255, blank=True, null=True)  # Field renamed because it started with '_'. Field renamed because it ended with '_'.
     out = models.CharField(max_length=255, blank=True, null=True)
@@ -431,7 +460,7 @@ class TgUserText(models.Model):
 
 
 class User(models.Model):
-
+   
     user_id = models.BigIntegerField()
     username = models.CharField(max_length=255, blank=True, null=True)
     fullname = models.CharField(max_length=255, blank=True, null=True)
