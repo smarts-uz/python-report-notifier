@@ -76,10 +76,10 @@ class Rss:
 
 
 
-
-
+#
+#
 chat_id= -1002109564785
-
-rss = Rss(chat_id).users()
-# rss = Rss(chat_id).category()
-pprint(rss)
+# 
+# rss = Rss(chat_id).users()
+# # rss = Rss(chat_id).category()
+# pprint(rss)

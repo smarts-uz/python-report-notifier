@@ -22,16 +22,6 @@ class Chat(models.Model):
         db_table = 'chat'
 
 
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
-
-
 class Keyword(models.Model):
 
     name = models.CharField(max_length=255)
@@ -309,6 +299,24 @@ class TgGroupText(models.Model):
         db_table = 'tg_group_text'
 
 
+class TgGroupUser(models.Model):
+    id = models.IntegerField(primary_key=True)
+    contact = models.BooleanField(blank=True, null=True)
+    bot = models.BooleanField(blank=True, null=True)
+    tg_group_user_id = models.BigIntegerField(blank=True, null=True)
+    full_name = models.CharField(max_length=255, blank=True, null=True)
+    username = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.BigIntegerField(blank=True, null=True)
+    photo_field = models.JSONField(db_column='photo ', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
+    status = models.JSONField(blank=True, null=True)
+    mtproto = models.JSONField(blank=True, null=True)
+    tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tg_group_user'
+
+
 class TgRole(models.Model):
 
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -388,7 +396,6 @@ class TgUserRole(models.Model):
 
 
 class TgUserText(models.Model):
-
     tg_id = models.IntegerField(blank=True, null=True)
     field_field = models.CharField(db_column='_', max_length=255, blank=True, null=True)  # Field renamed because it started with '_'. Field renamed because it ended with '_'.
     out = models.CharField(max_length=255, blank=True, null=True)
