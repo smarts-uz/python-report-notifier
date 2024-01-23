@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 from pprint import pprint
 class Rss:
 
@@ -41,7 +42,8 @@ class Rss:
             id = message['id']
             from_id = message['from_id']
             peer_id = message['peer_id']
-            date = message['date']
+            date_timestamp = message['date']
+            date = datetime.fromtimestamp(date_timestamp)
             content = message['message']
             reply_to_top_id = None
             mtproto = message
@@ -68,7 +70,8 @@ class Rss:
                 media = None
 
             try:
-                edit_date = message['edit_date']
+                edit_date_timestamp = message['edit_date']
+                edit_date = datetime.fromtimestamp(edit_date_timestamp)
             except Exception as e:
                 edit_date = None
             try:

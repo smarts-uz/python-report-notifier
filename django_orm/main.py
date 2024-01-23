@@ -21,7 +21,7 @@ save_to_db_log = Logger('save_to_db', 'a')
 add_keyword_log = Logger('add_keyword',"a")
 
 
-#django orm function start
+#------- django orm function start
 
 def all_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked', "topic_id")
@@ -50,7 +50,7 @@ def get_msg_id(msg_full_link):
 #django orm function end
 
 
-#save to db start
+# ----------save to db start
 def save_to_db():
     print("[Parsing in progress]")
     for item in all_keywords():
@@ -142,6 +142,18 @@ def save_to_db():
 
     print("Successfully end!!!!")
 
+
+def save_db_rss():
+    messages =Rss(-1002109564785).messages()
+    for message in messages:
+        try:
+         TgGroupMessage.objects.get_or_create(**message)
+        except Exception as e:
+            print(e)
+
+
+
+
 #save to db end
 
 
@@ -151,7 +163,6 @@ def save_to_db():
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
     create_topic = creatTopic(new_keyword)
-
     topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
     try:
@@ -175,6 +186,11 @@ def run_searching():
     save_to_db()
     click.echo('*----searching successfully finished----*')
 
+@click.command()
+def run_rss():
+    save_db_rss()
+    click.echo('*-------------end-----------*')
+
 
 @click.group()
 def cli():
@@ -185,6 +201,7 @@ def cli():
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_searching)
+cli.add_command(run_rss)
 
 
 try:
