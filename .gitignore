@@ -9,7 +9,7 @@ __pycache__/
 # Distribution / packaging
 django_orm/TGBOT/TOKEN.py
 .env
-vevn/
+venv/
 .Python
 build/
 develop-eggs/

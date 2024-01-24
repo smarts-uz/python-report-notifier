@@ -9,8 +9,9 @@
       <sourceFolder url="file://$MODULE_DIR$/django_orm/TGBOT" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/django_orm/Parsing/retryAfter" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/django_orm/regexF" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.9 (python-xtrime-parser) (3)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (python-xtrime-parser)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyNamespacePackagesService">
