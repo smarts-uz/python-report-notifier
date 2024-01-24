@@ -230,6 +230,7 @@ class TgGroup(models.Model):
     is_active = models.BooleanField(blank=True, null=True)
     name_history = models.JSONField(blank=True, null=True)
     last_message_id = models.BigIntegerField(blank=True, null=True)
+    days_count = models.SmallIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -249,7 +250,7 @@ class TgGroupMessage(models.Model):
     mtproto = models.JSONField(blank=True, null=True)
     tg_group_id = models.IntegerField(blank=True, null=True)
     edit_date = models.DateTimeField(blank=True, null=True)
-    message_private_link = models.CharField(max_length=255, blank=True, null=True)
+    message_private_link = models.CharField(unique=True, max_length=255)
     type = models.CharField(max_length=255, blank=True, null=True)
     pinned = models.BooleanField(blank=True, null=True)
     media = models.JSONField(blank=True, null=True)
@@ -259,6 +260,8 @@ class TgGroupMessage(models.Model):
     max_id = models.IntegerField(blank=True, null=True)
     read_max_id = models.IntegerField(blank=True, null=True)
     comments = models.BooleanField(blank=True, null=True)
+    old_content = models.JSONField(blank=True, null=True, default={})
+    old_count = models.IntegerField(blank=True, null=True,default=0)
 
     class Meta:
         managed = False
@@ -334,7 +337,7 @@ class TgGroupUser(models.Model):
     tg_group_user_id = models.BigIntegerField(blank=True, null=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-    phone = models.BigIntegerField(blank=True, null=True)
+    phone = models.CharField(max_length=255, blank=True, null=True)
     photo_field = models.JSONField(db_column='photo ', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
     status = models.JSONField(blank=True, null=True)
     mtproto = models.JSONField(blank=True, null=True)
@@ -460,7 +463,7 @@ class TgUserText(models.Model):
 
 
 class User(models.Model):
-   
+
     user_id = models.BigIntegerField()
     username = models.CharField(max_length=255, blank=True, null=True)
     fullname = models.CharField(max_length=255, blank=True, null=True)

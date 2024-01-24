@@ -1,46 +1,70 @@
-import requests
-from datetime import datetime
+from  datetime import datetime,timedelta
+import  requests
 from pprint import pprint
-class Rss:
+def rss(peer_id,days):
+    messages = []
+    users = []
+    topics = []
+    pag = 0
+    while True:
+        pag +=1
+        tdz = 0
+        today = datetime.now()
+        d = today - timedelta(days=days)
+        timestamp = datetime.timestamp(d)
 
-    def __init__(self,chat_id):
-        self.chat_id = chat_id
-
-    def parsing(self):
-        url = f"http://192.168.3.54:9504/json/{self.chat_id}?limit=10"
+        url = f"http://192.168.0.111:9504/json/{peer_id}/{pag}"
         response = requests.post(url).json()
-        return response
 
-    def topic(self):
-        response = self.parsing()
-        data = []
-        for topic in response['topics']:
-            topic_id = topic["id"]
-            created_time = topic['date']
-            title = topic['title']
-            topic_creater_id = topic['from_id']
-            closed = topic['closed']
-            data.append({
-                "tg_topic_id" : topic_id,
-                "created_time" : created_time,
-                "title" : title,
-                "topic_creater_id" :topic_creater_id,
-                "closed" : closed
 
-            })
-        return data
 
-    def messages(self):
-        data = []
-        response = self.parsing()
+
+        for user in response['users']:
+            tg_group_id = None
+            contact = user['contact']
+            bot = user['bot']
+            tg_group_user_id = user['id']
+            fullname = f'{user.get("first_name"," ")} {user.get("last_name"," ")}'
+            username = user.get('username'," ")
+            phone = user.get("phone","hidden")
+            photo = user.get("photo"," ")
+            status = user.get("status"," ")
+            mtproto = user
+            new_data = {
+                    "contact" : contact,
+                    "bot" : bot,
+                    "tg_group_user_id" :tg_group_user_id,
+                    "full_name" :fullname,
+                    "username" : username,
+                    "phone" : phone,
+                    "photo_field" : photo,
+                    "status" : status,
+                    "tg_group_id" : tg_group_id,
+                    "mtproto" : mtproto
+                }
+
+
+            if not any(item["tg_group_user_id"] == new_data["tg_group_user_id"] for item in users):
+                users.append(
+                new_data
+                )
+            else:
+
+                continue
+
+
+
+
+ #-------messages ----
         for message in response['messages']:
 
+            tdz = message['date']
             if message['_'] == 'messageService':
                 continue
             type = message['_']
             noforwards = message.get('noforwards',' ')
             id = message['id']
-            from_id = message['from_id']
+            from_id = message.get('from_id',' ')
             peer_id = message['peer_id']
             date_timestamp = message['date']
             date = datetime.fromtimestamp(date_timestamp)
@@ -89,7 +113,7 @@ class Rss:
             except Exception as e:
                 forum_topic = None
                 reply_to_msg_id = None
-            data.append({
+            messages.append({
                 "noforwards" : noforwards,
                 "msg_id" : id,
                 "from_id" : from_id,
@@ -120,56 +144,19 @@ class Rss:
 
 
             })
-        return data
 
 
-    def users(self):
-        response = self.parsing()
-        data = []
-        for user in response['users']:
-            tg_group_id = None
-            contact = user['contact']
-            bot = user['bot']
-            tg_group_user_id = user['id']
-            fullname = f'{user.get("first_name"," ")} {user.get("last_name"," ")}'
-            username = user.get('username'," ")
-            phone = user.get("phone","hidden")
-            photo = user.get("photo"," ")
-            status = user.get("status"," ")
-            mtproto = user
+            if timestamp >= tdz:
+                break
+        print(f"Lenth User: {len(users)}")
+        print(f"Lenth Messages: {len(messages)}")
+        print(f'{timestamp} and {tdz}')
 
-            data.append(
-                {
-                    "contact" : contact,
-                    "bot" : bot,
-                    "tg_group_user_id" :tg_group_user_id,
-                    "fullname" :fullname,
-                    "username" : username,
-                    "phone" : phone,
-                    "photo" : photo,
-                    "status" : status,
-                    "tg_group_id" : tg_group_id,
-                    "mtproto" : mtproto
-                }
-            )
-        return data
+        if timestamp >= tdz:
+            break
+    return messages , users ,topics
 
-
-    def category(self):
-        response = self.parsing()
-        for i in response:
-            print(i)
-
-
-
-
-
-
-
-
-
-chat_id= -1002109564785
 #
-# rss = Rss(chat_id).messages()
-# # rss = Rss(chat_id).category()
-# pprint(rss)
+# r = rss('-1002109564785',30)
+# pprint(r[1])
+# pprint(r[0])

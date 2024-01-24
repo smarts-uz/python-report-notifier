@@ -12,13 +12,15 @@ import django
 
 django.setup()
 from db.models import *
+from django.db.models import Q
 from datetime import datetime
 from Parsing.parser import Parser
-from Parsing.Telegram_RSS import Rss
+from Parsing.Telegram_RSS import rss
 
 from logx import Logger
 save_to_db_log = Logger('save_to_db', 'a')
 add_keyword_log = Logger('add_keyword',"a")
+rss_parsing_save_to_db = Logger('rss_parsing_save_to_db',"a")
 
 
 #------- django orm function start
@@ -41,6 +43,7 @@ def save_to_db():
             print(
                 f'[Keyword: {item["name"]}][Chat has been saved]: chat_id:{chat["chat_id"]}  chat_title:{chat["title"]} public_chat_link: {chat["public_chat_link"]}')
             try:
+
                 Chat.objects.get_or_create(**chat)
                 save_to_db_log.log(chat)
             except Exception as e:
@@ -114,12 +117,52 @@ def save_to_db():
 
 
 def save_db_rss():
-    messages =Rss(-1002109564785).messages()
-    for message in messages:
+    data = rss(-1002109564785,1)
+    messages = data[0]
+    users = data[1]
+    try:
+        for message in messages:
+
+            try:
+                msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
+                if message["content"] != msg.content:
+                    count = msg.old_count + 1
+                    old = {f"{count}:content": msg.content}
+                    ext_data = msg.old_content
+
+                    ext_data.update(old)
+                    msg.old_count = count
+
+                    msg.content = message["content"]
+                    msg.save()
+
+                    print(f'content update {message["message_private_link"]}')
+                    rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
+                else:
+                    print(f'already exists {message["message_private_link"]}')
+                    rss_parsing_save_to_db.log(f"[ALREADY EXISTS]{message}")
+
+
+            except TgGroupMessage.DoesNotExist:
+                TgGroupMessage.objects.create(**message)
+
+                print('Created new message')
+                print(f'[Message has been saved to db] msg_id : {message["message_private_link"]}')
+                rss_parsing_save_to_db.log(f'[CREATED NEW MESSAGE] {message}')
+    # --------------
+
+    except Exception as e:
+        print('[Message][Some Kind of error check the log file]')
+        rss_parsing_save_to_db.err(f'[Message Error]: {e}')
+    for user in users:
         try:
-         TgGroupMessage.objects.get_or_create(**message)
+            TgGroupUser.objects.get_or_create(**user)
+            print(f'[User has been saved to db] user_id :  {user["tg_group_user_id"]}' )
+            rss_parsing_save_to_db.log(user)
         except Exception as e:
-            print(e)
+            print('[User][Some Kind of error check the log file]')
+            rss_parsing_save_to_db.err(f'[User error]: {e}')
+    print('Parsing end!')
 
 
 
