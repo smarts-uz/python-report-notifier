@@ -20,7 +20,9 @@ DATABASES = {
         'NAME': "postgres",
         'USER': "postgres",
         'PASSWORD': os.getenv("PASSWORD"),
-        'PORT': '5432'
+        'PORT': '5432',
+
+
     }
 }
 

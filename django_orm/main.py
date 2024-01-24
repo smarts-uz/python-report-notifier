@@ -1,11 +1,7 @@
 import sys
 import time
-from Parsing.forward_msg import ForwardMsg
 
-from Parsing.craeteTopic import CreateTopic
-from Parsing.send_msg import sendMessage
 from TGBOT.tgbot import sendMsg,fwr_msg,creatTopic
-
 sys.dont_write_bytecode = True
 import click
 # Django specific settings
@@ -18,33 +14,14 @@ django.setup()
 from db.models import *
 from datetime import datetime
 from Parsing.parser import Parser
+from Parsing.Telegram_RSS import Rss
 
 from logx import Logger
 save_to_db_log = Logger('save_to_db', 'a')
 add_keyword_log = Logger('add_keyword',"a")
 
 
-@click.command()
-@click.argument('new_keyword', type=str)
-def add_keyword(new_keyword):
-    create_topic = creatTopic(new_keyword)
-
-    topic_id = create_topic
-    click.echo(f'Topic "{new_keyword}" has created successfully!')
-    try:
-        Keyword.objects.get_or_create(name=new_keyword,
-                           topic_id=topic_id)
-        add_keyword_log.log(f'{new_keyword} created successfully ')
-    except Exception as e:
-        add_keyword_log.err(e)
-    click.echo(f'Keyword "{new_keyword}" added successfully!')
-
-
-@click.command()
-def show_keywords():
-    data = Keyword.objects.values('name',)
-    click.echo(list(data))
-
+#------- django orm function start
 
 def all_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked', "topic_id")
@@ -70,7 +47,10 @@ def get_msg_id(msg_full_link):
     message = Message.objects.get(message_full_link=msg_full_link)
     return message.first.pk
 
+#django orm function end
 
+
+# ----------save to db start
 def save_to_db():
     print("[Parsing in progress]")
     for item in all_keywords():
@@ -131,17 +111,12 @@ def save_to_db():
 
                 sendMsg(content, user_link, private_chat_link, date, message_full_link, user_fullname, chat_title, username,
                         topic_id, pk)
-                # sendMessage(str(content), user_link, str(private_chat_link), str(date), str(message_full_link),
-                #             user_fullname, chat_title, username, topic_id, pk)  #python requests
+
 
             else:
                 fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
                         pk, username, topic_id)
-                # forward_message = ForwardMsg(peer_id, msg_id, topic_id, user_link, date, user_fullname,
-                #                              private_chat_link, chat_title,
-                #                              message_full_link)
-                #
-                # rpl_msg = forward_message.replyMessage()   #python requests
+
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
@@ -152,7 +127,7 @@ def save_to_db():
         print("last checked time", update_time)
 
         key = Keyword.objects.get(name=item["name"])
-        # Do something with the 'key' object
+
 
 
         key.last_checked = update_time
@@ -168,6 +143,41 @@ def save_to_db():
     print("Successfully end!!!!")
 
 
+def save_db_rss():
+    messages =Rss(-1002109564785).messages()
+    for message in messages:
+        try:
+         TgGroupMessage.objects.get_or_create(**message)
+        except Exception as e:
+            print(e)
+
+
+
+
+#save to db end
+
+
+
+#Click command start
+@click.command()
+@click.argument('new_keyword', type=str)
+def add_keyword(new_keyword):
+    create_topic = creatTopic(new_keyword)
+    topic_id = create_topic
+    click.echo(f'Topic "{new_keyword}" has created successfully!')
+    try:
+        Keyword.objects.get_or_create(name=new_keyword,
+                           topic_id=topic_id)
+        add_keyword_log.log(f'{new_keyword} created successfully ')
+    except Exception as e:
+        add_keyword_log.err(e)
+    click.echo(f'Keyword "{new_keyword}" added successfully!')
+
+
+@click.command()
+def show_keywords():
+    data = Keyword.objects.values('name',)
+    click.echo(list(data))
 
 
 
@@ -176,15 +186,24 @@ def run_searching():
     save_to_db()
     click.echo('*----searching successfully finished----*')
 
+@click.command()
+def run_rss():
+    save_db_rss()
+    click.echo('*-------------end-----------*')
+
 
 @click.group()
 def cli():
     pass
 
 
+
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_searching)
+cli.add_command(run_rss)
+
+
 try:
     if __name__ == '__main__':
         cli()
@@ -195,6 +214,13 @@ except Exception as e:
     print(msg)
     save_to_db_log.log(msg)
     save_to_db_log.err(e)
+
+
+#Click command end!
+
+
+
+
 
 
 
