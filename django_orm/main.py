@@ -54,9 +54,7 @@ def get_msg_id(msg_full_link):
 def save_to_db():
     print("[Parsing in progress]")
     for item in all_keywords():
-
         parser = Parser(item['last_checked'], item['name'])
-
         # Saving chats data to db
         chats = parser.chats()
         for chat in chats:
@@ -67,7 +65,6 @@ def save_to_db():
                 save_to_db_log.log(chat)
             except Exception as e:
                 save_to_db_log.err(e)
-
 
         # Saving users data to db
         users = parser.users()
@@ -105,18 +102,13 @@ def save_to_db():
             username = get_user_fullname(user_id)[1]
             pk = item['pk']
 
-
             print(f"[Forward]:{forward_bool}")
             if forward_bool == True:
-
                 sendMsg(content, user_link, private_chat_link, date, message_full_link, user_fullname, chat_title, username,
                         topic_id, pk)
-
-
             else:
                 fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
                         pk, username, topic_id)
-
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
@@ -128,8 +120,6 @@ def save_to_db():
 
         key = Keyword.objects.get(name=item["name"])
 
-
-
         key.last_checked = update_time
         key.save()
         print(f'update time is {update_time}')
@@ -139,8 +129,8 @@ def save_to_db():
             print(i + 1)
             time.sleep(1)
 
-
     print("Successfully end!!!!")
+
 
 
 def save_db_rss():
