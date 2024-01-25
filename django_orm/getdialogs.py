@@ -31,6 +31,7 @@ def channel_dialogs():
                     "tg_id":chat['id'],
                     "signatures":chat['signatures'],
                     "created_at" : datetime.fromtimestamp(chat['date']),
+                     "megagroup": chat['megagroup']
                     })
             else:
                  data_chat.append({
@@ -39,6 +40,7 @@ def channel_dialogs():
                     "tg_id": chat['id'],
                     "created_at": datetime.fromtimestamp(chat['date']),
                     "participants_count": chat['participants_count'],
+                     "megagroup": chat['megagroup']
                     })
     return data_channel, data_chat
 
@@ -69,34 +71,3 @@ def saveChannels():
 
 saveChannels()
 
-# for channel in data_channel:
-#     print(channel)
-#
-# for chat in data_chat:
-#     print(chat)
-
-# try:
-#     book = TgChannel.objects.get(name=i['title'])
-#
-# except TgChannel.DoesNotExist:
-#
-#     for channel_info in data_channel:
-#         TgChannel.objects.create(**channel_info)
-#
-# except TgChannel.MultipleObjectsReturned:
-#     pass
-#
-#
-#
-#
-# try:
-#     book = TgGroup.objects.get(name=i['title'])
-#
-# except TgGroup.DoesNotExist:
-#
-#     for channel_info in data_channel:
-#         TgGroup.objects.create(**channel_info)
-#
-# except TgGroup.MultipleObjectsReturned:
-#         pass
-#

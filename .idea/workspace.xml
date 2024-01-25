@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3e5346c-5e77-45fa-9067-5be7827f37fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/django_orm/getdialogs.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/django_orm/test2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_orm/db/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_orm/db/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_orm/getdialogs.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_orm/getdialogs.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +53,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.Test3.executor": "Run",
+    "Python.getdialogs (1).executor": "Run",
     "Python.main.executor": "Run",
+    "Python.models.executor": "Run",
     "Python.parser.executor": "Run",
     "Python.test2 (1).executor": "Run",
     "Python.test2.executor": "Run",
@@ -77,8 +79,8 @@
       <recent name="C:\Users\Администратор\Desktop\smarts software\python-xtrime-parser\django_orm" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.getdialogs">
-    <configuration name="Test3" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.getdialogs (1)">
+    <configuration name="getdialogs (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python-xtrime-parser" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -87,11 +89,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/django_orm/TGBOT" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/django_orm" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/django_orm/TGBOT/Test3.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/django_orm/getdialogs.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -122,7 +124,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="parser" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="models" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python-xtrime-parser" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -131,11 +133,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/django_orm/Parsing" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/django_orm/db" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/django_orm/Parsing/parser.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/django_orm/db/models.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -189,9 +191,10 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.getdialogs" />
+      <item itemvalue="Python.getdialogs (1)" />
+      <item itemvalue="Python.models" />
       <item itemvalue="Python.test3" />
-      <item itemvalue="Python.Test3" />
-      <item itemvalue="Python.parser" />
       <item itemvalue="Python.test2" />
       <item itemvalue="Shell Script.pip install -r requirements.txt" />
       <item itemvalue="Shell Script.py main.py add-keyword &lt;&quot;insert new keyword&quot;&gt;" />
@@ -199,15 +202,14 @@
       <item itemvalue="Shell Script.py main.py  show-keywords" />
       <item itemvalue="Shell Script.py -m venv venv " />
       <item itemvalue="Shell Script.-m venv venv" />
-      <item itemvalue="Python.getdialogs" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.getdialogs (1)" />
+        <item itemvalue="Python.test3" />
+        <item itemvalue="Python.models" />
         <item itemvalue="Python.getdialogs" />
         <item itemvalue="Python.test2" />
-        <item itemvalue="Python.test3" />
-        <item itemvalue="Python.Test3" />
-        <item itemvalue="Python.parser" />
       </list>
     </recent_temporary>
   </component>

@@ -121,6 +121,7 @@ class TgChannel(models.Model):
     updated_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
     hrm_project_id = models.IntegerField(blank=True, null=True)
+    megagroup=models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -231,6 +232,7 @@ class TgGroup(models.Model):
     name_history = models.JSONField(blank=True, null=True)
     last_message_id = models.BigIntegerField(blank=True, null=True)
     days_count = models.SmallIntegerField(blank=True, null=True)
+    megagroup = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = False
