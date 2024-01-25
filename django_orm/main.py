@@ -156,9 +156,48 @@ def save_db_rss():
         rss_parsing_save_to_db.err(f'[Message Error]: {e}')
     for user in users:
         try:
-            TgGroupUser.objects.get_or_create(**user)
-            print(f'[User has been saved to db] user_id :  {user["tg_group_user_id"]}' )
-            rss_parsing_save_to_db.log(user)
+            try:
+                usr = TgGroupUser.objects.get(tg_group_user_id=user['tg_group_user_id'])
+                if user['full_name'] != usr.full_name:
+                    count = usr.old_full_name_count + 1
+                    old_name = {f"{count}:full_name": usr.full_name}
+                    ext_name = usr.old_full_name
+                    ext_name.update(old_name)
+                    usr.full_name = user['full_name']
+                    usr.old_full_name_count = count
+                    usr.save()
+                    print(f'[user][full_name] updated {user["tg_group_user_id"]}')
+                    rss_parsing_save_to_db.log(f"[UPDATED FULLNAME]{user}")
+
+                if user['username'] != usr.username:
+                    count = usr.old_username_count + 1
+                    old_user = {f"{count}:username": usr.username}
+                    ext_username = usr.old_username
+                    ext_username.update(old_user)
+                    usr.username = user['username']
+                    usr.old_username_count = count
+                    usr.save()
+                    print(f'[user][username] updated {user["tg_group_user_id"]}')
+                    rss_parsing_save_to_db.log(f"[UPDATED USERNAME]{user}")
+                if user['phone'] != usr.phone:
+                    count = usr.old_phone_count + 1
+                    old_phones = {f"{count}:phone": usr.phone}
+                    ext_phone = usr.old_phone
+                    ext_phone.update(old_phones)
+                    usr.phone = user['phone']
+                    usr.old_phone_count = count
+                    usr.save()
+                    print(f'[user][phone] updated {user["tg_group_user_id"]}')
+                    rss_parsing_save_to_db.log(f"[UPDATED PHONE]{user}")
+                else:
+                    print('user already exist')
+                    rss_parsing_save_to_db.log(f"[NOTHING UPDATE]: {user}")
+
+
+            except TgGroupUser.DoesNotExist:
+                TgGroupUser.objects.create(**user)
+                print(f'[User has been saved to db] user_id :  {user["tg_group_user_id"]}' )
+                rss_parsing_save_to_db.log(user)
         except Exception as e:
             print('[User][Some Kind of error check the log file]')
             rss_parsing_save_to_db.err(f'[User error]: {e}')

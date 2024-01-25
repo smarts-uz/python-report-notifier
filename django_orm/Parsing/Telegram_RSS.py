@@ -5,6 +5,7 @@ def rss(peer_id,days):
     messages = []
     users = []
     topics = []
+    public_link = None
     pag = 0
     while True:
         pag +=1
@@ -13,9 +14,18 @@ def rss(peer_id,days):
         d = today - timedelta(days=days)
         timestamp = datetime.timestamp(d)
 
-        url = f"http://192.168.0.111:9504/json/{peer_id}/{pag}"
+        url = f"http://192.168.3.54:9504/json/{peer_id}/{pag}"
         response = requests.post(url).json()
 
+        for chat in response['chats']:
+            try:
+                username = chat['username']
+            except Exception as e:
+                username  =None
+            if username != None:
+                public_link = f't.me/{username}'
+            else:
+                public_link = None
 
 
 
@@ -74,6 +84,10 @@ def rss(peer_id,days):
             tg_group_id = None
             pinned = message['pinned']
             message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{id}"
+            if public_link != None:
+                message_public_link  = f'{public_link}/{id}'
+            else:
+                message_public_link = None
             post = message['post']
             out = message['out']
             try :
@@ -126,6 +140,7 @@ def rss(peer_id,days):
                 "mtproto" : mtproto,
                 "tg_group_id" : tg_group_id,
                 "edit_date" : edit_date,
+                "message_public_link" : message_public_link,
                 "message_private_link" : message_private_link,
                 "type" : type,
                 "pinned" : pinned,
@@ -154,9 +169,10 @@ def rss(peer_id,days):
 
         if timestamp >= tdz:
             break
-    return messages , users ,topics
+    return messages, users
 
+
+# r = rss('-1002109564785',1)
+# r = rss('-1002116049831',1)
 #
-# r = rss('-1002109564785',30)
-# pprint(r[1])
 # pprint(r[0])

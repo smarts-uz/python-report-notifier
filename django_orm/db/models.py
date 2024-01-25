@@ -260,8 +260,9 @@ class TgGroupMessage(models.Model):
     max_id = models.IntegerField(blank=True, null=True)
     read_max_id = models.IntegerField(blank=True, null=True)
     comments = models.BooleanField(blank=True, null=True)
-    old_content = models.JSONField(blank=True, null=True, default={})
+    old_content = models.JSONField(blank=True, null=True,default={})
     old_count = models.IntegerField(blank=True, null=True,default=0)
+    message_public_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -332,6 +333,7 @@ class TgGroupText(models.Model):
 
 
 class TgGroupUser(models.Model):
+    id = models.SmallAutoField(primary_key=True)
     contact = models.BooleanField(blank=True, null=True)
     bot = models.BooleanField(blank=True, null=True)
     tg_group_user_id = models.BigIntegerField(blank=True, null=True)
@@ -342,6 +344,12 @@ class TgGroupUser(models.Model):
     status = models.JSONField(blank=True, null=True)
     mtproto = models.JSONField(blank=True, null=True)
     tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
+    old_full_name = models.JSONField(blank=True, null=True , default={})
+    old_full_name_count = models.IntegerField(blank=True, null=True,default=0)
+    old_username = models.JSONField(blank=True, null=True,default={})
+    old_username_count = models.IntegerField(blank=True, null=True,default=0)
+    old_phone = models.JSONField(blank=True, null=True,default={})
+    old_phone_count = models.IntegerField(blank=True, null=True,default=0)
 
     class Meta:
         managed = False

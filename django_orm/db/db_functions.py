@@ -29,3 +29,9 @@ def get_user_fullname(user_id):
 def get_msg_id(msg_full_link):
     message = Message.objects.get(message_full_link=msg_full_link)
     return message.first.pk
+
+
+
+def get_all_group():
+    data = TgGroup.objects.values('pk','tg_id','is_active','days_count')
+    return list(data)
