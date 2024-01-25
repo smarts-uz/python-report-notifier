@@ -161,6 +161,13 @@ def run_rss():
     save_db_rss()
     click.echo('*-------------end-----------*')
 
+from Parsing.userDialogs import save_dialogs_to_db
+@click.command()
+def collect_dialogs():
+    save_dialogs_to_db()
+
+    click.echo('*----collect ended!!!!---*')
+
 
 @click.group()
 def cli():
@@ -172,6 +179,7 @@ cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_searching)
 cli.add_command(run_rss)
+cli.add_command(collect_dialogs)
 
 
 try:
