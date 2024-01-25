@@ -39,3 +39,5 @@ def get_all_group():
 def get_all_channel():
     data = TgChannel.objects.values('pk','tg_id','is_active','days_count','name')
     return list(data)
+
+

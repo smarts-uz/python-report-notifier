@@ -245,3 +245,6 @@ def save_db_rss_channel():
 
             print(f'[Channel][{peer_id}] : saving to db successfully end!')
             rss_parsing_save_to_db.log(f'[Channel][{peer_id}] : saving to db successfully end!')
+
+
+Keyword.objects.create(name=777)

@@ -5,10 +5,10 @@ import django
 django.setup()
 
 
-from TGBOT.tgbot import sendMsg,fwr_msg,creatTopic
+from TGBOT.tgbot import creatTopic
 sys.dont_write_bytecode = True
 import click
-from db.models import *
+
 from db.save_to_db import *
 
 
@@ -27,9 +27,11 @@ def add_keyword(new_keyword):
     topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
     try:
+        from db.models import Keyword
         Keyword.objects.get_or_create(name=new_keyword,
                            topic_id=topic_id)
-        add_keyword_log.log(f'{new_keyword} created successfully ')
+        add_keyword_log.log(f'[DB]{new_keyword} created successfully ')
+        print(f'[DB]{new_keyword} created successfully ')
     except Exception as e:
         add_keyword_log.err(e)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
@@ -48,13 +50,13 @@ def run_searching():
     click.echo('*----searching successfully finished----*')
 
 @click.command()
-def collect_messages_g():
+def collect_msg_group():
     save_db_rss_group()
     click.echo('*-------------end-----------*')
 
 
 @click.command()
-def collect_messages_c():
+def collect_msg_channel():
     save_db_rss_channel()
     click.echo('*-------------end-----------*')
 
@@ -69,8 +71,8 @@ def cli():
 cli.add_command(add_keyword)
 cli.add_command(show_keywords)
 cli.add_command(run_searching)
-cli.add_command(collect_messages_g)
-cli.add_command(collect_messages_c)
+cli.add_command(collect_msg_group)
+cli.add_command(collect_msg_channel)
 
 
 try:
