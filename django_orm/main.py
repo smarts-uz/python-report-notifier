@@ -118,96 +118,100 @@ def save_to_db():
 
 def save_db_rss():
     all_group = get_all_group()
+
     for group in all_group:
-        peer_id = int(str(f'-100{group["tg_id"]}'))
+        if group['is_active']:
+            print(group)
+            peer_id = int(str(f'-100{group["tg_id"]}'))
 
-        data = rss(peer_id, group['days_count'])
-        messages = data[0]
-        users = data[1]
-        print(peer_id)
-        try:
-            for message in messages:
-                message['tg_group_id'] = group['pk']
-                try:
-                    msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
-                    if message["content"] != msg.content:
-                        count = msg.old_count + 1
-                        old = {f"{count}:content": msg.content}
-                        ext_data = msg.old_content
-
-                        ext_data.update(old)
-                        msg.old_count = count
-
-                        msg.content = message["content"]
-                        msg.save()
-
-                        print(f'content update {message["message_private_link"]}')
-                        rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
-                    else:
-                        print(f'already exists {message["message_private_link"]}')
-                        rss_parsing_save_to_db.log(f"[ALREADY EXISTS]{message}")
-
-
-                except TgGroupMessage.DoesNotExist:
-                    TgGroupMessage.objects.create(**message)
-
-                    print('Created new message')
-                    print(f'[Message has been saved to db] msg_id : {message["message_private_link"]}')
-                    rss_parsing_save_to_db.log(f'[CREATED NEW MESSAGE] {message}')
-        # --------------
-
-        except Exception as e:
-            print('[Message][Some Kind of error check the log file]')
-            rss_parsing_save_to_db.err(f'[Message Error]: {e}')
-        for user in users:
+            data = rss(peer_id, group['days_count'])
+            messages = data[0]
+            users = data[1]
+            print(peer_id)
             try:
-                try:
-                    usr = TgGroupUser.objects.get(tg_group_user_id=user['tg_group_user_id'])
-                    if user['full_name'] != usr.full_name:
-                        count = usr.old_full_name_count + 1
-                        old_name = {f"{count}:full_name": usr.full_name}
-                        ext_name = usr.old_full_name
-                        ext_name.update(old_name)
-                        usr.full_name = user['full_name']
-                        usr.old_full_name_count = count
-                        usr.save()
-                        print(f'[user][full_name] updated {user["tg_group_user_id"]}')
-                        rss_parsing_save_to_db.log(f"[UPDATED FULLNAME]{user}")
+                for message in messages:
+                    message['tg_group_id'] = group['pk']
+                    try:
+                        msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
+                        if message["content"] != msg.content:
+                            count = msg.old_count + 1
+                            old = {f"{count}:content": msg.content}
+                            ext_data = msg.old_content
 
-                    if user['username'] != usr.username:
-                        count = usr.old_username_count + 1
-                        old_user = {f"{count}:username": usr.username}
-                        ext_username = usr.old_username
-                        ext_username.update(old_user)
-                        usr.username = user['username']
-                        usr.old_username_count = count
-                        usr.save()
-                        print(f'[user][username] updated {user["tg_group_user_id"]}')
-                        rss_parsing_save_to_db.log(f"[UPDATED USERNAME]{user}")
-                    if user['phone'] != usr.phone:
-                        count = usr.old_phone_count + 1
-                        old_phones = {f"{count}:phone": usr.phone}
-                        ext_phone = usr.old_phone
-                        ext_phone.update(old_phones)
-                        usr.phone = user['phone']
-                        usr.old_phone_count = count
-                        usr.save()
-                        print(f'[user][phone] updated {user["tg_group_user_id"]}')
-                        rss_parsing_save_to_db.log(f"[UPDATED PHONE]{user}")
-                    else:
-                        print('user already exist')
-                        rss_parsing_save_to_db.log(f"[NOTHING UPDATE]: {user}")
+                            ext_data.update(old)
+                            msg.old_count = count
+
+                            msg.content = message["content"]
+                            msg.save()
+
+                            print(f'content update {message["message_private_link"]}')
+                            rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
+                        else:
+                            print(f'already exists {message["message_private_link"]}')
+                            rss_parsing_save_to_db.log(f"[ALREADY EXISTS]{message}")
 
 
-                except TgGroupUser.DoesNotExist:
-                    TgGroupUser.objects.create(**user)
-                    print(f'[User has been saved to db] user_id :  {user["tg_group_user_id"]}')
-                    rss_parsing_save_to_db.log(user)
+                    except TgGroupMessage.DoesNotExist:
+                        TgGroupMessage.objects.create(**message)
+
+                        print('Created new message')
+                        print(f'[Message has been saved to db] msg_id : {message["message_private_link"]}')
+                        rss_parsing_save_to_db.log(f'[CREATED NEW MESSAGE] {message}')
+            # --------------
+
             except Exception as e:
-                print('[User][Some Kind of error check the log file]')
-                rss_parsing_save_to_db.err(f'[User error]: {e}')
-        print(f'[{peer_id}] : saving to db successfully end!')
-        rss_parsing_save_to_db.log(f'[{peer_id}] : saving to db successfully end!')
+                print('[Message][Some Kind of error check the log file]')
+                rss_parsing_save_to_db.err(f'[Message Error]: {e}')
+            for user in users:
+                try:
+                    try:
+                        usr = TgGroupUser.objects.get(tg_group_user_id=user['tg_group_user_id'])
+                        if user['full_name'] != usr.full_name:
+                            count = usr.old_full_name_count + 1
+                            old_name = {f"{count}:full_name": usr.full_name}
+                            ext_name = usr.old_full_name
+                            ext_name.update(old_name)
+                            usr.full_name = user['full_name']
+                            usr.old_full_name_count = count
+                            usr.save()
+                            print(f'[user][full_name] updated {user["tg_group_user_id"]}')
+                            rss_parsing_save_to_db.log(f"[UPDATED FULLNAME]{user}")
+
+                        if user['username'] != usr.username:
+                            count = usr.old_username_count + 1
+                            old_user = {f"{count}:username": usr.username}
+                            ext_username = usr.old_username
+                            ext_username.update(old_user)
+                            usr.username = user['username']
+                            usr.old_username_count = count
+                            usr.save()
+                            print(f'[user][username] updated {user["tg_group_user_id"]}')
+                            rss_parsing_save_to_db.log(f"[UPDATED USERNAME]{user}")
+                        if user['phone'] != usr.phone:
+                            count = usr.old_phone_count + 1
+                            old_phones = {f"{count}:phone": usr.phone}
+                            ext_phone = usr.old_phone
+                            ext_phone.update(old_phones)
+                            usr.phone = user['phone']
+                            usr.old_phone_count = count
+                            usr.save()
+                            print(f'[user][phone] updated {user["tg_group_user_id"]}')
+                            rss_parsing_save_to_db.log(f"[UPDATED PHONE]{user}")
+                        else:
+                            print('user already exist')
+                            rss_parsing_save_to_db.log(f"[NOTHING UPDATE]: {user}")
+
+
+                    except TgGroupUser.DoesNotExist:
+                        TgGroupUser.objects.create(**user)
+                        print(f'[User has been saved to db] user_id :  {user["tg_group_user_id"]}')
+                        rss_parsing_save_to_db.log(f"[User has been saved to db] {user}")
+                except Exception as e:
+                    print('[User][Some Kind of error check the log file]')
+                    rss_parsing_save_to_db.err(f'[User error]: {e}')
+            print(f'[{peer_id}] : saving to db successfully end!')
+            rss_parsing_save_to_db.log(f'[{peer_id}] : saving to db successfully end!')
+
 
 
 

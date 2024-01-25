@@ -1,6 +1,14 @@
 from  datetime import datetime,timedelta
 import  requests
 from pprint import pprint
+
+
+import os
+from dotenv import load_dotenv
+ip = os.getenv("IP")
+port = os.getenv("PORT_RSS")
+
+load_dotenv()
 def rss(peer_id,days):
     messages = []
     users = []
@@ -14,7 +22,7 @@ def rss(peer_id,days):
         d = today - timedelta(days=days)
         timestamp = datetime.timestamp(d)
 
-        url = f"http://192.168.3.54:9504/json/{peer_id}/{pag}"
+        url = f"http://{ip}:{port}/json/{peer_id}/{pag}"
         response = requests.post(url).json()
 
         for chat in response['chats']:
@@ -171,8 +179,9 @@ def rss(peer_id,days):
             break
     return messages, users
 
-
-# r = rss('-1002109564785',1)
-# r = rss('-1002116049831',1)
 #
+# r = rss('-1001113869250',1)
+# r = rss('tuit_online',1)
+#
+# pprint(r[1])
 # pprint(r[0])

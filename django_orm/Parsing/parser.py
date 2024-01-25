@@ -1,13 +1,13 @@
 import requests
 from datetime import datetime
-import os
-from dotenv import load_dotenv
+
 
 
 from logx import Logger
 save_parser_to_log = Logger('parser_log', 'a')
 
-
+import os
+from dotenv import load_dotenv
 ip = os.getenv("IP")
 port = os.getenv("PORT")
 
