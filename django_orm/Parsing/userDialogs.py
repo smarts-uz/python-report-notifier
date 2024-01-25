@@ -62,4 +62,3 @@ def user_dialogs():
     return users
 
 
-user_dialogs()

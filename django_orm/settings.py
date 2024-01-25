@@ -21,6 +21,8 @@ DATABASES = {
         'USER': "postgres",
         'PASSWORD': os.getenv("PASSWORD"),
         'PORT': '5432',
+        'CHARSET' : 'UTF-8',
+
 
 
     }
