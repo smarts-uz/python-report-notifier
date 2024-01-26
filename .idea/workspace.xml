@@ -59,6 +59,7 @@
     "Python.parser.executor": "Run",
     "Python.test2 (1).executor": "Run",
     "Python.test2.executor": "Run",
+    "Python.test3 (1).executor": "Run",
     "Python.test3.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -146,7 +147,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test3 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python-xtrime-parser" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -155,11 +156,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/django_orm/TGBOT" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/django_orm/TGBOT/test2.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test3.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,11 +192,11 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.test3 (1)" />
       <item itemvalue="Python.getdialogs" />
       <item itemvalue="Python.getdialogs (1)" />
       <item itemvalue="Python.models" />
       <item itemvalue="Python.test3" />
-      <item itemvalue="Python.test2" />
       <item itemvalue="Shell Script.pip install -r requirements.txt" />
       <item itemvalue="Shell Script.py main.py add-keyword &lt;&quot;insert new keyword&quot;&gt;" />
       <item itemvalue="Shell Script.py main.py  run-searching" />
@@ -206,10 +207,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.getdialogs (1)" />
+        <item itemvalue="Python.test3 (1)" />
         <item itemvalue="Python.test3" />
         <item itemvalue="Python.models" />
         <item itemvalue="Python.getdialogs" />
-        <item itemvalue="Python.test2" />
       </list>
     </recent_temporary>
   </component>
