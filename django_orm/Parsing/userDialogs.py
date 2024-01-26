@@ -70,17 +70,58 @@ def user_dialogs():
     return users
 
 
+
+
 def save_dialogs_to_db():
     users = user_dialogs()
     for user in users:
         try:
-            print(f"{user['tg_id']} is Saved to db")
-            TgUser.objects.get_or_create(**user)
-            save_dialog_to_log.log(f"{user['tg_id']} is Saved to db")
+            try:
+                usr = TgUser.objects.get(tg_id=user['tg_id'])
+                if user['first_name'] != usr.first_name:
+                    count = usr.old_first_name_count + 1
+                    old_name = {f"{count}:first_name": usr.first_name}
+                    ext_name = usr.old_first_name
+                    ext_name.update(old_name)
+                    usr.first_name = user['first_name']
+                    usr.old_first_name_count = count
+                    usr.save()
+                    print(f'[User][first_name] updated {user["tg_id"]}')
+                    save_dialog_to_log.log(f"[User][UPDATED FIRSTNAME]{user}")
+
+                if user['username'] != usr.username:
+                    count = usr.old_username_count + 1
+                    old_user = {f"{count}:username": usr.username}
+                    ext_username = usr.old_username
+                    ext_username.update(old_user)
+                    usr.username = user['username']
+                    usr.old_username_count = count
+                    usr.save()
+                    print(f'[Group][user][username] updated {user["tg_group_user_id"]}')
+                    save_dialog_to_log.log(f"[User][UPDATED USERNAME]{user}")
+                if user['phone'] != usr.phone:
+                    count = usr.old_phone_count + 1
+                    old_phones = {f"{count}:phone": usr.phone}
+                    ext_phone = usr.old_phone
+                    ext_phone.update(old_phones)
+                    usr.phone = user['phone']
+                    usr.old_phone_count = count
+                    usr.save()
+                    print(f'[Group][user][phone] updated {user["tg_group_user_id"]}')
+                    save_dialog_to_log.log(f"[User][UPDATED PHONE]{user}")
+                else:
+                    print('[Group]user already exist')
+                    save_dialog_to_log.log(f"[Group][NOTHING UPDATE]: {user}")
+
+
+            except TgUser.DoesNotExist:
+                TgUser.objects.create(**user)
+                print(f'[Group][User has been saved to db] user_id :  {user["tg_id"]}')
+                save_dialog_to_log.log(f"[Group][User has been saved to db] {user}")
         except Exception as e:
-            msg = "Error occured. Check the log file"
-            print(msg)
-            save_dialog_to_log.log(msg)
-            save_dialog_to_log.err(e)
+            print('[Group][User][Some Kind of error check the log file]')
+            save_dialog_to_log.err(f'[Group][User error]: {e}')
+    print(f'[User] : saving to db successfully end!')
+    save_dialog_to_log.log(f'[User] : saving to db successfully end!')
 
 # save_dialogs_to_db()
