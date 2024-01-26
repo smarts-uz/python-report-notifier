@@ -14,11 +14,4 @@
     <orderEntry type="jdk" jdkName="Python 3.9 (python-xtrime-parser)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
-  <component name="PyNamespacePackagesService">
-    <option name="namespacePackageFolders">
-      <list>
-        <option value="$MODULE_DIR$/django_orm" />
-      </list>
-    </option>
-  </component>
 </module>
