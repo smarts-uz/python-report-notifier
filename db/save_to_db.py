@@ -46,8 +46,9 @@ def save_to_db():
         # Saving messages data to db
         messages = parser.messages()
         for message in messages:
+
             message['keyword_id'] = item['pk']
-            msg_id = message['msg_id_field']
+            msg_id = message['msg_id']
             try:
                 Message.objects.get_or_create(**message)
                 save_to_db_log.log(message)
@@ -79,7 +80,7 @@ def save_to_db():
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
 
-        time.sleep(1)
+            time.sleep(1)
 
         update_time = parser.update_date()
         print("last checked time", update_time)

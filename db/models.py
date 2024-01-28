@@ -34,7 +34,7 @@ class Keyword(models.Model):
 
 class Message(models.Model):
     datetime = models.DateTimeField(blank=True, null=True)
-    keyword_id = models.IntegerField(blank=True, null=True)
+    keyword = models.ForeignKey(Keyword, models.DO_NOTHING, blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     files = models.CharField(max_length=255, blank=True, null=True)
     user_id = models.BigIntegerField(blank=True, null=True)

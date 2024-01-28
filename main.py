@@ -10,7 +10,7 @@ sys.dont_write_bytecode = True
 import click
 
 from db.save_to_db import *
-
+from datetime import datetime
 
 
 from logx import Logger
@@ -31,7 +31,8 @@ def add_keyword(new_keyword):
     try:
         from db.models import Keyword
         Keyword.objects.get_or_create(name=new_keyword,
-                           topic_id=topic_id)
+                           topic_id=topic_id,
+                            last_checked=datetime(2015,1,1))
         add_keyword_log.log(f'[DB]{new_keyword} created successfully ')
         print(f'[DB]{new_keyword} created successfully ')
     except Exception as e:
