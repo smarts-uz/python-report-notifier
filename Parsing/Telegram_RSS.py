@@ -87,16 +87,14 @@ def rss_group(peer_id,days):
             date_timestamp = message['date']
             date = datetime.fromtimestamp(date_timestamp)
             content = message['message']
-            reply_to_top_id = None
+            reply_to_msg_id = None
+            topic_id = None
             mtproto = message
             tg_group_id = None
+            reply_to = None
 
             pinned = message['pinned']
-            message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{id}"
-            if public_link != None:
-                message_public_link  = f'{public_link}/{id}'
-            else:
-                message_public_link = None
+
             post = message['post']
             out = message['out']
             try :
@@ -122,20 +120,37 @@ def rss_group(peer_id,days):
             except Exception as e:
                 edit_date = None
             try:
-
-                forum_topic = message['reply_to']['forum_topic']
-                reply_to_msg_id  = message['reply_to']['reply_to_msg_id']
-                try:
-                    reply_to_top_id = message['reply_to']['reply_to_top_id']
-                except Exception as e:
-                    reply_to_top_id = None
-
-
-
+                reply_to = message['reply_to']
+                forum_topic = reply_to['forum_topic']
+                if forum_topic == False:
+                    topic_id=None
+                    reply_to_msg_id = reply_to['reply_to_msg_id']
+                else:
+                    topic_id = reply_to['reply_to_msg_id']
+                    try:
+                        topic_id = reply_to['reply_to_top_id']
+                        reply_to_msg_id = reply_to['reply_to_msg_id']
+                    except Exception as e:
+                        topic_id = reply_to['reply_to_msg_id']
 
             except Exception as e:
-                forum_topic = None
-                reply_to_msg_id = None
+                reply_to = None
+            if topic_id != None:
+                message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{topic_id}/{id}"
+            else:
+                message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{id}"
+            if public_link != None:
+                if topic_id!=None:
+                    message_public_link = f'{public_link}/{topic_id}/{id}'
+                else:
+
+                    message_public_link = f'{public_link}/{id}'
+            else:
+                message_public_link = None
+
+
+
+
             messages.append({
                 "noforwards" : noforwards,
                 "msg_id" : id,
@@ -145,7 +160,7 @@ def rss_group(peer_id,days):
                 "content" : content,
                 "forum_topic": forum_topic,
                 "reply_to_msg_id": reply_to_msg_id,
-                "topic_id" : reply_to_top_id,
+                "topic_id" : topic_id,
                 "mtproto" : mtproto,
                 "tg_group_id" : tg_group_id,
                 "edit_date" : edit_date,
