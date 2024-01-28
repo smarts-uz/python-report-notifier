@@ -16,6 +16,7 @@ from db.save_to_db import *
 from logx import Logger
 add_keyword_log = Logger('add_keyword',"a")
 add_report_log = Logger('add_report',"a")
+command_line_log = Logger('command_line',"a")
 
 
 
@@ -74,6 +75,12 @@ def collect_msg_channel():
     click.echo('*-------------end-----------*')
 
 
+@click.command()
+def get_rating():
+    save_to_rating()
+    click.echo('[Reply Messages process successfully ended!!]')
+
+
 
 @click.group()
 def cli():
@@ -87,18 +94,19 @@ cli.add_command(run_searching)
 cli.add_command(collect_msg_group)
 cli.add_command(collect_msg_channel)
 cli.add_command(add_report)
+cli.add_command(get_rating)
 
 
 try:
     if __name__ == '__main__':
         cli()
         msg = "Searching successfully ended!"
-        save_to_db_log.log(msg)
+        command_line_log.log(msg)
 except Exception as e:
     msg = "Some kind of error, check log file"
     print(msg)
-    save_to_db_log.log(msg)
-    save_to_db_log.err(e)
+    command_line_log.log(msg)
+    command_line_log.err(e)
 
 
 #Click command end!

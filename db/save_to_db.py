@@ -313,4 +313,3 @@ def save_to_rating():
         save_to_report_log.err(f'[Reply Message][Error]: {e}')
 
 
-save_to_rating()
