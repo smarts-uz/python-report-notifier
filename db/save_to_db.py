@@ -247,3 +247,22 @@ def save_db_rss_channel():
             rss_parsing_save_to_db.log(f'[Channel][{peer_id}] : saving to db successfully end!')
 
 
+def save_to_report(msg_private_link):
+    try:
+        Report.objects.get(link=msg_private_link)
+        print('this report already exists')
+
+    except Report.DoesNotExist:
+        report = get_message_from_group(msg_private_link)
+        peer_id = str(report[2])
+        chat_id = int(str(peer_id)[4:])
+        Report.objects.create(
+            link = msg_private_link,
+            topic_id = report[3],
+            message_id = report[1],
+            chat_id = chat_id,
+            tg_group_message_id = report[0],
+            replies_count = report[4]
+
+        )
+        print(f'{msg_private_link} saved to db!!!')
