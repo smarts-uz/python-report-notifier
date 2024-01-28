@@ -20,7 +20,7 @@ def channel_dialogs():
     data_chat = []
 
     for chat in response['response']['chats']:
-        if chat['_']=='chat' or chat['id']==2059626462:
+        if chat['_']=='chat' or chat['id']==os.getenv("ID"):
             continue
         else:
             # If channel
