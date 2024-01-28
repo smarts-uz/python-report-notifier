@@ -49,4 +49,14 @@ def get_message_from_group(msg_link):
             msg.topic_id,
             msg.replies_count)
 
+def get_reply_messages(reply_msg_id):
+    msg = TgGroupMessage.objects.all().filter(reply_to_msg_id=reply_msg_id)
+
+    return msg
+
+def get_all_reports():
+    data = Report.objects.values('pk','message_id', 'link')
+    return list(data)
+
+
 

@@ -258,7 +258,7 @@ class TgGroupUser(models.Model):
     full_name = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    photo = models.JSONField(blank=True, null=True)
+    photo_field = models.JSONField(blank=True, null=True)
     status = models.JSONField(blank=True, null=True)
     mtproto = models.JSONField(blank=True, null=True)
     old_full_name = models.JSONField(blank=True, null=True)
