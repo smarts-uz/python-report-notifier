@@ -15,6 +15,7 @@ from db.save_to_db import *
 
 from logx import Logger
 add_keyword_log = Logger('add_keyword',"a")
+add_report_log = Logger('add_report',"a")
 
 
 
@@ -35,6 +36,18 @@ def add_keyword(new_keyword):
     except Exception as e:
         add_keyword_log.err(e)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
+
+@click.command()
+@click.argument('new_report',type=str)
+def add_report(new_report):
+    try:
+        report = save_to_report(new_report)
+        click.echo(f'[report][added]: {new_report}')
+        add_report_log.log(f'[report][added]: {new_report}')
+    except Exception as e:
+        click.echo(f'[Some kind of error] check the log file!!!')
+        add_report_log.err(f'[Some kind of error]: {e}')
+
 
 
 @click.command()
@@ -73,6 +86,7 @@ cli.add_command(show_keywords)
 cli.add_command(run_searching)
 cli.add_command(collect_msg_group)
 cli.add_command(collect_msg_channel)
+cli.add_command(add_report)
 
 
 try:
