@@ -41,3 +41,12 @@ def get_all_channel():
     return list(data)
 
 
+def get_message_from_group(msg_link):
+    msg = TgGroupMessage.objects.get(message_private_link = msg_link)
+    return (msg.pk,
+            msg.msg_id
+            ,msg.peer_id,
+            msg.topic_id,
+            msg.replies_count)
+
+
