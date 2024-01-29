@@ -20,7 +20,7 @@ def get_dialogs():
     data_chat = []
 
     for chat in response['response']['chats']:
-        if chat['_']=='chat' or chat['id']==2059626462:
+        if chat['_']=='chat' or chat['id']==2059626462 or chat['id']==1965260006:
             continue
         else:
             # If channel
@@ -34,6 +34,7 @@ def get_dialogs():
                         "created_at": datetime.fromtimestamp(chat['date']),
                         "megagroup": chat['megagroup'],
                         "username":chat['username'],
+                        "noforwards":chat['noforwards']
                                         })
                 else:
                      data_channel.append({
@@ -42,7 +43,9 @@ def get_dialogs():
                         "tg_id":chat['id'],
                         "signatures":chat['signatures'],
                         "created_at" : datetime.fromtimestamp(chat['date']),
-                         "megagroup": chat['megagroup']
+                         "megagroup": chat['megagroup'],
+                         "noforwards": chat['noforwards'],
+
                         })
             else:
                 if 'username'in chat :
@@ -54,6 +57,7 @@ def get_dialogs():
                             "participants_count": chat['participants_count'],
                             "megagroup": chat['megagroup'],
                             "username": chat['username'],
+                             "noforwards": chat['noforwards']
                             })
                 else:
                     data_chat.append({
@@ -62,7 +66,8 @@ def get_dialogs():
                         "tg_id": chat['id'],
                         "created_at": datetime.fromtimestamp(chat['date']),
                         "participants_count": chat['participants_count'],
-                        "megagroup": chat['megagroup']
+                        "megagroup": chat['megagroup'],
+                        "noforwards": chat['noforwards']
                     })
     return data_channel, data_chat
 
@@ -76,15 +81,15 @@ def collect_dialogs():
 
         try:
            msg= TgChannel.objects.get(tg_id=channel['tg_id'])
+           channel['noforwards']=msg.noforwards
            if channel['name']!=msg.name:
 
                old={f"{datetime.now()}:name":msg.name}
-               ext_data=msg.name_history
-               if ext_data == None:
-                   ext_data = {}
+               if msg.name_history == None:
+                   msg.name_history = {}
 
 
-               ext_data.update(old)
+               msg.name_history.update(old)
 
                msg.name = channel['name']
                msg.save()
@@ -94,10 +99,13 @@ def collect_dialogs():
            if 'username' in channel:
                if  channel['username']!=msg.username: # For username column in Channel
                    old_username = {f"{datetime.now()}:username": msg.username}
-                   ext_data_username = msg.username_history
 
 
-                   ext_data_username.update(old_username)
+                   if msg.username_history ==None:
+                       msg.username_history={}
+
+
+                   msg.username_history.update(old_username)
 
                    msg.username = channel['username']
                    msg.save()
@@ -117,11 +125,13 @@ def collect_dialogs():
     for chat in chats:
         try:
             msg = TgGroup.objects.get(tg_id=chat['tg_id'])
+            chat['noforwards'] = msg.noforwards
             if chat['name'] != msg.name:
                 old = {f"{datetime.now()}:name": msg.name}
-                ext_data = msg.name_history
+                if msg.name_history ==None:
+                    msg.name_history={}
 
-                ext_data.update(old)
+                msg.name_history.update(old)
 
                 msg.name = chat['name']
                 msg.save()
@@ -132,9 +142,10 @@ def collect_dialogs():
                 if chat['username'] != msg.username:  # For username column in Chat
 
                     old_username = {f"{datetime.now()}:username": msg.username}
-                    ext_data_username = msg.username_history
+                    if msg.username_history ==None:
+                        msg.username_history={}
 
-                    ext_data_username.update(old_username)
+                    msg.username_history.update(old_username)
 
                     msg.username = chat['username']
                     msg.save()
@@ -149,4 +160,3 @@ def collect_dialogs():
             print("Error occured. Check the log file")
             save_channel_chat_log.err(e)
 
-#hjhjhj

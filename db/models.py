@@ -77,6 +77,7 @@ class Report(models.Model):
     chat_id = models.IntegerField(blank=True, null=True)
     tg_group_message_id = models.IntegerField(blank=True, null=True)
     replies_count = models.BigIntegerField(blank=True, null=True)
+    thread_id = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -124,6 +125,7 @@ class TgChannel(models.Model):
     name_history = models.JSONField(blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     username_history = models.JSONField(blank=True, null=True)
+    noforwards = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -204,6 +206,7 @@ class TgGroup(models.Model):
     megagroup = models.BooleanField(blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     username_history = models.JSONField(blank=True, null=True)
+    noforwards = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = False
