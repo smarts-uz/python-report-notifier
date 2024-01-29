@@ -5,6 +5,10 @@ import django
 django.setup()
 
 
+
+from Parsing.getdialogs import collect_dialogs
+from Parsing.userDialogs import save_dialogs_to_db
+
 from TGBOT.tgbot import creatTopic
 sys.dont_write_bytecode = True
 import click
@@ -82,6 +86,12 @@ def get_rating():
     click.echo('[Reply Messages process successfully ended!!]')
 
 
+@click.command()
+def get_dialogs():
+    save_dialogs_to_db()
+    collect_dialogs()
+    click.echo("[Process: Collect Dialog ended!]")
+
 
 @click.group()
 def cli():
@@ -96,7 +106,7 @@ cli.add_command(collect_msg_group)
 cli.add_command(collect_msg_channel)
 cli.add_command(add_report)
 cli.add_command(get_rating)
-
+cli.add_command(get_dialogs)
 
 try:
     if __name__ == '__main__':
@@ -111,10 +121,3 @@ except Exception as e:
 
 
 #Click command end!
-
-
-
-
-
-
-

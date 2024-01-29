@@ -15,12 +15,12 @@ save_channel_chat_log = Logger('save_channel_chat_log', 'a')
 url = "http://192.168.3.54:9503/api/messages.getDialogs"
 
 response = requests.post(url).json()
-def channel_dialogs():
+def get_dialogs():
     data_channel = []
     data_chat = []
 
     for chat in response['response']['chats']:
-        if chat['_']=='chat' or chat['id']==os.getenv("ID"):
+        if chat['_']=='chat' or chat['id']==2059626462:
             continue
         else:
             # If channel
@@ -69,8 +69,8 @@ def channel_dialogs():
 
 # pprint(channel_dialogs())
 
-def saveChannels():
-    channels, chats = channel_dialogs()[0], channel_dialogs()[1]
+def collect_dialogs():
+    channels, chats = get_dialogs()[0], get_dialogs()[1]
 
     for channel in channels:
 
@@ -149,5 +149,4 @@ def saveChannels():
             print("Error occured. Check the log file")
             save_channel_chat_log.err(e)
 
-saveChannels()
 
