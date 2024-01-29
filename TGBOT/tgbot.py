@@ -15,7 +15,7 @@ token = os.getenv("TOKEN")
 bot = TeleBot(token, parse_mode="HTML")
 
 
-def sendMsg(content, user_link, private_chat_link, date, message_link, user_fullname, chat_title, username, topic_id,pk):
+def sendMsg(content, user_link, private_chat_link, date, message_link, user_fullname, chat_title, username, topic_id,pk,chat_id):
     text = f"""<b>🔢:{pk}</b>
 
     📅<b>Date</b> : <u>{date}</u>
@@ -39,7 +39,7 @@ def sendMsg(content, user_link, private_chat_link, date, message_link, user_full
 
 
 
-def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,username, topic_id):
+def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,username, topic_id,chat_id):
     text = f"""<b>🔢:{pk}</b>
 
     📅<b>Date</b> : <u>{date}</u>

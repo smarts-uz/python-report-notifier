@@ -48,7 +48,7 @@ def add_keyword(new_keyword):
 def add_report(new_report):
     try:
         create_topic = creatTopic(new_report, chat_id_2)
-        report = save_to_report(new_report)
+        report = save_to_report(new_report,create_topic)
         click.echo(f'[report][added]: {new_report}')
         add_report_log.log(f'[report][added]: {new_report}')
     except Exception as e:

@@ -4,6 +4,13 @@ import django
 import time
 django.setup()
 
+
+
+from dotenv import load_dotenv
+chat_id = os.getenv("CHAT_ID")
+chat_id_2 = os.getenv("CHAT_ID_2")
+load_dotenv()
+
 from datetime import datetime
 from Parsing.parser import Parser
 from Parsing.Telegram_RSS import rss_group ,rss_channel
@@ -72,10 +79,10 @@ def save_to_db():
             print(f"[Forward]:{forward_bool}")
             if forward_bool == True:
                 sendMsg(content, user_link, private_chat_link, date, message_full_link, user_fullname, chat_title, username,
-                        topic_id, pk)
+                        topic_id, pk,chat_id)
             else:
                 fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
-                        pk, username, topic_id)
+                        pk, username, topic_id,chat_id)
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
@@ -259,7 +266,7 @@ def save_db_rss_channel():
             rss_parsing_save_to_db.log(f'[Channel][{peer_id}] : saving to db successfully end!')
 
 
-def save_to_report(msg_private_link):
+def save_to_report(msg_private_link,thread_id):
     try:
         Report.objects.get(link=msg_private_link)
         print('this report already exists')
@@ -274,7 +281,8 @@ def save_to_report(msg_private_link):
             message_id = report[1],
             chat_id = chat_id,
             tg_group_message_id = report[0],
-            replies_count = report[4]
+            replies_count = report[4],
+            thread_id=thread_id
 
         )
         print(f'{msg_private_link} saved to db!!!')
