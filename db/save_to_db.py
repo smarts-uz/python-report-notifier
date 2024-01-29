@@ -290,6 +290,7 @@ def save_to_rating():
                     if rate.content != rpl_msg.content:
                         rate.content = rpl_msg.content
                         rate.content_history = rpl_msg.content_history
+                        rate.replies_count = rpl_msg.replies_count
                         rate.save()
 
                     #     this line for telegram function to send message
@@ -297,6 +298,8 @@ def save_to_rating():
                         save_to_report_log.log(f'[Reply Message][Content] updated to {rpl_msg.content}')
 
                     else:
+                        rate.replies_count = rpl_msg.replies_count
+                        rate.save()
                         save_to_report_log.log(f'[Reply Message]{rpl_msg.message_private_link} already exists')
                 except Rating.DoesNotExist:
                     Rating.objects.create(
@@ -310,7 +313,7 @@ def save_to_rating():
                         tg_group_message_id=rpl_msg.pk,
                         message_private_link=rpl_msg.message_private_link,
                         message_public_link=rpl_msg.message_public_link,
-                        old_content=rpl_msg.old_content,
+                        content_history=rpl_msg.content_history,
                         report_id=report['pk']
 
                     )
