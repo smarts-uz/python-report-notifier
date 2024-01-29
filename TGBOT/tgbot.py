@@ -15,7 +15,7 @@ token = os.getenv("TOKEN")
 bot = TeleBot(token, parse_mode="HTML")
 
 
-def sendMsg(content, user_link, private_chat_link, date, message_link, user_fullname, chat_title, username, topic_id,pk,chat_id):
+def sendMsg(content, user_link=None, private_chat_link=None, date=None, message_link=None, user_fullname=None, chat_title=None, username=None, topic_id=None,pk=None,chat_id=None):
     text = f"""<b>🔢:{pk}</b>
 
     📅<b>Date</b> : <u>{date}</u>
@@ -102,3 +102,42 @@ def creatTopic(name,chat_id):
 
 
 
+def send_msg_rating(content,date,message_link,topic_id,chat_id):
+    text = f"{content}"
+
+    try:
+        a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
+        print('[Message sent]')
+        sendM.log(f'[Send Message] : {a}')
+    except Exception as e:
+        print(f'[Send Error] {e}')
+        sendM.err(f'[Send Error] {e}')
+        retry_after(str(e))
+        a = bot.send_message(chat_id=chat_id, message_thread_id=topic_id, text=text, timeout=10)
+        sendM.log(f'[Send Message] : {a}')
+        print('[Message sent]')
+
+def fwr_msg_rating(chat_id,peer_id,msg_id,topic_id):
+    try:
+        a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,
+                                    message_thread_id=topic_id)
+
+        fwr_id = a.json['message_id']
+        print(f'[Message forward]  id {fwr_id}')
+        forwM.log(f'[Forward Message]{a}')
+    except Exception as e:
+        forwM.err(f'[Forward Error] {e}')
+        print(f'[Forward Error] {e}')
+        retry_after(str(e))
+
+        a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,
+                                    message_thread_id=topic_id)
+
+        fwr_id = a.json['message_id']
+        print(f'[Message forwarded]  id {fwr_id}')
+        forwM.log(f'[Forward Message]{a}')
+
+
+
+
+# fwr_msg_rating(chat_id=-1001965260006, peer_id=-1002098866683, msg_id=89, topic_id=7)

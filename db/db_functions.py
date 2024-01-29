@@ -55,8 +55,14 @@ def get_reply_messages(reply_msg_id):
     return msg
 
 def get_all_reports():
-    data = Report.objects.values('pk','message_id', 'link')
+    data = Report.objects.values('pk','message_id', 'link','thread_id')
     return list(data)
+
+def get_forward(peer_id):
+    chat_id = int(str(peer_id)[4:])
+    data = TgGroup.objects.get(tg_id=chat_id)
+    return data.noforwards
+
 
 
 

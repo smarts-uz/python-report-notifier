@@ -15,7 +15,7 @@ from datetime import datetime
 from Parsing.parser import Parser
 from Parsing.Telegram_RSS import rss_group ,rss_channel
 from db.db_functions import *
-from TGBOT.tgbot import sendMsg,fwr_msg
+from TGBOT.tgbot import sendMsg,fwr_msg ,send_msg_rating,fwr_msg_rating
 
 from logx import Logger
 save_to_db_log = Logger('save_to_db', 'a')
@@ -327,6 +327,12 @@ def save_to_rating():
                         report_id=report['pk']
 
                     )
+                    forward_bool = get_forward(rpl_msg.peer_id)
+                    if forward_bool != False:
+                        send_msg_rating(content=rpl_msg.content, date=rpl_msg.date, message_link=rpl_msg.message_private_link,  topic_id=report['thread_id'],chat_id=chat_id_2)
+                    else:
+                        fwr_msg_rating(chat_id=chat_id_2, peer_id=rpl_msg.peer_id, msg_id=rpl_msg.msg_id, topic_id=report['thread_id'])
+
                     print(f'{rpl_msg.message_private_link} added to rating table !!!!')
                     print(f'[Reply Message]{report["link"]} succesfully ended!!!')
             save_to_report_log.log(f'[Reply Message]{report["link"]} succesfully ended!!!')
