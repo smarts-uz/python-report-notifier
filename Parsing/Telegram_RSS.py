@@ -201,6 +201,7 @@ def rss_group(peer_id,days):
 def rss_channel(peer_id,days):
     messages = []
     public_link = None
+    reply = None
     pag = 0
     while True:
         pag += 1
@@ -254,11 +255,14 @@ def rss_channel(peer_id,days):
                 comments = message['replies']['comments']
 
 
+
             except Exception as e:
                 replies_count = None
                 max_id = None
                 read_max_id = None
                 comments = None
+
+
             try:
                 views = message['views']
             except Exception as e:
@@ -284,6 +288,7 @@ def rss_channel(peer_id,days):
             except Exception as e:
                 forum_topic = None
                 reply_to_msg_id = None
+                reply_to_top_id = None
             messages.append({
                 "noforwards": noforwards,
                 "msg_id": id,
@@ -291,7 +296,7 @@ def rss_channel(peer_id,days):
                 "date": date,
                 "content": content,
                 "forum_topic": forum_topic,
-                "reply_to_msg_id": reply_to_msg_id,
+                "reply_to_message_id": reply_to_msg_id,
                 "topic_id": reply_to_top_id,
                 "mtproto": mtproto,
                 "tg_channel_id": tg_channel_id,

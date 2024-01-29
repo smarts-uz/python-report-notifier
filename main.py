@@ -4,7 +4,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()
 
+from dotenv import load_dotenv
+chat_id = os.getenv("CHAT_ID")
+chat_id_2 = os.getenv("CHAT_ID_2")
 
+load_dotenv()
 from TGBOT.tgbot import creatTopic
 sys.dont_write_bytecode = True
 import click
@@ -25,7 +29,7 @@ command_line_log = Logger('command_line',"a")
 @click.command()
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
-    create_topic = creatTopic(new_keyword)
+    create_topic = creatTopic(new_keyword,chat_id)
     topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
     try:
@@ -43,6 +47,7 @@ def add_keyword(new_keyword):
 @click.argument('new_report',type=str)
 def add_report(new_report):
     try:
+        create_topic = creatTopic(new_report, chat_id_2)
         report = save_to_report(new_report)
         click.echo(f'[report][added]: {new_report}')
         add_report_log.log(f'[report][added]: {new_report}')
@@ -111,7 +116,6 @@ except Exception as e:
 
 
 #Click command end!
-
 
 
 

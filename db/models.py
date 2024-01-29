@@ -121,11 +121,9 @@ class TgChannel(models.Model):
     is_active = models.BooleanField(blank=True, null=True)
     days_count = models.IntegerField(blank=True, null=True)
     megagroup = models.BooleanField(blank=True, null=True)
-    old_name = models.JSONField(blank=True, null=True)
-    old_name_count = models.IntegerField(blank=True, null=True)
+    name_history = models.JSONField(blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-    old_username = models.JSONField(blank=True, null=True)
-    old_username_count = models.IntegerField(blank=True, null=True)
+    username_history = models.JSONField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -154,8 +152,7 @@ class TgChannelMessage(models.Model):
     max_id = models.IntegerField(blank=True, null=True)
     read_max_id = models.IntegerField(blank=True, null=True)
     comments = models.BooleanField(blank=True, null=True)
-    old_content = models.JSONField(blank=True, null=True)
-    old_count = models.IntegerField(blank=True, null=True)
+    content_history = models.JSONField(blank=True, null=True)
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
     views = models.IntegerField(blank=True, null=True)
 
@@ -205,11 +202,8 @@ class TgGroup(models.Model):
     last_message_id = models.BigIntegerField(blank=True, null=True)
     days_count = models.SmallIntegerField(blank=True, null=True)
     megagroup = models.BooleanField(blank=True, null=True)
-    old_name = models.JSONField(blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
-    old_username = models.JSONField(blank=True, null=True)
-    old_username_count = models.IntegerField(blank=True, null=True)
-    old_name_count = models.SmallIntegerField(blank=True, null=True)
+    username_history = models.JSONField(blank=True, null=True)
 
     class Meta:
         managed = False

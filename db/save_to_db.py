@@ -223,12 +223,14 @@ def save_db_rss_channel():
                     try:
                         msg = TgChannelMessage.objects.get(message_private_link=message['message_private_link'])
                         if message["content"] != msg.content:
-                            count = msg.old_count + 1
-                            old = {f"{count}:content": msg.content}
-                            ext_data = msg.old_content
 
-                            ext_data.update(old)
-                            msg.old_count = count
+                            old = {f"{message['edit_date']}:content": msg.content}
+
+                            if msg.content_history == None:
+                                msg.content_history = {}
+
+                            msg.content_history.update(old)
+
 
                             msg.content = message["content"]
                             msg.save()

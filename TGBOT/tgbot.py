@@ -10,7 +10,7 @@ from regexF.regexFunction import retry_after
 
 load_dotenv()
 token = os.getenv("TOKEN")
-chat_id = os.getenv("CHAT_ID")
+
 
 bot = TeleBot(token, parse_mode="HTML")
 
@@ -88,7 +88,7 @@ def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, messa
 
 
 
-def creatTopic(name):
+def creatTopic(name,chat_id):
     try:
         a = bot.create_forum_topic(chat_id=chat_id,name=name)
         topic_id = a.message_thread_id
@@ -96,6 +96,7 @@ def creatTopic(name):
     except Exception as e:
         print(f'[Creat Topic Error]')
         creatT.err(f'[Error] : {e}')
+        topic_id = None
 
     return topic_id
 
