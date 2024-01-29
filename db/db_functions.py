@@ -29,3 +29,34 @@ def get_user_fullname(user_id):
 def get_msg_id(msg_full_link):
     message = Message.objects.get(message_full_link=msg_full_link)
     return message.first.pk
+
+
+
+def get_all_group():
+    data = TgGroup.objects.values('pk','tg_id','is_active','days_count','name')
+    return list(data)
+
+def get_all_channel():
+    data = TgChannel.objects.values('pk','tg_id','is_active','days_count','name')
+    return list(data)
+
+
+def get_message_from_group(msg_link):
+    msg = TgGroupMessage.objects.get(message_private_link = msg_link)
+    return (msg.pk,
+            msg.msg_id
+            ,msg.peer_id,
+            msg.topic_id,
+            msg.replies_count)
+
+def get_reply_messages(reply_msg_id):
+    msg = TgGroupMessage.objects.all().filter(reply_to_msg_id=reply_msg_id)
+
+    return msg
+
+def get_all_reports():
+    data = Report.objects.values('pk','message_id', 'link')
+    return list(data)
+
+
+

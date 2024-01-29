@@ -1,15 +1,17 @@
 import requests
 from datetime import datetime
-import os
-from dotenv import load_dotenv
+
 
 
 from logx import Logger
 save_parser_to_log = Logger('parser_log', 'a')
 
-
+import os
+from dotenv import load_dotenv
 ip = os.getenv("IP")
 port = os.getenv("PORT")
+group_id = os.getenv("CHAT_ID")
+group_peer_id = int(str(group_id)[4:])
 
 load_dotenv()
 
@@ -117,8 +119,7 @@ class Parser:
             save_parser_to_log.err(e)
 
 
-        # with open('db/json/chats.json', mode='w', encoding='utf-8') as file:
-        #  json.dump(data, file, indent=4, ensure_ascii=False)
+
 
         return data
 
@@ -156,7 +157,7 @@ class Parser:
                          "message_full_link": message_full_link,
                          "public_chat_link": public_link_chat,
                          "user_link": user_link,
-                         "msg_id_field": msg_id
+                         "msg_id": msg_id
                          })
                 save_parser_to_log.log(message)
         except Exception as e:
