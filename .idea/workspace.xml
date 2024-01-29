@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3e5346c-5e77-45fa-9067-5be7827f37fc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_orm/db/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_orm/db/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/django_orm/getdialogs.py" beforeDir="false" afterPath="$PROJECT_DIR$/django_orm/getdialogs.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,8 +207,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.getdialogs (1)" />
-        <item itemvalue="Python.test3 (1)" />
         <item itemvalue="Python.test3" />
+        <item itemvalue="Python.test3 (1)" />
         <item itemvalue="Python.models" />
         <item itemvalue="Python.getdialogs" />
       </list>

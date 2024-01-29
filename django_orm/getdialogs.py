@@ -77,12 +77,14 @@ def saveChannels():
         try:
            msg= TgChannel.objects.get(tg_id=channel['tg_id'])
            if channel['name']!=msg.name:
-               count=msg.old_name_count+1
-               old={f"{count}:name":msg.name}
-               ext_data=msg.old_name
+
+               old={f"{datetime.now()}:name":msg.name}
+               ext_data=msg.name_history
+               if ext_data == None:
+                   ext_data = {}
+
 
                ext_data.update(old)
-               msg.old_name_count = count
 
                msg.name = channel['name']
                msg.save()
@@ -91,18 +93,17 @@ def saveChannels():
 
            if 'username' in channel:
                if  channel['username']!=msg.username: # For username column in Channel
-                   count_username = msg.old_username_count + 1
-                   old_username = {f"{count_username}:username": msg.username}
-                   ext_data_username = msg.old_username
+                   old_username = {f"{datetime.now()}:username": msg.username}
+                   ext_data_username = msg.username_history
 
 
                    ext_data_username.update(old_username)
-                   msg.old_username_count = count_username
 
                    msg.username = channel['username']
                    msg.save()
 
                    print(f'[Channel ]username update {channel["username"]}')
+
 
         except TgChannel.DoesNotExist:
             TgChannel.objects.create(**channel)
@@ -117,12 +118,10 @@ def saveChannels():
         try:
             msg = TgGroup.objects.get(tg_id=chat['tg_id'])
             if chat['name'] != msg.name:
-                count = msg.old_name_count + 1
-                old = {f"{count}:name": msg.name}
-                ext_data = msg.old_name
+                old = {f"{datetime.now()}:name": msg.name}
+                ext_data = msg.name_history
 
                 ext_data.update(old)
-                msg.old_name_count = count
 
                 msg.name = chat['name']
                 msg.save()
@@ -131,12 +130,11 @@ def saveChannels():
 
             if 'username' in chat:
                 if chat['username'] != msg.username:  # For username column in Chat
-                    count_username = msg.old_username_count + 1
-                    old_username = {f"{count_username}:username": msg.username}
-                    ext_data_username = msg.old_username
+
+                    old_username = {f"{datetime.now()}:username": msg.username}
+                    ext_data_username = msg.username_history
 
                     ext_data_username.update(old_username)
-                    msg.old_username_count = count_username
 
                     msg.username = chat['username']
                     msg.save()
