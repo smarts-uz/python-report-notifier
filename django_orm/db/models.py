@@ -43,7 +43,7 @@ class Message(models.Model):
     public_chat_link = models.CharField(max_length=255, blank=True, null=True)
     private_chat_link = models.CharField(max_length=255, blank=True, null=True)
     user_link = models.CharField(max_length=255, blank=True, null=True)
-    msg_id_field = models.IntegerField(db_column='msg_id ', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
+    msg_id = models.IntegerField(blank=True, null=True)
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
@@ -62,8 +62,9 @@ class Rating(models.Model):
     public_chat_link = models.CharField(max_length=255, blank=True, null=True)
     private_chat_link = models.CharField(max_length=255, blank=True, null=True)
     user_link = models.CharField(max_length=255, blank=True, null=True)
-    msg_id_field = models.IntegerField(db_column='msg_id ', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
+    msg_id = models.IntegerField(blank=True, null=True)
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
+    tg_group_message_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -71,10 +72,12 @@ class Rating(models.Model):
 
 
 class Report(models.Model):
-    link = models.CharField(max_length=255)
+    link = models.CharField(max_length=255, blank=True, null=True)
     topic_id = models.IntegerField(blank=True, null=True)
     message_id = models.IntegerField(blank=True, null=True)
     chat_id = models.IntegerField(blank=True, null=True)
+    tg_group_message_id = models.IntegerField(blank=True, null=True)
+    replies_count = models.BigIntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -91,8 +94,8 @@ class TgChannel(models.Model):
     restricted = models.CharField(max_length=255, blank=True, null=True)
     access_hash = models.CharField(max_length=255, blank=True, null=True)
     signatures = models.CharField(max_length=255, blank=True, null=True)
-    read_inbox_max_id = models.CharField(max_length=255, blank=True, null=True)
-    read_outbox_max_id = models.CharField(max_length=255, blank=True, null=True)
+    read_inbox_max_id = models.IntegerField(blank=True, null=True)
+    read_outbox_max_id = models.IntegerField(blank=True, null=True)
     hidden_prehistory = models.CharField(max_length=255, blank=True, null=True)
     bot_info = models.TextField(blank=True, null=True)
     notify_settings = models.TextField(blank=True, null=True)
@@ -100,9 +103,9 @@ class TgChannel(models.Model):
     can_view_participants = models.CharField(max_length=255, blank=True, null=True)
     can_set_username = models.CharField(max_length=255, blank=True, null=True)
     participants_count = models.CharField(max_length=255, blank=True, null=True)
-    admins_count = models.CharField(max_length=255, blank=True, null=True)
-    kicked_count = models.CharField(max_length=255, blank=True, null=True)
-    banned_count = models.CharField(max_length=255, blank=True, null=True)
+    admins_count = models.IntegerField(blank=True, null=True)
+    kicked_count = models.IntegerField(blank=True, null=True)
+    banned_count = models.IntegerField(blank=True, null=True)
     migrated_from_chat_id = models.CharField(max_length=255, blank=True, null=True)
     migrated_from_max_id = models.CharField(max_length=255, blank=True, null=True)
     pinned_msg_id = models.CharField(max_length=255, blank=True, null=True)
@@ -111,7 +114,7 @@ class TgChannel(models.Model):
     online_count = models.CharField(max_length=255, blank=True, null=True)
     invite = models.CharField(max_length=255, blank=True, null=True)
     participants = models.TextField(blank=True, null=True)
-    mtproto = models.TextField(blank=True, null=True)
+    mtproto = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
@@ -119,6 +122,11 @@ class TgChannel(models.Model):
     is_active = models.BooleanField(blank=True, null=True)
     days_count = models.IntegerField(blank=True, null=True)
     megagroup = models.BooleanField(blank=True, null=True)
+    old_name = models.JSONField(blank=True, null=True)
+    old_name_count = models.IntegerField(blank=True, null=True)
+    username = models.CharField(max_length=255, blank=True, null=True)
+    old_username = models.JSONField(blank=True, null=True)
+    old_username_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -132,12 +140,12 @@ class TgChannelMessage(models.Model):
     peer_id = models.BigIntegerField(blank=True, null=True)
     date = models.DateTimeField(blank=True, null=True)
     forum_topic = models.BooleanField(blank=True, null=True)
-    reply_to_msg_id = models.IntegerField(blank=True, null=True)
+    reply_to_message_id = models.IntegerField(blank=True, null=True)
     topic_id = models.IntegerField(blank=True, null=True)
     mtproto = models.JSONField(blank=True, null=True)
     tg_channel = models.ForeignKey(TgChannel, models.DO_NOTHING, blank=True, null=True)
     edit_date = models.DateTimeField(blank=True, null=True)
-    message_private_link = models.CharField(unique=True, max_length=255)
+    message_private_link = models.CharField(max_length=255)
     type = models.CharField(max_length=255, blank=True, null=True)
     pinned = models.BooleanField(blank=True, null=True)
     media = models.JSONField(blank=True, null=True)
@@ -232,27 +240,27 @@ class TgGroup(models.Model):
     restricted = models.CharField(max_length=255, blank=True, null=True)
     access_hash = models.CharField(max_length=255, blank=True, null=True)
     signatures = models.CharField(max_length=255, blank=True, null=True)
-    read_inbox_max_id = models.CharField(max_length=255, blank=True, null=True)
-    read_outbox_max_id = models.CharField(max_length=255, blank=True, null=True)
+    read_inbox_max_id = models.IntegerField(blank=True, null=True)
+    read_outbox_max_id = models.IntegerField(blank=True, null=True)
     hidden_prehistory = models.CharField(max_length=255, blank=True, null=True)
     bot_info = models.TextField(blank=True, null=True)
-    notify_settings = models.TextField(blank=True, null=True)
-    can_set_stickers = models.CharField(max_length=255, blank=True, null=True)
-    can_view_participants = models.CharField(max_length=255, blank=True, null=True)
-    can_set_username = models.CharField(max_length=255, blank=True, null=True)
-    participants_count = models.CharField(max_length=255, blank=True, null=True)
-    admins_count = models.CharField(max_length=255, blank=True, null=True)
-    kicked_count = models.CharField(max_length=255, blank=True, null=True)
-    banned_count = models.CharField(max_length=255, blank=True, null=True)
-    migrated_from_chat_id = models.CharField(max_length=255, blank=True, null=True)
-    migrated_from_max_id = models.CharField(max_length=255, blank=True, null=True)
-    pinned_msg_id = models.CharField(max_length=255, blank=True, null=True)
+    notify_settings = models.JSONField(blank=True, null=True)
+    can_set_stickers = models.BooleanField(blank=True, null=True)
+    can_view_participants = models.BooleanField(blank=True, null=True)
+    can_set_username = models.BooleanField(blank=True, null=True)
+    participants_count = models.IntegerField(blank=True, null=True)
+    admins_count = models.IntegerField(blank=True, null=True)
+    kicked_count = models.IntegerField(blank=True, null=True)
+    banned_count = models.IntegerField(blank=True, null=True)
+    migrated_from_chat_id = models.IntegerField(blank=True, null=True)
+    migrated_from_max_id = models.IntegerField(blank=True, null=True)
+    pinned_msg_id = models.IntegerField(blank=True, null=True)
     about = models.CharField(max_length=255, blank=True, null=True)
     can_view_stats = models.CharField(max_length=255, blank=True, null=True)
     online_count = models.CharField(max_length=255, blank=True, null=True)
     invite = models.CharField(max_length=255, blank=True, null=True)
-    participants = models.TextField(blank=True, null=True)
-    mtproto = models.TextField(blank=True, null=True)
+    participants = models.CharField(max_length=255, blank=True, null=True)
+    mtproto = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(blank=True, null=True)
     updated_at = models.DateTimeField(blank=True, null=True)
     deleted_at = models.DateTimeField(blank=True, null=True)
@@ -262,6 +270,10 @@ class TgGroup(models.Model):
     last_message_id = models.BigIntegerField(blank=True, null=True)
     days_count = models.SmallIntegerField(blank=True, null=True)
     megagroup = models.BooleanField(blank=True, null=True)
+    old_name = models.JSONField(blank=True, null=True)
+    username = models.CharField(max_length=255, blank=True, null=True)
+    old_username = models.JSONField(blank=True, null=True)
+    old_username_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -281,19 +293,21 @@ class TgGroupMessage(models.Model):
     mtproto = models.JSONField(blank=True, null=True)
     tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
     edit_date = models.DateTimeField(blank=True, null=True)
-    message_private_link = models.CharField(unique=True, max_length=255)
+    message_private_link = models.CharField(max_length=255, blank=True, null=True)
     type = models.CharField(max_length=255, blank=True, null=True)
     pinned = models.BooleanField(blank=True, null=True)
     media = models.JSONField(blank=True, null=True)
     post = models.BooleanField(blank=True, null=True)
     out = models.BooleanField(blank=True, null=True)
-    replies_count = models.IntegerField(blank=True, null=True)
+    replies_count = models.CharField(max_length=255, blank=True, null=True)
     max_id = models.IntegerField(blank=True, null=True)
     read_max_id = models.IntegerField(blank=True, null=True)
     comments = models.BooleanField(blank=True, null=True)
     old_content = models.JSONField(blank=True, null=True)
     old_count = models.IntegerField(blank=True, null=True)
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
+    tg_group_user_id = models.IntegerField(blank=True, null=True)
+    tg_topic_id = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -301,6 +315,7 @@ class TgGroupMessage(models.Model):
 
 
 class TgGroupText(models.Model):
+    id = models.AutoField()
     type = models.CharField(max_length=255, blank=True, null=True)
     message_private_link = models.CharField(max_length=255, blank=True, null=True)
     tg_channel_text_id = models.IntegerField(blank=True, null=True)
@@ -366,13 +381,13 @@ class TgGroupUser(models.Model):
     contact = models.BooleanField(blank=True, null=True)
     bot = models.BooleanField(blank=True, null=True)
     tg_group_user_id = models.BigIntegerField(blank=True, null=True)
+    tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
     full_name = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    photo_field = models.JSONField(db_column='photo ', blank=True, null=True)  # Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
+    photo = models.JSONField(blank=True, null=True)
     status = models.JSONField(blank=True, null=True)
     mtproto = models.JSONField(blank=True, null=True)
-    tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
     old_full_name = models.JSONField(blank=True, null=True)
     old_full_name_count = models.IntegerField(blank=True, null=True)
     old_username = models.JSONField(blank=True, null=True)
@@ -386,6 +401,7 @@ class TgGroupUser(models.Model):
 
 
 class TgRole(models.Model):
+    id = models.AutoField()
     name = models.CharField(max_length=255, blank=True, null=True)
     display_name = models.CharField(max_length=255, blank=True, null=True)
     send_messages = models.SmallIntegerField(blank=True, null=True)
@@ -413,7 +429,7 @@ class TgTopic(models.Model):
     tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
     created_time = models.DateTimeField(blank=True, null=True)
     title = models.CharField(max_length=255, blank=True, null=True)
-    topic_creater_id = models.BigIntegerField(blank=True, null=True)
+    topic_creator_id = models.BigIntegerField(blank=True, null=True)
     notify_settings = models.JSONField(blank=True, null=True)
     closed = models.BooleanField(blank=True, null=True)
 
@@ -429,12 +445,12 @@ class TgUser(models.Model):
     status = models.JSONField(blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     photo = models.JSONField(blank=True, null=True)
-    mtproto = models.TextField(blank=True, null=True)
+    mtproto = models.JSONField(blank=True, null=True)
     bot = models.BooleanField(blank=True, null=True)
-    old_first_name = models.JSONField(blank=True, null=True, default=dict)
-    old_first_name_count = models.IntegerField(blank=True, null=True, default=0)
-    old_username = models.JSONField(blank=True, null=True, default=dict)
-    old_phone = models.JSONField(blank=True, null=True, default=dict)
+    old_first_name = models.JSONField(blank=True, null=True)
+    old_first_name_count = models.IntegerField(blank=True, null=True)
+    old_username = models.JSONField(blank=True, null=True)
+    old_phone = models.JSONField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -442,6 +458,7 @@ class TgUser(models.Model):
 
 
 class TgUserRole(models.Model):
+    id = models.AutoField()
     tg_user_id = models.IntegerField(blank=True, null=True)
     tg_role_id = models.IntegerField(blank=True, null=True)
 
@@ -451,6 +468,7 @@ class TgUserRole(models.Model):
 
 
 class TgUserText(models.Model):
+    id = models.AutoField()
     tg_id = models.IntegerField(blank=True, null=True)
     field_field = models.CharField(db_column='_', max_length=255, blank=True, null=True)  # Field renamed because it started with '_'. Field renamed because it ended with '_'.
     out = models.CharField(max_length=255, blank=True, null=True)
