@@ -62,7 +62,7 @@ class Rating(models.Model):
     tg_group_message = models.ForeignKey('TgGroupMessage', models.DO_NOTHING, blank=True, null=True)
     message_private_link = models.CharField(max_length=255, blank=True, null=True)
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
-    old_content = models.JSONField(blank=True, null=True)
+    content_history = models.JSONField(blank=True, null=True)
     report = models.ForeignKey('Report', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
@@ -239,8 +239,7 @@ class TgGroupMessage(models.Model):
     max_id = models.IntegerField(blank=True, null=True)
     read_max_id = models.IntegerField(blank=True, null=True)
     comments = models.BooleanField(blank=True, null=True)
-    old_content = models.JSONField(blank=True, null=True)
-    old_count = models.IntegerField(blank=True, null=True)
+    content_history = models.JSONField(blank=True, null=True)
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
     tg_group_user_id = models.IntegerField(blank=True, null=True)
     tg_topic_id = models.IntegerField(blank=True, null=True)

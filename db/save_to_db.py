@@ -118,27 +118,32 @@ def save_db_rss_group():
                     try:
                         msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
                         if message["content"] != msg.content:
-                            count = msg.old_count + 1
-                            old = {f"{count}:content": msg.content}
-                            ext_data = msg.old_content
 
-                            ext_data.update(old)
-                            msg.old_count = count
+                            # old = {f"{message['edit_date']}": msg.content}
 
+
+                            if msg.content_history == None:
+                                print(type(msg.content_history))
+                                msg.content_history = {}
+                            print(type(msg.content_history))
+                            # ext_data.update(old)
+                            msg.content_history.update({f"{message['edit_date']}": msg.content})
+
+                            msg.edit_date = message['edit_date']
                             msg.content = message["content"]
                             msg.save()
 
-                            print(f'[Group]content update {message["message_private_link"]}')
+                            print(f'[Group][Message]content update {message["message_private_link"]}')
                             rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
                         else:
-                            print(f'[Group]already exists {message["message_private_link"]}')
+                            print(f'[Group][Message]already exists {message["message_private_link"]}')
                             rss_parsing_save_to_db.log(f"[Group][ALREADY EXISTS]{message}")
 
 
                     except TgGroupMessage.DoesNotExist:
                         TgGroupMessage.objects.create(**message)
 
-                        print('[Group]Created new message')
+                        print('[Group][Message]Created new message')
                         print(f'[Group][Message has been saved to db] msg_link : {message["message_private_link"]}')
                         rss_parsing_save_to_db.log(f'[Group][CREATED NEW MESSAGE] {message}')
             # --------------
