@@ -134,6 +134,7 @@ def rss_group(peer_id,days):
                         topic_id = reply_to['reply_to_msg_id']
 
             except Exception as e:
+                forum_topic = None
                 reply_to = None
             if topic_id != None:
                 message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{topic_id}/{id}"
