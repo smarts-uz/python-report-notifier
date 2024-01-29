@@ -87,6 +87,12 @@ def get_rating():
     click.echo('[Reply Messages process successfully ended!!]')
 
 
+@click.command()
+def get_dialogs():
+    save_dialogs_to_db()
+    collect_dialogs()
+    click.echo("[Process: Collect Dialog ended!]")
+
 
 @click.group()
 def cli():
@@ -101,7 +107,7 @@ cli.add_command(collect_msg_group)
 cli.add_command(collect_msg_channel)
 cli.add_command(add_report)
 cli.add_command(get_rating)
-
+cli.add_command(get_dialogs)
 
 try:
     if __name__ == '__main__':
