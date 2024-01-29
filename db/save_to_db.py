@@ -131,11 +131,14 @@ def save_db_rss_group():
 
                             msg.edit_date = message['edit_date']
                             msg.content = message["content"]
+                            msg.replies_count = message['replies_count']
                             msg.save()
 
                             print(f'[Group][Message]content update {message["message_private_link"]}')
                             rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
                         else:
+                            msg.replies_count = message['replies_count']
+                            msg.save()
                             print(f'[Group][Message]already exists {message["message_private_link"]}')
                             rss_parsing_save_to_db.log(f"[Group][ALREADY EXISTS]{message}")
 
@@ -286,7 +289,7 @@ def save_to_rating():
                     print(f'[Reply Message]{rpl_msg.message_private_link} already exists')
                     if rate.content != rpl_msg.content:
                         rate.content = rpl_msg.content
-                        rate.old_content = rpl_msg.old_content
+                        rate.content_history = rpl_msg.content_history
                         rate.save()
 
                     #     this line for telegram function to send message
