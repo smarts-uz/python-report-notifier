@@ -3,7 +3,8 @@ from datetime import datetime
 
 from logx import Logger
 
-save_parser_to_log = Logger('parser_log', 'a')
+parser_log = 'parser_log'
+save_parser_to_log = Logger(f'{parser_log}', 'a')
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -49,9 +50,8 @@ class Parser:
             save_parser_to_log.log(msg)
 
         except Exception as e:
-            msg = 'Some kind of error. check log file'
+            msg = f'<!> Oops! Something went wrong, check the log file: {parser_log}.log'
             print(msg)
-            save_parser_to_log.log(msg)
             save_parser_to_log.err(e)
 
         return response
@@ -74,9 +74,8 @@ class Parser:
                              'username': username})
                 save_parser_to_log.log(user)
         except Exception as e:
-            msg = '[Parser][User]Some kind of error. check log file'
+            msg = f'<!> Oops! Something went wrong, check the log file: {parser_log}.log'
             print(msg)
-            save_parser_to_log.log(msg)
             save_parser_to_log.err(e)
 
         # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
@@ -116,9 +115,9 @@ class Parser:
                              "forward_message": forward_message})
                 save_parser_to_log.log(chat)
         except Exception as e:
-            msg = '[Parser][Chat]Some kind of error. check log file'
+            msg = f'<!> Oops! Something went wrong, check the log file: {parser_log}.log'
             print(msg)
-            save_parser_to_log.log(msg)
+
             save_parser_to_log.err(e)
 
         return data
@@ -166,9 +165,9 @@ class Parser:
                              })
                 save_parser_to_log.log(message)
         except Exception as e:
-            msg = '[Parser][Message]: Some kind of error. check log file'
+            msg = f'<!> Oops! Something went wrong, check the log file: {parser_log}.log'
             print(msg)
-            save_parser_to_log.log(msg)
+
             save_parser_to_log.err(e)
 
         return data

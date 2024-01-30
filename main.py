@@ -22,9 +22,13 @@ from datetime import datetime
 
 
 from logx import Logger
-add_keyword_log = Logger('add_keyword',"a")
-add_report_log = Logger('add_report',"a")
-command_line_log = Logger('command_line',"a")
+add_keyword_n = 'add_keyword'
+add_report_n = 'add_report'
+command_line_n = 'command_line'
+
+add_keyword_log = Logger(f'{add_keyword_n}',"a")
+add_report_log = Logger(f'{add_report_n}',"a")
+command_line_log = Logger(f'{command_line_n}',"a")
 
 
 
@@ -42,8 +46,9 @@ def add_keyword(new_keyword):
                            topic_id=topic_id,
                             last_checked=datetime(2015,1,1))
         add_keyword_log.log(f'[DB]{new_keyword} created successfully ')
-        print(f'[DB]{new_keyword} created successfully ')
+        print(f'{new_keyword} created successfully in database ')
     except Exception as e:
+        print(f'<!> Oops! Something went wrong, check the log file: {add_keyword_n}.log')
         add_keyword_log.err(e)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
 
@@ -53,11 +58,11 @@ def add_report(new_report):
     try:
         create_topic = creatTopic(new_report, chat_id_2)
         report = save_to_report(new_report,create_topic)
-        click.echo(f'[report][added]: {new_report}')
-        add_report_log.log(f'[report][added]: {new_report}')
+        click.echo(f'report added to db: {new_report}')
+        add_report_log.log(f'report added to db: {new_report}')
     except Exception as e:
-        click.echo(f'[Some kind of error] check the log file!!!')
-        add_report_log.err(f'[Some kind of error]: {e}')
+        click.echo(f'<!> Oops! Something went wrong, check the log file: {add_report_n}.log')
+        add_report_log.err(f'error: {e}')
 
 
 
@@ -88,14 +93,14 @@ def collect_msg_channel():
 @click.command()
 def get_rating():
     save_to_rating()
-    click.echo('[Reply Messages process successfully ended!!]')
+    click.echo('Reply Messages process successfully ended!!')
 
 
 @click.command()
 def get_dialogs():
     save_dialogs_to_db()
     collect_dialogs()
-    click.echo("[Process: Collect Dialog ended!]")
+    click.echo("Process: Collect Dialog ended!")
 
 
 @click.group()
@@ -119,9 +124,8 @@ try:
         msg = "Searching successfully ended!"
         command_line_log.log(msg)
 except Exception as e:
-    msg = "Some kind of error, check log file"
+    msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
     print(msg)
-    command_line_log.log(msg)
     command_line_log.err(e)
 
 
