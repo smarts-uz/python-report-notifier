@@ -64,5 +64,9 @@ def get_forward(peer_id):
     return data.noforwards
 
 
+def get_fullname_from_rating(user_id):
+    user = TgGroupUser.objects.get(tg_group_user_id=user_id)
+    return user.full_name
+
 
 

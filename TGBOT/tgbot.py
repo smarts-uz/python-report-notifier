@@ -102,8 +102,12 @@ def creatTopic(name,chat_id):
 
 
 
-def send_msg_rating(content,date,message_link,topic_id,chat_id):
-    text = f"{content}"
+def send_msg_rating(content,date,message_link,topic_id,chat_id,user_id,user_fullname):
+    text = f"""
+    <a href="t.me/@id{user_id}">{user_fullname}</a>,[{date}]
+<a href="{message_link}">{content}</a>
+    
+"""
 
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
@@ -138,6 +142,3 @@ def fwr_msg_rating(chat_id,peer_id,msg_id,topic_id):
         forwM.log(f'[Forward Message]{a}')
 
 
-
-
-# fwr_msg_rating(chat_id=-1001965260006, peer_id=-1002098866683, msg_id=89, topic_id=7)
