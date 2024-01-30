@@ -1,27 +1,28 @@
+# ORM functionality
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
-import time
 django.setup()
 
-
-
+# .env
 from dotenv import load_dotenv
+load_dotenv()
 chat_id = os.getenv("CHAT_ID")
 chat_id_2 = os.getenv("CHAT_ID_2")
-load_dotenv()
 
-from datetime import datetime
+# Other packages
+import time
 from Parsing.parser import Parser
 from Parsing.Telegram_RSS import rss_group ,rss_channel
 from db.db_functions import *
 from TGBOT.tgbot import sendMsg,fwr_msg ,send_msg_rating,fwr_msg_rating
 
+# Logger
 from logx import Logger
-save_to_db_log = Logger('save_to_db', 'a')
-save_to_report_log = Logger('save_to_report', 'a')
-
-rss_parsing_save_to_db = Logger('rss_parsing_save_to_db',"a")
+log_names = ['save_to_db', 'save_to_report', 'rss_parsing_save_to_db']
+save_to_db_log = Logger(log_names[0], 'a')
+save_to_report_log = Logger(log_names[1], 'a')
+rss_parsing_save_to_db = Logger(log_names[2],"a")
 
 def save_to_db():
     print("[Parsing in progress]")

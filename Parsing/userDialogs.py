@@ -10,8 +10,6 @@ load_dotenv()
 
 # Other packages
 import requests
-from datetime import datetime
-from pprint import pprint
 
 # ORM imports
 from db.models import TgUser
