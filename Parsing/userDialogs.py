@@ -1,36 +1,34 @@
+# ORM functionality
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()
 
-import requests
-from datetime import datetime
-import os
+# .env functionality
 from dotenv import load_dotenv
 load_dotenv()
+
+# Other packages
+import requests
+from datetime import datetime
 from pprint import pprint
 
+# ORM imports
+from db.models import TgUser
 
+# Logger functionality
 from logx import Logger
-save_dialog_to_log = Logger('user_dialog_log', 'a')
+log_file_name = 'user_dialog_log'
+save_dialog_to_log = Logger(log_file_name, 'a')
 
-
+# Receive .env data
 ip = os.getenv("IP")
 port = os.getenv("PORT")
 token = os.getenv("TOKEN")
 chat_id = os.getenv("CHAT_ID")
 
 
-# --- Function
-
-# tg_id = 0
-# tg_role_id = 0
-# type = ''
-# full_name = ''
-# username = ''
-
-from db.models import TgUser
-
+# --- Main Functions
 def user_dialogs():
     url = f"http://{ip}:{port}/api/messages.getDialogs"
     response = requests.get(url).json()['response']['users']
@@ -56,19 +54,14 @@ def user_dialogs():
                 'photo': photo,
                 'mtproto': mtproto
             })
-            print(f"Users found: {len(users)}")
             save_dialog_to_log.log(user)
+        print(f"Total users found: {len(users)}")
     except Exception as e:
-        msg = '[Parser][User]Some kind of error. check log file'
+        msg = f"<!> Oops! Something went wrong, check the log file: {log_file_name}.log"
         print(msg)
         save_dialog_to_log.log(msg)
         save_dialog_to_log.err(e)
-
-    # pprint(users)
-    # print("---> Users count:", len(users))
     return users
-
-
 
 
 def save_dialogs_to_db():
@@ -85,8 +78,8 @@ def save_dialogs_to_db():
                     usr.first_name = user['first_name']
                     usr.old_first_name_count = count
                     usr.save()
-                    print(f'[User][first_name] updated {user["tg_id"]}')
-                    save_dialog_to_log.log(f"[User][UPDATED FIRSTNAME]{user}")
+                    print(f"User with ID {user['tg_id']} updated <first_name> to: {user['first_name']}")
+                    save_dialog_to_log.log(f"User with ID {user['tg_id']} updated <first_name> to: {user['first_name']}")
 
                 if user['username'] != usr.username:
                     count = usr.old_username_count + 1
@@ -96,8 +89,8 @@ def save_dialogs_to_db():
                     usr.username = user['username']
                     usr.old_username_count = count
                     usr.save()
-                    print(f'[Group][user][username] updated {user["tg_group_user_id"]}')
-                    save_dialog_to_log.log(f"[User][UPDATED USERNAME]{user}")
+                    print(f"User with ID {user['tg_group_user_id']} updated <username> to: {user['username']}")
+                    save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} updated <username> to: {user['username']}")
                 if user['phone'] != usr.phone:
                     count = usr.old_phone_count + 1
                     old_phones = {f"{count}:phone": usr.phone}
@@ -106,22 +99,19 @@ def save_dialogs_to_db():
                     usr.phone = user['phone']
                     usr.old_phone_count = count
                     usr.save()
-                    print(f'[Group][user][phone] updated {user["tg_group_user_id"]}')
-                    save_dialog_to_log.log(f"[User][UPDATED PHONE]{user}")
+                    print(f"User with ID {user['tg_group_user_id']} updated <phone> to: {user['phone']}")
+                    save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} updated <phone> to: {user['phone']}")
                 else:
-                    print('[Group]user already exist')
-                    save_dialog_to_log.log(f"[Group][NOTHING UPDATE]: {user}")
+                    print(f"User with ID {user['tg_group_user_id']} already exist")
+                    save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} already exist.")
 
 
             except TgUser.DoesNotExist:
                 TgUser.objects.create(**user)
-                print(f'[Group][User has been saved to db] user_id :  {user["tg_id"]}')
-                save_dialog_to_log.log(f"[Group][User has been saved to db] {user}")
+                print(f"User with ID {user['tg_group_user_id']} has been saved to DB.")
+                save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} has been saved to DB.")
         except Exception as e:
-            print('[Group][User][Some Kind of error check the log file]')
-            save_dialog_to_log.err(f'[Group][User error]: {e}')
-    print(f'[User] : saving to db successfully end!')
-    save_dialog_to_log.log(f'[User] : saving to db successfully end!')
-
-
-
+            print(f"<!> Oops! Something went wrong, check the log file: {log_file_name}.log")
+            save_dialog_to_log.err(e)
+    print(f"DB save process has been finished!")
+    save_dialog_to_log.log(f"DB save process has been finished!")
