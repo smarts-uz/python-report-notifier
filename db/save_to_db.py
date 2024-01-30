@@ -135,7 +135,7 @@ def save_db_rss_group():
                                 msg.content_history = {}
                             print(type(msg.content_history))
                             # ext_data.update(old)
-                            msg.content_history.update({f"{message['edit_date']}": msg.content})
+                            msg.content_history.update({f"{message['edit_date']}" : msg.content})
 
                             msg.edit_date = message['edit_date']
                             msg.content = message["content"]
@@ -287,6 +287,7 @@ def save_to_report(msg_private_link,thread_id):
 
         )
         print(f'{msg_private_link} saved to db!!!')
+    return Report.title
 
 def save_to_rating():
     try:

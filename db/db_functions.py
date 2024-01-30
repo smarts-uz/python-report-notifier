@@ -44,8 +44,8 @@ def get_all_channel():
 def get_message_from_group(msg_link):
     msg = TgGroupMessage.objects.get(message_private_link = msg_link)
     return (msg.pk,
-            msg.msg_id
-            ,msg.peer_id,
+            msg.msg_id,
+            msg.peer_id,
             msg.topic_id,
             msg.replies_count)
 
@@ -68,5 +68,5 @@ def get_fullname_from_rating(user_id):
     user = TgGroupUser.objects.get(tg_group_user_id=user_id)
     return user.full_name
 
-
-
+def get_user_from_group():
+    pass
