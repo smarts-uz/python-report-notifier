@@ -97,8 +97,8 @@ def save_to_db():
         key.last_checked = update_time
         key.save()
         print(f'update time is {update_time}')
-        print(f"f[*---------{item['name']}-------------- search successfully ended!! *]")
-
+        print(f"[*---------{item['name']}-------------- search successfully ended!! *]")
+        print('wait 5 sec to next keyword')
         for i in range(5):
             print(i + 1)
             time.sleep(1)

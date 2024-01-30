@@ -5,10 +5,10 @@ from pprint import pprint
 
 import os
 from dotenv import load_dotenv
+load_dotenv()
 ip = os.getenv("IP")
 port = os.getenv("PORT_RSS")
 
-load_dotenv()
 def rss_group(peer_id,days):
     messages = []
     users = []
@@ -330,14 +330,3 @@ def rss_channel(peer_id,days):
 
 
 
-
-
-
-#
-#
-# # #
-# r = rss_channel('smarts_uzb',1)
-# # # # r = rss('tuit_online',1)
-# # #
-# # #
-# pprint(r[0])

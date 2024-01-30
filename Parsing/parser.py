@@ -1,19 +1,20 @@
 import requests
 from datetime import datetime
 
-
-
 from logx import Logger
-save_parser_to_log = Logger('parser_log', 'a')
 
+save_parser_to_log = Logger('parser_log', 'a')
 import os
 from dotenv import load_dotenv
-ip = os.getenv("IP")
-port = os.getenv("PORT")
-group_id = os.getenv("CHAT_ID")
-group_peer_id = int(str(group_id)[4:])
-
 load_dotenv()
+
+
+IP = os.getenv("IP")
+PORT = os.getenv("PORT")
+group_id = os.getenv("CHAT_ID")  # example -1002059626462
+group_peer_id = str(group_id)[4:]  # example 2059626462
+group_id_2 = os.getenv('CHAT_ID_2')  # example -1002059626462
+group_peer_id_2 = str(group_id_2)[4:]  # example 2059626462
 
 
 class Parser:
@@ -25,8 +26,8 @@ class Parser:
         self.q = q
 
     def parsing(self):
-        url = f"http://{ip}:{port}/api/messages.searchGlobal"
-        # url = "http://192.168.0.106:9503/api/messages.searchGlobal"
+        # url = f"http://{ip}:{port}/api/messages.searchGlobal"
+        url = "http://192.168.3.54:9503/api/messages.searchGlobal"
 
         payload = {"params": {
             "flags": 0,
@@ -61,23 +62,22 @@ class Parser:
             response = self.parsing()
             users = response['response']['users']
             for user in users:
-                user_id = user.get("id","This is not user")
-                if user == [136817688,211246197]:
+                user_id = user.get("id", "This is not user")
+                if user == [136817688, 211246197]:
                     continue
 
                 fullname = f'{user.get("first_name", " ")} {user.get("last_name", " ")}'
                 username = user.get('username', ' ')
 
                 data.append({'user_id': user_id,
-                         'fullname': fullname,
-                         'username': username})
+                             'fullname': fullname,
+                             'username': username})
                 save_parser_to_log.log(user)
         except Exception as e:
             msg = '[Parser][User]Some kind of error. check log file'
             print(msg)
             save_parser_to_log.log(msg)
             save_parser_to_log.err(e)
-
 
         # with open('db/json/users.json', mode='w', encoding='utf-8') as file:
         #  json.dump(data, file, indent=4, ensure_ascii=False)
@@ -92,9 +92,12 @@ class Parser:
 
             for chat in chats:
 
-                chat_id = chat['id']
-                if chat_id == 2059626462:
+                if chat['id'] == int(group_peer_id) or chat['id'] == int(group_peer_id_2):  # 2059626462
+
                     continue
+
+                chat_id = chat['id']
+
                 peer_id = int("-100" + str(chat_id))
                 title = chat['title']
                 type = chat['_']
@@ -106,20 +109,17 @@ class Parser:
                     public_chat_link = f"t.me/{username}"
 
                 data.append({"chat_id": chat_id,
-                         "peer_id": peer_id,
-                         "title": title,
-                         "type": type,
-                         "public_chat_link": public_chat_link,
-                         "forward_message": forward_message})
+                             "peer_id": peer_id,
+                             "title": title,
+                             "type": type,
+                             "public_chat_link": public_chat_link,
+                             "forward_message": forward_message})
                 save_parser_to_log.log(chat)
         except Exception as e:
             msg = '[Parser][Chat]Some kind of error. check log file'
             print(msg)
             save_parser_to_log.log(msg)
             save_parser_to_log.err(e)
-
-
-
 
         return data
 
@@ -131,11 +131,16 @@ class Parser:
             topic_id = None
 
             for message in messages:
-                peer_id = message['peer_id']
+
                 # content group
 
-                if peer_id == -1002059626462:
+                if message['peer_id'] == int(group_id) or message['peer_id'] == int(group_id_2):  # example-1002059626462
+
                     continue
+                peer_id = message['peer_id']
+
+
+
                 msg_id = message['id']
                 text = message.get("message", " ")
                 from_id = message.get('from_id', ' ')
@@ -149,23 +154,22 @@ class Parser:
                 message_full_link = f"t.me/c/{int(str(peer_id)[4:])}/{msg_id}"
 
                 data.append({'user_id': from_id,
-                         'datetime': date,
-                         'peer_id': peer_id,
-                         'content': text,
-                         'keyword_id': keyword_id,
-                         "private_chat_link": private_link_chat,
-                         "message_full_link": message_full_link,
-                         "public_chat_link": public_link_chat,
-                         "user_link": user_link,
-                         "msg_id": msg_id
-                         })
+                             'datetime': date,
+                             'peer_id': peer_id,
+                             'content': text,
+                             'keyword_id': keyword_id,
+                             "private_chat_link": private_link_chat,
+                             "message_full_link": message_full_link,
+                             "public_chat_link": public_link_chat,
+                             "user_link": user_link,
+                             "msg_id": msg_id
+                             })
                 save_parser_to_log.log(message)
         except Exception as e:
             msg = '[Parser][Message]: Some kind of error. check log file'
             print(msg)
             save_parser_to_log.log(msg)
             save_parser_to_log.err(e)
-
 
         return data
 

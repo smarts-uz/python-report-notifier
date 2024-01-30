@@ -1,5 +1,9 @@
 import sys
 import os
+
+from Parsing.getdialogs import collect_dialogs
+from Parsing.userDialogs import save_dialogs_to_db
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()

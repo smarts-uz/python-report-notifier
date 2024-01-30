@@ -7,7 +7,7 @@ import requests
 from datetime import datetime
 import os
 from dotenv import load_dotenv
-
+load_dotenv()
 from pprint import pprint
 
 
@@ -20,7 +20,6 @@ port = os.getenv("PORT")
 token = os.getenv("TOKEN")
 chat_id = os.getenv("CHAT_ID")
 
-load_dotenv()
 
 # --- Function
 
@@ -33,7 +32,7 @@ load_dotenv()
 from db.models import TgUser
 
 def user_dialogs():
-    url = f"http://192.168.3.54:9503/api/messages.getDialogs"
+    url = f"http://{ip}:{port}/api/messages.getDialogs"
     response = requests.get(url).json()['response']['users']
     users = []
     try:
@@ -124,4 +123,5 @@ def save_dialogs_to_db():
     print(f'[User] : saving to db successfully end!')
     save_dialog_to_log.log(f'[User] : saving to db successfully end!')
 
-# save_dialogs_to_db()
+
+

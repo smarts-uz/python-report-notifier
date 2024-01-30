@@ -9,20 +9,38 @@ import requests
 from datetime import datetime
 from pprint import pprint
 
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
+ip = os.getenv("IP")
+port = os.getenv("PORT")
+group_id = os.getenv("CHAT_ID") #example -1002059626462
+group_peer_id = int(str(group_id)[4:]) #example 2059626462
+group_id_2 = os.getenv('CHAT_ID_2') #example -1002059626462
+group_peer_id_2 = int(str(group_id_2)[4:]) #example 2059626462
+
+
+
+
+
 from logx import Logger
 save_channel_chat_log = Logger('save_channel_chat_log', 'a')
 
-url = "http://192.168.3.54:9503/api/messages.getDialogs"
+url = f"http://{ip}:{port}/api/messages.getDialogs"
 
 response = requests.post(url).json()
 def get_dialogs():
     data_channel = []
     data_chat = []
-
     for chat in response['response']['chats']:
-        if chat['_']=='chat' or chat['id']==2059626462:
+
+        if chat['_']=='chat' or chat['id']==group_peer_id or chat['id'] ==group_peer_id_2 :  #example 2059626462
             continue
         else:
+
             # If channel
             if chat['megagroup']==False:
                 if 'username' in chat:
@@ -149,4 +167,4 @@ def collect_dialogs():
             print("Error occured. Check the log file")
             save_channel_chat_log.err(e)
 
-#hjhjhj
+get_dialogs()
