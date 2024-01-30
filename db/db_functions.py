@@ -55,7 +55,7 @@ def get_reply_messages(reply_msg_id):
     return msg
 
 def get_all_reports():
-    data = Report.objects.values('pk','message_id', 'link','thread_id')
+    data = Report.objects.values('pk','message_id', 'message_link','thread_id')
     return list(data)
 
 def get_forward(peer_id):

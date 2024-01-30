@@ -71,13 +71,14 @@ class Rating(models.Model):
 
 
 class Report(models.Model):
-    link = models.CharField(max_length=255, blank=True, null=True)
+    message_link = models.CharField(max_length=255, blank=True, null=True)
     topic_id = models.IntegerField(blank=True, null=True)
     message_id = models.IntegerField(blank=True, null=True)
     chat_id = models.IntegerField(blank=True, null=True)
     tg_group_message_id = models.IntegerField(blank=True, null=True)
     replies_count = models.BigIntegerField(blank=True, null=True)
     thread_id = models.BigIntegerField(blank=True, null=True)
+    thread_title = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False

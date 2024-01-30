@@ -15,7 +15,7 @@ import time
 from Parsing.parser import Parser
 from Parsing.Telegram_RSS import rss_group ,rss_channel
 from db.db_functions import *
-from TGBOT.tgbot import sendMsg,fwr_msg ,send_msg_rating,fwr_msg_rating
+from TGBOT.tgbot import sendMsg,fwr_msg
 
 # Logger
 from logx import Logger
@@ -70,7 +70,7 @@ def save_to_db():
             message_full_link = message['message_full_link']
             user_id = message['user_id']
             topic_id = item['topic_id']
-
+            tg_id = int(str(peer_id)[4:])
             forward_bool = forward_message_boolen(peer_id)
             chat_title = get_title_chat(peer_id)
             user_fullname = get_user_fullname(user_id)[0]
@@ -79,11 +79,11 @@ def save_to_db():
 
             print(f"[Forward]:{forward_bool}")
             if forward_bool == True:
-                sendMsg(content, user_link, private_chat_link, date, message_full_link, user_fullname, chat_title, username,
-                        topic_id, pk,chat_id)
+                sendMsg(content=content, user_id=user_id, tg_id=tg_id,date=date,message_link=message_full_link,user_fullname=user_fullname, chat_title=chat_title, username=username,
+                        topic_id=topic_id,chat_id=chat_id)
             else:
-                fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
-                        pk, username, topic_id,chat_id)
+                fwr_msg(user_id, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
+                        username, topic_id,chat_id)
 
             print(
                 f'[Keyword: {item["name"]}][Message has been saved]: content: {message["content"]} ,chat_id:  {message["peer_id"]}, user_id: {message["user_id"]}, time: {message["datetime"]} private_chat_link: {message["private_chat_link"]}')
@@ -277,7 +277,7 @@ def save_to_report(msg_private_link,thread_id):
         peer_id = str(report[2])
         chat_id = int(str(peer_id)[4:])
         Report.objects.create(
-            link = msg_private_link,
+            message_link = msg_private_link,
             topic_id = report[3],
             message_id = report[1],
             chat_id = chat_id,
@@ -335,17 +335,17 @@ def save_to_rating():
 
                     chat_title =get_title_from_collect_group(tg_id)
                     if forward_bool != False:
-
-                        send_msg_rating(content=rpl_msg.content, date=rpl_msg.date,
+                        sendMsg(content=rpl_msg.content, date=rpl_msg.date,
                                         message_link=rpl_msg.message_private_link,  topic_id=report['thread_id'],
                                         chat_id=chat_id_2,user_id=rpl_msg.from_id,user_fullname=full_name,tg_id=tg_id,chat_title=chat_title)
                     else:
+                        fwr_msg(user_id=rpl_msg.from_id,user_fullname=full_name, chat_title=chat_title,peer_id=rpl_msg.peer_id, date=rpl_msg.date, message_link=rpl_msg.message_private_link, msg_id=rpl_msg.msg_id,
+                                topic_id=report['thread_id'], chat_id=chat_id_2)
 
-                        fwr_msg_rating(chat_id=chat_id_2, peer_id=rpl_msg.peer_id, msg_id=rpl_msg.msg_id, topic_id=report['thread_id'])
 
                     print(f'{rpl_msg.message_private_link} added to rating table !!!!')
-                    print(f'[Reply Message]{report["link"]} succesfully ended!!!')
-            save_to_report_log.log(f'[Reply Message]{report["link"]} succesfully ended!!!')
+                    print(f'[Reply Message]{report["message_link"]} succesfully ended!!!')
+            save_to_report_log.log(f'[Reply Message]{report["message_link"]} succesfully ended!!!')
     except Exception as e:
         print('[Reply Message][Some kind of error check the log file!!!]')
         save_to_report_log.err(f'[Reply Message][Error]: {e}')

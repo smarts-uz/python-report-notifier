@@ -15,16 +15,21 @@ token = os.getenv("TOKEN")
 bot = TeleBot(token, parse_mode="HTML")
 
 
-def sendMsg(content, user_link=None, private_chat_link=None, date=None, message_link=None, user_fullname=None, chat_title=None, username=None, topic_id=None,pk=None,chat_id=None):
-    text = f"""📝  {content}
+def sendMsg(content,date,message_link,topic_id,chat_id,user_id,user_fullname,tg_id,chat_title,username=None):
+    if username == None:
+        text = f"""📝  {content}
 
- 👉  <a href="{message_link}">Message</a>
- 👥  <a href="{private_chat_link}">{chat_title}</a>
- 👤  <a href="{user_link}">{user_fullname}</a>
- 📅  {date}"""
-
-
-
+👉  <a href="{message_link}">Message</a>
+👥  <a href="t.me/c/{tg_id}">{chat_title}</a>
+👤  <a href="t.me/@id{user_id}">{user_fullname}</a>
+📅  {date}"""
+    else:
+        text = f"""📝  {content}
+        
+👉  <a href="{message_link}">Message</a>
+👥  <a href="t.me/c/{tg_id}">{chat_title}</a>
+👤  <a href="t.me/@{username}">{user_fullname}</a>
+📅  {date}"""
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
         print('[Message sent]')
@@ -39,16 +44,20 @@ def sendMsg(content, user_link=None, private_chat_link=None, date=None, message_
 
 
 
-def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,username, topic_id,chat_id):
-
-    text = f"""👉  <a href="{message_link}">Message</a>
-👥  <a href="{private_chat_link}">{chat_title}</a>
-👤  <a href="{user_link}">{user_fullname}</a>
+def fwr_msg(user_id, user_fullname, chat_title, date, message_link, msg_id, peer_id,topic_id,chat_id,username=None):
+    if  username ==None:
+        text = f"""👉  <a href="{message_link}">Message</a>
+👥  <a href="t.me/c/{peer_id}">{chat_title}</a>
+👤  <a href="t.me/@id{user_id}">{user_fullname}</a>
+📅  {date}"""
+    else:
+        text = f"""👉  <a href="{message_link}">Message</a>
+👥  <a href="t.me/c/{peer_id}">{chat_title}</a>
+👤  <a href="t.me/@{username}">{user_fullname}</a>
 📅  {date}"""
 
 
 
-    # print(f"user_link  : {user_link}")
     try:
         a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,message_thread_id=topic_id)
 
@@ -100,44 +109,8 @@ def creatTopic(name,chat_id):
 
 
 
-def send_msg_rating(content,date,message_link,topic_id,chat_id,user_id,user_fullname,tg_id,chat_title):
-    text = f"""📝  {content}
 
-👉  <a href="{message_link}">Message</a>
-👥  <a href="t.me/c/{tg_id}">{chat_title}</a>
-👤  <a href="t.me/@id{user_id}">{user_fullname}</a>
-📅  {date}"""
 
-    try:
-        a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
-        print('[Message sent]')
-        sendM.log(f'[Send Message] : {a}')
-    except Exception as e:
-        print(f'[Send Error] {e}')
-        sendM.err(f'[Send Error] {e}')
-        retry_after(str(e))
-        a = bot.send_message(chat_id=chat_id, message_thread_id=topic_id, text=text, timeout=10)
-        sendM.log(f'[Send Message] : {a}')
-        print('[Message sent]')
 
-def fwr_msg_rating(chat_id,peer_id,msg_id,topic_id):
-    try:
-        a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,
-                                    message_thread_id=topic_id)
-
-        fwr_id = a.json['message_id']
-        print(f'[Message forward]  id {fwr_id}')
-        forwM.log(f'[Forward Message]{a}')
-    except Exception as e:
-        forwM.err(f'[Forward Error] {e}')
-        print(f'[Forward Error] {e}')
-        retry_after(str(e))
-
-        a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,
-                                    message_thread_id=topic_id)
-
-        fwr_id = a.json['message_id']
-        print(f'[Message forwarded]  id {fwr_id}')
-        forwM.log(f'[Forward Message]{a}')
 
 
