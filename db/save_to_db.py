@@ -329,11 +329,15 @@ def save_to_rating():
                     )
                     forward_bool = get_forward(rpl_msg.peer_id)
                     full_name = get_fullname_from_rating(rpl_msg.from_id)
+
+                    tg_id = int(str(rpl_msg.peer_id)[4:])
+
+                    chat_title =get_title_from_collect_group(tg_id)
                     if forward_bool != False:
 
                         send_msg_rating(content=rpl_msg.content, date=rpl_msg.date,
                                         message_link=rpl_msg.message_private_link,  topic_id=report['thread_id'],
-                                        chat_id=chat_id_2,user_id=rpl_msg.from_id,user_fullname=full_name)
+                                        chat_id=chat_id_2,user_id=rpl_msg.from_id,user_fullname=full_name,tg_id=tg_id,chat_title=chat_title)
                     else:
 
                         fwr_msg_rating(chat_id=chat_id_2, peer_id=rpl_msg.peer_id, msg_id=rpl_msg.msg_id, topic_id=report['thread_id'])

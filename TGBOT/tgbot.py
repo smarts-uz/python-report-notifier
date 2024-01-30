@@ -16,15 +16,15 @@ bot = TeleBot(token, parse_mode="HTML")
 
 
 def sendMsg(content, user_link=None, private_chat_link=None, date=None, message_link=None, user_fullname=None, chat_title=None, username=None, topic_id=None,pk=None,chat_id=None):
-    text = f"""<b>🔢:{pk}</b>
+    text = f"""📝  {content}
 
-    📅<b>Date</b> : <u>{date}</u>
-    👤<b>User</b> :  <a href="t.me/{username}">{user_fullname}</a>
-    🔗<b>User Link</b> : <tg-spoiler>{user_link}</tg-spoiler>
-    👥<b>Group/Channel</b> : <a href="{private_chat_link}">{chat_title}</a>
-    🔗<b>Link</b>: <a href="{message_link}">Message Link</a>
+ 👉  <a href="{message_link}">Message</a>
+ 👥  <a href="{private_chat_link}">{chat_title}</a>
+ 👤  <a href="{user_link}">{user_fullname}</a>
+ 📅  {date}"""
 
-    📩<b>Text</b>: <i>{content}</i> """
+
+
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)
         print('[Message sent]')
@@ -40,16 +40,14 @@ def sendMsg(content, user_link=None, private_chat_link=None, date=None, message_
 
 
 def fwr_msg(user_link, user_fullname, chat_title, private_chat_link, date, message_link, msg_id, peer_id, pk,username, topic_id,chat_id):
-    text = f"""<b>🔢:{pk}</b>
 
-    📅<b>Date</b> : <u>{date}</u>
-    👤<b>User</b> :  <a href="t.me/{username}">{user_fullname}</a>
-    🔗<b>User Link</b> : <tg-spoiler>{user_link}</tg-spoiler>
-    👥<b>Group/Channel</b> : <a href="{private_chat_link}">{chat_title}</a>
-    🔗<b>Link</b>: <a href="{message_link}">Message Link</a>
+    text = f"""👉  <a href="{message_link}">Message</a>
+👥  <a href="{private_chat_link}">{chat_title}</a>
+👤  <a href="{user_link}">{user_fullname}</a>
+📅  {date}"""
 
 
-    """
+
     # print(f"user_link  : {user_link}")
     try:
         a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,message_thread_id=topic_id)
@@ -102,12 +100,13 @@ def creatTopic(name,chat_id):
 
 
 
-def send_msg_rating(content,date,message_link,topic_id,chat_id,user_id,user_fullname):
-    text = f"""
-    <a href="t.me/@id{user_id}">{user_fullname}</a>,[{date}]
-<a href="{message_link}">{content}</a>
-    
-"""
+def send_msg_rating(content,date,message_link,topic_id,chat_id,user_id,user_fullname,tg_id,chat_title):
+    text = f"""📝  {content}
+
+👉  <a href="{message_link}">Message</a>
+👥  <a href="t.me/c/{tg_id}">{chat_title}</a>
+👤  <a href="t.me/@id{user_id}">{user_fullname}</a>
+📅  {date}"""
 
     try:
         a = bot.send_message(chat_id=chat_id,message_thread_id=topic_id,text=text,timeout=10)

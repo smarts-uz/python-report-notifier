@@ -68,5 +68,9 @@ def get_fullname_from_rating(user_id):
     user = TgGroupUser.objects.get(tg_group_user_id=user_id)
     return user.full_name
 
+def get_title_from_collect_group(chat_id):
+    chat = TgGroup.objects.get(tg_id=chat_id)
+    return chat.name
+
 
 
