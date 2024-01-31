@@ -56,7 +56,15 @@ def add_keyword(new_keyword):
 @click.command()
 @click.argument('new_report',type=str)
 def add_report(new_report):
-    save_to_report(new_report)
+    try:
+        title = save_to_report(new_report)
+        print(title)
+    except Exception as e:
+        msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
+        print(msg)
+        command_line_log.err(e)
+
+
 
 
 
