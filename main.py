@@ -1,10 +1,5 @@
 # ORM functionality
 import os
-
-from Parsing.getdialogs import collect_dialogs
-from Parsing.userDialogs import save_dialogs_to_db
-from Parsing.getForumTopic import check_topics
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()
@@ -23,6 +18,9 @@ from TGBOT.tgbot import creatTopic
 from datetime import datetime
 sys.dont_write_bytecode = True
 import click
+from Parsing.getdialogs import collect_dialogs
+from Parsing.userDialogs import save_dialogs_to_db
+from Parsing.getForumTopic import check_topics
 
 # ORM imports
 from db.save_to_db import *
@@ -65,8 +63,6 @@ def add_report(new_report):
         msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
         print(msg)
         command_line_log.err(e)
-
-
 
 
 @click.command()
