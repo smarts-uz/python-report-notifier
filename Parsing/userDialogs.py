@@ -87,8 +87,8 @@ def save_dialogs_to_db():
                     usr.username = user['username']
                     usr.old_username_count = count
                     usr.save()
-                    print(f"User with ID {user['tg_group_user_id']} updated <username> to: {user['username']}")
-                    save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} updated <username> to: {user['username']}")
+                    print(f"User with ID {user['tg_id']} updated <username> to: {user['username']}")
+                    save_dialog_to_log.log(f"User with ID {user['tg_id']} updated <username> to: {user['username']}")
                 if user['phone'] != usr.phone:
                     count = usr.old_phone_count + 1
                     old_phones = {f"{count}:phone": usr.phone}
@@ -97,17 +97,17 @@ def save_dialogs_to_db():
                     usr.phone = user['phone']
                     usr.old_phone_count = count
                     usr.save()
-                    print(f"User with ID {user['tg_group_user_id']} updated <phone> to: {user['phone']}")
-                    save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} updated <phone> to: {user['phone']}")
+                    print(f"User with ID {user['tg_id']} updated <phone> to: {user['phone']}")
+                    save_dialog_to_log.log(f"User with ID {user['tg_id']} updated <phone> to: {user['phone']}")
                 else:
-                    print(f"User with ID {user['tg_group_user_id']} already exist")
-                    save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} already exist.")
+                    print(f"User with ID {user['tg_id']} already exist")
+                    save_dialog_to_log.log(f"User with ID {user['tg_id']} already exist.")
 
 
             except TgUser.DoesNotExist:
                 TgUser.objects.create(**user)
-                print(f"User with ID {user['tg_group_user_id']} has been saved to DB.")
-                save_dialog_to_log.log(f"User with ID {user['tg_group_user_id']} has been saved to DB.")
+                print(f"User with ID {user['tg_id']} has been saved to DB.")
+                save_dialog_to_log.log(f"User with ID {user['tg_id']} has been saved to DB.")
         except Exception as e:
             print(f"<!> Oops! Something went wrong, check the log file: {log_file_name}.log")
             save_dialog_to_log.err(e)

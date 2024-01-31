@@ -35,50 +35,108 @@ def get_dialogs():
     data_channel = []
     data_chat = []
     for chat in response['response']['chats']:
-        if chat['_']=='chat' or chat['id']==group_peer_id or chat['id'] ==group_peer_id_2 :
+        username = None
+        participants_count=None
+        admin_rights = None
+        default_banned_rights = None
+        noforwards=None
+
+        try:
+            username = chat['username']
+
+        except:
+            username = None
+        try:
+            admin_rights = chat['admin_rights']
+        except:
+            admin_rights = None
+
+        try:
+            default_banned_rights = chat['default_banned_rights']
+        except:
+            default_banned_rights = None
+        try:
+            noforwards=chat['noforwards']
+        except:
+            noforwards=None
+
+        try:
+            participants_count=chat['participants_count']
+        except:
+            participants_count=0
+
+        if chat['_']=='chat' or chat['id'] == group_peer_id or chat['id'] == group_peer_id_2:
             continue
-        else:
-            # If channel
-            if chat['megagroup'] == False:
-                if 'username' in chat:
-                    data_channel.append({
-                        "type": 'channel',
-                        "name": chat['title'],
-                        "tg_id": chat['id'],
-                        "signatures": chat['signatures'],
-                        "created_at": datetime.fromtimestamp(chat['date']),
-                        "megagroup": chat['megagroup'],
-                        "username": chat['username'],
-                        })
-                else:
-                     data_channel.append({
-                        "type": 'channel',
-                        "name": chat['title'],
-                        "tg_id":chat['id'],
-                        "signatures":chat['signatures'],
-                        "created_at" : datetime.fromtimestamp(chat['date']),
-                         "megagroup": chat['megagroup']
-                    })
-            else:
-                if 'username' in chat:
-                    data_chat.append({
-                        "type": 'chat',
-                        "name": chat['title'],
-                        "tg_id": chat['id'],
-                        "created_at": datetime.fromtimestamp(chat['date']),
-                        "participants_count": chat['participants_count'],
-                        "megagroup": chat['megagroup'],
-                        "username": chat['username'],
-                    })
-                else:
-                    data_chat.append({
-                        "type": 'chat',
-                        "name": chat['title'],
-                        "tg_id": chat['id'],
-                        "created_at": datetime.fromtimestamp(chat['date']),
-                        "participants_count": chat['participants_count'],
-                        "megagroup": chat['megagroup']
-                    })
+        elif chat['megagroup'] == False:
+            data_channel.append({
+                "type": 'channel',
+                "name": chat['title'],
+                "tg_id": chat['id'],
+                "signatures": chat['signatures'],
+                "participants_count": participants_count,
+                "created_at": datetime.fromtimestamp(chat['date']),
+                "megagroup": chat['megagroup'],
+                "username": username,
+                "noforwards": noforwards,
+                "creator": chat['creator'],
+                "broadcast": chat['broadcast'],
+                "verified": chat['verified'],
+                "restricted": chat['restricted'],
+                "min": chat['min'],
+                "slowmode_enabled": chat['slowmode_enabled'],
+                "scam": chat['scam'],
+                "has_link": chat['has_link'],
+                "has_geo": chat['has_geo'],
+                "photo": chat['photo'],
+                "call_active": chat['call_active'],
+                "call_not_empty": chat['call_not_empty'],
+                "fake": chat['fake'],
+                "gigagroup": chat['gigagroup'],
+                "join_to_send": chat['join_to_send'],
+                "join_request": chat['join_request'],
+                "forum": chat['forum'],
+                "stories_hidden": chat['stories_hidden'],
+                "stories_hidden_min": chat['stories_hidden_min'],
+                "stories_unavailable": chat['stories_unavailable'],
+                "admin_rights": admin_rights,
+                "default_banned_rights": default_banned_rights,
+            })
+        elif chat['megagroup'] == True:
+            data_chat.append({
+                "type": 'chat',
+                "name": chat['title'],
+                "tg_id": chat['id'],
+                "created_at": datetime.fromtimestamp(chat['date']),
+                "participants_count": participants_count,
+                "megagroup": chat['megagroup'],
+                "username": username,
+                "noforwards":noforwards,
+                 "creator": chat['creator'],
+                "broadcast": chat['broadcast'],
+                "verified": chat['verified'],
+                "restricted": chat['restricted'],
+                "signatures": chat['signatures'],
+                "min": chat['min'],
+                "scam": chat['scam'],
+                "has_link": chat['has_link'],
+                "has_geo": chat['has_geo'],
+                "call_active": chat['call_active'],
+                "call_not_empty": chat['call_not_empty'],
+                "fake": chat['fake'],
+                "slowmode_enabled":chat['slowmode_enabled'],
+                "gigagroup": chat['gigagroup'],
+                "join_to_send": chat['join_to_send'],
+                "join_request": chat['join_request'],
+                "forum": chat['forum'],
+                "photo" :chat['photo'],
+                "stories_hidden": chat['stories_hidden'],
+                "stories_hidden_min": chat['stories_hidden_min'],
+                "stories_unavailable": chat['stories_unavailable'],
+                "admin_rights": admin_rights,
+                "default_banned_rights": default_banned_rights,
+
+            })
+
     return data_channel, data_chat
 
 
@@ -91,10 +149,9 @@ def collect_dialogs():
             msg = TgChannel.objects.get(tg_id=channel['tg_id'])
             if channel['name'] != msg.name:
                 old = {f"{datetime.now()}:name":msg.name}
-                ext_data = msg.name_history
-                if ext_data == None:
-                    ext_data = {}
-                ext_data.update(old)
+                if msg.name_history == None:
+                    msg.name_history = {}
+                msg.name_history.update(old)
 
                 msg.name = channel['name']
                 msg.save()
@@ -104,8 +161,9 @@ def collect_dialogs():
             if 'username' in channel:
                 if  channel['username'] != msg.username: # For username column in Channel
                     old_username = {f"{datetime.now()}:username": msg.username}
-                    ext_data_username = msg.username_history
-                    ext_data_username.update(old_username)
+                    if msg.username_history ==None:
+                        msg.username_history={}
+                    msg.username_history.update(old_username)
 
                     msg.username = channel['username']
                     msg.save()
@@ -126,8 +184,10 @@ def collect_dialogs():
             msg = TgGroup.objects.get(tg_id=chat['tg_id'])
             if chat['name'] != msg.name:
                 old = {f"{datetime.now()}:name": msg.name}
-                ext_data = msg.name_history
-                ext_data.update(old)
+                if msg.name_history ==None:
+                    msg.name_history={}
+
+                msg.name_history.update(old)
 
                 msg.name = chat['name']
                 msg.save()
@@ -137,8 +197,10 @@ def collect_dialogs():
             if 'username' in chat:
                 if chat['username'] != msg.username:  # For username column in Chat
                     old_username = {f"{datetime.now()}:username": msg.username}
-                    ext_data_username = msg.username_history
-                    ext_data_username.update(old_username)
+                    if msg.username_history==None:
+                        msg.username_history={}
+
+                    msg.username_history.update(old_username)
 
                     msg.username = chat['username']
                     msg.save()
