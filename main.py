@@ -1,5 +1,10 @@
 # ORM functionality
 import os
+
+from Parsing.getdialogs import collect_dialogs
+from Parsing.userDialogs import save_dialogs_to_db
+from Parsing.getForumTopic import check_topics
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()
@@ -54,12 +59,14 @@ def add_keyword(new_keyword):
 @click.argument('new_report',type=str)
 def add_report(new_report):
     try:
-        create_topic = creatTopic(new_report, chat_id_2)
-        click.echo(f'Report: {new_report} has been added to DB!')
-        add_report_log.log(f'Report: {new_report} has been added to DB!')
+        title = save_to_report(new_report)
+        print(title)
     except Exception as e:
-        click.echo(f'<!> Oops! Something went wrong, check the log file: {add_report_n}.log')
-        add_report_log.err(f'Error occured: {e}')
+        msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
+        print(msg)
+        command_line_log.err(e)
+
+
 
 
 @click.command()

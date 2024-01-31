@@ -1,21 +1,22 @@
-# ORM functionality
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
+
 django.setup()
 
-# .env functionality
 
 
-# Other packages
 from .models import *
 
-# List all keywords on DB
+from dotenv import load_dotenv
+load_dotenv()
+msg_lenth = os.getenv('MESSAGE_LENTH')
+
 def all_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked', "topic_id")
     return list(data)
 
-# Does a chat have permission to forward messages?
+
 def forward_message_boolean(peer_id):
     chat = Chat.objects.get(peer_id=peer_id)
     return chat.forward_message
@@ -36,10 +37,10 @@ def get_msg_id(msg_full_link):
     return message.first.pk
 
 
+
 def get_all_group():
     data = TgGroup.objects.values('pk','tg_id','is_active','days_count','name')
     return list(data)
-
 
 def get_all_channel():
     data = TgChannel.objects.values('pk','tg_id','is_active','days_count','name')
@@ -54,17 +55,14 @@ def get_message_from_group(msg_link):
             msg.topic_id,
             msg.replies_count)
 
-
 def get_reply_messages(reply_msg_id):
     msg = TgGroupMessage.objects.all().filter(reply_to_msg_id=reply_msg_id)
 
     return msg
 
-
 def get_all_reports():
     data = Report.objects.values('pk','message_id', 'message_link','thread_id')
     return list(data)
-
 
 def get_forward(peer_id):
     chat_id = int(str(peer_id)[4:])
@@ -76,7 +74,6 @@ def get_fullname_from_rating(user_id):
     user = TgGroupUser.objects.get(tg_group_user_id=user_id)
     return user.full_name
 
-
 def get_title_from_collect_group(chat_id):
     chat = TgGroup.objects.get(tg_id=chat_id)
     return chat.name
@@ -86,10 +83,26 @@ def get_user_id_form_tg_group_user(user_id):
     return user.pk
 
 
-def get_title_from_user_and_message(msg_link):
+def get_title_from_user_and_message(msg_link:str):
     msg = TgGroupMessage.objects.get(message_private_link=msg_link)
-    user_id = msg.tg_group_user_id
+    user_pk = msg.tg_group_user_id
     content = msg.content
+    user = TgGroupUser.objects.get(pk=user_pk)
+    full_name = user.full_name
+    # title = f'{full_name}  |  {content}'
+    if len(content) <=50:
+        title = f'{full_name}  |  {content}'
+    else:
+        title = f'{full_name}  |  {content[0:msg_lenth]}'
+    return title
 
+
+def get_title_and_thread_id_from_report(msg_link:str):
+    msg = Report.objects.get(message_link=msg_link)
+    return msg.chat_id ,msg.thread_title
+
+def get_all_thread_id_from_report():
+    msg = Report.objects.only('thread_id','thread_title')
+    return msg
 
 
