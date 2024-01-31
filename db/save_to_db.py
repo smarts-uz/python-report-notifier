@@ -25,16 +25,15 @@ save_to_report_log = Logger(log_names[1], 'a')
 rss_parsing_save_to_db = Logger(log_names[2],"a")
 
 def save_to_db():
-    print("[Parsing in progress]")
+    print("Parsing in progress...")
     for item in all_keywords():
         parser = Parser(item['last_checked'], item['name'])
         # Saving chats data to db
         chats = parser.chats()
         for chat in chats:
             print(
-                f'[Keyword: {item["name"]}][Chat has been saved]: chat_id:{chat["chat_id"]}  chat_title:{chat["title"]} public_chat_link: {chat["public_chat_link"]}')
+                f'[Keyword: {item["name"]}][Chat has been saved]: chat_id: {chat["chat_id"]} chat_title: {chat["title"]} public_chat_link: {chat["public_chat_link"]}')
             try:
-
                 Chat.objects.get_or_create(**chat)
                 save_to_db_log.log(chat)
             except Exception as e:
@@ -71,7 +70,7 @@ def save_to_db():
             user_id = message['user_id']
             topic_id = item['topic_id']
             tg_id = int(str(peer_id)[4:])
-            forward_bool = forward_message_boolen(peer_id)
+            forward_bool = forward_message_boolean(peer_id)
             chat_title = get_title_chat(peer_id)
             user_fullname = get_user_fullname(user_id)[0]
             username = get_user_fullname(user_id)[1]

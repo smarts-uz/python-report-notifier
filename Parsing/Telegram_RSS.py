@@ -1,5 +1,5 @@
-from  datetime import datetime,timedelta
-import  requests
+from datetime import datetime,timedelta
+import requests
 from pprint import pprint
 
 
