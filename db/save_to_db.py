@@ -282,19 +282,26 @@ def save_to_report(msg_private_link):
     # , thread_id
     title = get_title_from_user_and_message(msg_private_link)
     try:
-        Report.objects.get(message_link=msg_private_link)
+        report = Report.objects.get(message_link=msg_private_link)
+        if report['thread_id'] == None:
+            thread_id = creatTopic(title, chat_id_2)
+            report.thread_id = thread_id
+            report.thread_title = title
+            report.save()
+            print(f'report updated {title}')
+
         print('this report already exists')
 
     except Report.DoesNotExist:
         thread_id = creatTopic(title,chat_id_2)
         report = get_message_from_group(msg_private_link)
         peer_id = str(report[2])
-        chat_id = int(str(peer_id)[4:])
+        chats_id = int(str(peer_id)[4:])
         Report.objects.create(
             message_link = msg_private_link,
             topic_id = report[3],
             message_id = report[1],
-            chat_id = chat_id,
+            chat_id = chats_id,
             tg_group_message_id = report[0],
             replies_count = report[4],
             thread_id=thread_id,
@@ -367,3 +374,23 @@ def save_to_rating():
         save_to_report_log.err(f'[Reply Message][Error]: {e}')
 
 
+def foreach_report():
+    reports = get_thread_id_and_title_from_report()
+    for report in reports:
+
+        msg_link = report.message_link
+        title = get_title_from_user_and_message(msg_link)
+        thread_id = creatTopic(title, chat_id_2)
+        report = get_message_from_group(msg_link)
+        peer_id = str(report[2])
+        chats_id = int(str(peer_id)[4:])
+        print(msg_link, title, thread_id, report[3], report[1])
+        update_report = Report.objects.get(message_link=msg_link)
+        update_report.topic_id = report[3]
+        update_report.message_id = report[1]
+        update_report.chat_id = chats_id
+        update_report.tg_group_message_id = report[0]
+        update_report.replies_count = report[4]
+        update_report.thread_id=thread_id
+        update_report.thread_title=title
+        update_report.save()

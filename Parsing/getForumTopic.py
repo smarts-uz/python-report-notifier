@@ -1,5 +1,8 @@
 # ORM functionality
 import os
+
+from db.db_functions import get_thread_id_and_title_from_report
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()

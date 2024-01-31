@@ -96,13 +96,7 @@ def get_title_from_user_and_message(msg_link:str):
         title = f'{full_name}  |  {content[0:msg_lenth]}'
     return title
 
-
-def get_title_and_thread_id_from_report(msg_link:str):
-    msg = Report.objects.get(message_link=msg_link)
-    return msg.chat_id ,msg.thread_title
-
-def get_all_thread_id_from_report():
-    msg = Report.objects.only('thread_id','thread_title')
-    return msg
-
+def get_thread_id_and_title_from_report():
+    report = Report.objects.only("message_link").filter(thread_id=None)
+    return report
 

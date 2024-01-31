@@ -104,6 +104,18 @@ def get_dialogs():
     collect_dialogs()
     click.echo("Process: Collect Dialog ended!")
 
+@click.command()
+def check_report():
+    try:
+        foreach_report()
+        print('Topic created')
+    except Exception as e:
+        msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
+        print(msg)
+        command_line_log.err(e)
+
+
+
 
 @click.group()
 def cli():
@@ -119,6 +131,7 @@ cli.add_command(collect_msg_channel)
 cli.add_command(add_report)
 cli.add_command(get_rating)
 cli.add_command(get_dialogs)
+cli.add_command(check_report)
 
 try:
     if __name__ == '__main__':
