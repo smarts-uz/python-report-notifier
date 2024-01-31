@@ -286,8 +286,7 @@ def save_to_report(msg_private_link):
         print('this report already exists')
 
     except Report.DoesNotExist:
-        peer_id = get_message_from_group(msg_private_link)[2]
-        thread_id = creatTopic(title,peer_id)
+        thread_id = creatTopic(title,chat_id_2)
         report = get_message_from_group(msg_private_link)
         peer_id = str(report[2])
         chat_id = int(str(peer_id)[4:])
@@ -303,7 +302,7 @@ def save_to_report(msg_private_link):
 
         )
         print(f'{title} saved to db!!!')
-
+    return title
 
 def save_to_rating():
     try:

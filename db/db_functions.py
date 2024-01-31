@@ -89,11 +89,11 @@ def get_title_from_user_and_message(msg_link:str):
     content = msg.content
     user = TgGroupUser.objects.get(pk=user_pk)
     full_name = user.full_name
-    title = f'{full_name}  |  {content}'
-    # if len(content) <=50:
-    #
-    # else:
-    #     title = f'{full_name}  |  {content[0:msg_lenth]}'
+    # title = f'{full_name}  |  {content}'
+    if len(content) <=50:
+        title = f'{full_name}  |  {content}'
+    else:
+        title = f'{full_name}  |  {content[0:msg_lenth]}'
     return title
 
 
