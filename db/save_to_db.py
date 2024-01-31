@@ -15,7 +15,7 @@ import time
 from Parsing.parser import Parser
 from Parsing.Telegram_RSS import rss_group ,rss_channel
 from db.db_functions import *
-from TGBOT.tgbot import sendMsg,fwr_msg
+from TGBOT.tgbot import sendMsg, fwr_msg, creatTopic
 
 # Logger
 from logx import Logger
@@ -278,13 +278,16 @@ def save_db_rss_channel():
             rss_parsing_save_to_db.log(f'[Channel][{peer_id}] : saving to db successfully end!')
 
 
-def save_to_report(msg_private_link,thread_id):
+def save_to_report(msg_private_link):
+    # , thread_id
     title = get_title_from_user_and_message(msg_private_link)
     try:
         Report.objects.get(message_link=msg_private_link)
         print('this report already exists')
 
     except Report.DoesNotExist:
+        peer_id = get_message_from_group(msg_private_link)[2]
+        thread_id = creatTopic(title,peer_id)
         report = get_message_from_group(msg_private_link)
         peer_id = str(report[2])
         chat_id = int(str(peer_id)[4:])
@@ -300,7 +303,7 @@ def save_to_report(msg_private_link,thread_id):
 
         )
         print(f'{title} saved to db!!!')
-    return title
+
 
 def save_to_rating():
     try:

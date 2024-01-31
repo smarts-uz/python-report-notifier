@@ -29,6 +29,7 @@ chat_id_2 = os.getenv("CHAT_ID_2")
 
 
 def check_topics(peer_id):
+    data = []
     url = f"http://{ip}:{port}/api/channels.getForumTopics"
     payload = {
         "data": {
@@ -41,9 +42,13 @@ def check_topics(peer_id):
     response = requests.get(url, json=payload, headers=headers).json()
 
     for topic in response['response']['topics']:
-        title = topic.get('topic')
-        thread_id = topic.get('id')
+        title = topic['title']
+        thread_id = topic['id']
+        data.append({
+            'thread_id':thread_id,
+            'thread_title' : title
+        })
 
-    # pprint(response)
+    return data
 
-check_topics(-1001965260006)
+

@@ -3,6 +3,7 @@ import os
 
 from Parsing.getdialogs import collect_dialogs
 from Parsing.userDialogs import save_dialogs_to_db
+from Parsing.getForumTopic import check_topics
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
@@ -55,15 +56,7 @@ def add_keyword(new_keyword):
 @click.command()
 @click.argument('new_report',type=str)
 def add_report(new_report):
-    try:
-        name = get_title_from_user_and_message(new_report)
-        create_topic = creatTopic(name, chat_id_2)
-        report = save_to_report(new_report,create_topic)
-        click.echo(f'report added to db: {name}')
-        add_report_log.log(f'report added to db: {name}')
-    except Exception as e:
-        click.echo(f'<!> Oops! Something went wrong, check the log file: {add_report_n}.log')
-        add_report_log.err(f'error: {e}')
+    save_to_report(new_report)
 
 
 
