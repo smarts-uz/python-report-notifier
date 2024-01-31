@@ -1,39 +1,37 @@
-import sys
+# ORM functionality
 import os
-
-from Parsing.getdialogs import collect_dialogs
-from Parsing.userDialogs import save_dialogs_to_db
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()
 
+# .env functionality
 from dotenv import load_dotenv
+load_dotenv()
 chat_id = os.getenv("CHAT_ID")
 chat_id_2 = os.getenv("CHAT_ID_2")
 
-load_dotenv()
+# Other packages
+import sys
+from Parsing.getdialogs import collect_dialogs
+from Parsing.userDialogs import save_dialogs_to_db
 from TGBOT.tgbot import creatTopic
+from datetime import datetime
 sys.dont_write_bytecode = True
 import click
 
+# ORM imports
 from db.save_to_db import *
-from datetime import datetime
+from db.models import Keyword
 
-
+# Logger
 from logx import Logger
-add_keyword_n = 'add_keyword'
-add_report_n = 'add_report'
-command_line_n = 'command_line'
-
-add_keyword_log = Logger(f'{add_keyword_n}',"a")
-add_report_log = Logger(f'{add_report_n}',"a")
-command_line_log = Logger(f'{command_line_n}',"a")
+add_keyword_n, add_report_n, command_line_n = 'add_keyword', 'add_report', 'command_line'
+add_keyword_log = Logger(f'{add_keyword_n}', "a")
+add_report_log = Logger(f'{add_report_n}', "a")
+command_line_log = Logger(f'{command_line_n}', "a")
 
 
-
-
-#Click command start
+# Click - used to create CLI functionality
 @click.command()
 @click.argument('new_keyword', type=str)
 def add_keyword(new_keyword):
@@ -41,10 +39,9 @@ def add_keyword(new_keyword):
     topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
     try:
-        from db.models import Keyword
         Keyword.objects.get_or_create(name=new_keyword,
-                           topic_id=topic_id,
-                            last_checked=datetime(2015,1,1))
+                                      topic_id=topic_id,
+                                      last_checked=datetime(2015,1,1))
         add_keyword_log.log(f'[DB]{new_keyword} created successfully ')
         print(f'{new_keyword} created successfully in database ')
     except Exception as e:
@@ -52,18 +49,17 @@ def add_keyword(new_keyword):
         add_keyword_log.err(e)
     click.echo(f'Keyword "{new_keyword}" added successfully!')
 
+
 @click.command()
 @click.argument('new_report',type=str)
 def add_report(new_report):
     try:
         create_topic = creatTopic(new_report, chat_id_2)
-        report = save_to_report(new_report,create_topic)
-        click.echo(f'report added to db: {new_report}')
-        add_report_log.log(f'report added to db: {new_report}')
+        click.echo(f'Report: {new_report} has been added to DB!')
+        add_report_log.log(f'Report: {new_report} has been added to DB!')
     except Exception as e:
         click.echo(f'<!> Oops! Something went wrong, check the log file: {add_report_n}.log')
-        add_report_log.err(f'error: {e}')
-
+        add_report_log.err(f'Error occured: {e}')
 
 
 @click.command()
@@ -72,41 +68,40 @@ def show_keywords():
     click.echo(list(data))
 
 
-
 @click.command()
 def run_searching():
     save_to_db()
-    click.echo('*----searching successfully finished----*')
+    click.echo('*---- Searching finished! ----*')
+
 
 @click.command()
 def collect_msg_group():
     save_db_rss_group()
-    click.echo('*-------------end-----------*')
+    click.echo('*--- Group Message Collection Process Finished! ---*')
 
 
 @click.command()
 def collect_msg_channel():
     save_db_rss_channel()
-    click.echo('*-------------end-----------*')
+    click.echo('*--- Channel Message Collection Process Finished! ---*')
 
 
 @click.command()
 def get_rating():
     save_to_rating()
-    click.echo('Reply Messages process successfully ended!!')
+    click.echo('*--- Reply Messages Process Finished! ---*')
 
 
 @click.command()
 def get_dialogs():
     save_dialogs_to_db()
     collect_dialogs()
-    click.echo("Process: Collect Dialog ended!")
+    click.echo("*--- Collect Dialogs Process Finished! ---*")
 
 
 @click.group()
 def cli():
     pass
-
 
 
 cli.add_command(add_keyword)
@@ -118,21 +113,13 @@ cli.add_command(add_report)
 cli.add_command(get_rating)
 cli.add_command(get_dialogs)
 
+
 try:
     if __name__ == '__main__':
         cli()
-        msg = "Searching successfully ended!"
+        msg = "*--- Searching successfully ended! ---*"
         command_line_log.log(msg)
 except Exception as e:
     msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
     print(msg)
     command_line_log.err(e)
-
-
-#Click command end!
-
-
-
-
-
-
