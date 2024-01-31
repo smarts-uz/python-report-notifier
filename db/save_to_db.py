@@ -280,8 +280,9 @@ def save_db_rss_channel():
 
 
 def save_to_report(msg_private_link,thread_id):
+    title = get_title_from_user_and_message(msg_private_link)
     try:
-        Report.objects.get(link=msg_private_link)
+        Report.objects.get(message_link=msg_private_link)
         print('this report already exists')
 
     except Report.DoesNotExist:
@@ -295,11 +296,12 @@ def save_to_report(msg_private_link,thread_id):
             chat_id = chat_id,
             tg_group_message_id = report[0],
             replies_count = report[4],
-            thread_id=thread_id
+            thread_id=thread_id,
+            thread_title=title
 
         )
-        print(f'{msg_private_link} saved to db!!!')
-    return Report.title
+        print(f'{title} saved to db!!!')
+    return title
 
 def save_to_rating():
     try:
