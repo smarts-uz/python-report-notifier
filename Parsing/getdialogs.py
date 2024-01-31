@@ -3,7 +3,6 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
 import django
 django.setup()
-
 # .env functionality
 from dotenv import load_dotenv
 load_dotenv()
