@@ -4,7 +4,13 @@ import django
 
 django.setup()
 
+
+
 from .models import *
+
+from dotenv import load_dotenv
+load_dotenv()
+msg_lenth = os.getenv('MESSAGE_LENTH')
 
 def all_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked', "topic_id")
@@ -71,6 +77,24 @@ def get_fullname_from_rating(user_id):
 def get_title_from_collect_group(chat_id):
     chat = TgGroup.objects.get(tg_id=chat_id)
     return chat.name
+
+def get_user_id_form_tg_group_user(user_id):
+    user = TgGroupUser.objects.get(tg_group_user_id=user_id)
+    return user.pk
+
+
+def get_title_from_user_and_message(msg_link:str):
+    msg = TgGroupMessage.objects.get(message_private_link=msg_link)
+    user_pk = msg.tg_group_user_id
+    content = msg.content
+    user = TgGroupUser.objects.get(pk=user_pk)
+    full_name = user.full_name
+    title = f'{full_name}  |  {content}'
+    # if len(content) <=50:
+    #
+    # else:
+    #     title = f'{full_name}  |  {content[0:msg_lenth]}'
+    return title
 
 
 

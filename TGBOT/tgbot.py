@@ -1,6 +1,7 @@
+import os
+
 from telebot import TeleBot
 
-import os
 from dotenv import load_dotenv
 from logx import Logger
 sendM = Logger('sendMessage', 'a')
