@@ -72,5 +72,15 @@ def get_title_from_collect_group(chat_id):
     chat = TgGroup.objects.get(tg_id=chat_id)
     return chat.name
 
+def get_user_id_form_tg_group_user(user_id):
+    user = TgGroupUser.objects.get(tg_group_user_id=user_id)
+    return user.pk
+
+
+def get_title_from_user_and_message(msg_link):
+    msg = TgGroupMessage.objects.get(message_private_link=msg_link)
+    user_id = msg.tg_group_user_id
+    content = msg.content
+
 
 
