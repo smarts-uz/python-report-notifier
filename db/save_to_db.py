@@ -116,51 +116,12 @@ def save_db_rss_group():
             peer_id = int(str(f'-100{group["tg_id"]}'))
 
             data = rss_group(peer_id, group['days_count'])
+
+
             messages = data[0]
             users = data[1]
             print(peer_id)
-            try:
-                for message in messages:
-                    message['tg_group_id'] = group['pk']
-                    try:
-                        msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
-                        if message["content"] != msg.content:
 
-                            # old = {f"{message['edit_date']}": msg.content}
-
-
-                            if msg.content_history == None:
-                                print(type(msg.content_history))
-                                msg.content_history = {}
-                            print(type(msg.content_history))
-                            # ext_data.update(old)
-                            msg.content_history.update({f"{message['edit_date']}" : msg.content})
-
-                            msg.edit_date = message['edit_date']
-                            msg.content = message["content"]
-                            msg.replies_count = message['replies_count']
-                            msg.save()
-
-                            print(f'[Group][Message]content update {message["message_private_link"]}')
-                            rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
-                        else:
-                            msg.replies_count = message['replies_count']
-                            msg.save()
-                            print(f'[Group][Message]already exists {message["message_private_link"]}')
-                            rss_parsing_save_to_db.log(f"[Group][ALREADY EXISTS]{message}")
-
-
-                    except TgGroupMessage.DoesNotExist:
-                        TgGroupMessage.objects.create(**message)
-
-                        print('[Group][Message]Created new message')
-                        print(f'[Group][Message has been saved to db] msg_link : {message["message_private_link"]}')
-                        rss_parsing_save_to_db.log(f'[Group][CREATED NEW MESSAGE] {message}')
-            # --------------
-
-            except Exception as e:
-                print('[Group][Message][Some Kind of error check the log file]')
-                rss_parsing_save_to_db.err(f'[Group][Message Error]: {e}')
             for user in users:
                 try:
                     try:
@@ -208,8 +169,59 @@ def save_db_rss_group():
                 except Exception as e:
                     print('[Group][User][Some Kind of error check the log file]')
                     rss_parsing_save_to_db.err(f'[Group][User error]: {e}')
+
+
+
+            try:
+                for message in messages:
+
+                    message['tg_group_user_id'] = get_user_id_form_tg_group_user(message['from_id'])
+                    message['tg_group_id'] = group['pk']
+
+                    try:
+                        msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
+                        msg.tg_group_user_id = message['tg_group_user_id']
+
+                        if message["content"] != msg.content:
+
+
+
+
+                            if msg.content_history == None:
+                                print(type(msg.content_history))
+                                msg.content_history = {}
+                            print(type(msg.content_history))
+                            # ext_data.update(old)
+                            msg.content_history.update({f"{message['edit_date']}" : msg.content})
+
+                            msg.edit_date = message['edit_date']
+                            msg.content = message["content"]
+                            msg.replies_count = message['replies_count']
+                            msg.save()
+
+                            print(f'[Group][Message]content update {message["message_private_link"]}')
+                            rss_parsing_save_to_db.log(f"[UPDATED MESSAGE]{message}")
+                        else:
+                            msg.replies_count = message['replies_count']
+                            msg.save()
+                            print(f'[Group][Message]already exists {message["message_private_link"]}')
+                            rss_parsing_save_to_db.log(f"[Group][ALREADY EXISTS]{message}")
+                        msg.save()
+
+                    except TgGroupMessage.DoesNotExist:
+                        TgGroupMessage.objects.create(**message)
+
+                        print('[Group][Message]Created new message')
+                        print(f'[Group][Message has been saved to db] msg_link : {message["message_private_link"]}')
+                        rss_parsing_save_to_db.log(f'[Group][CREATED NEW MESSAGE] {message}')
+            # --------------
+
+            except Exception as e:
+                print('[Group][Message][Some Kind of error check the log file]')
+                rss_parsing_save_to_db.err(f'[Group][Message Error]: {e}')
             print(f'[Group][{peer_id}] : saving to db successfully end!')
             rss_parsing_save_to_db.log(f'[Group][{peer_id}] : saving to db successfully end!')
+
 
 
 def save_db_rss_channel():

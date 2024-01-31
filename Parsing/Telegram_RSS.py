@@ -92,6 +92,7 @@ def rss_group(peer_id,days):
             mtproto = message
             tg_group_id = None
             reply_to = None
+            tg_group_user_id = None
 
             pinned = message['pinned']
 
@@ -176,14 +177,7 @@ def rss_group(peer_id,days):
                 "max_id" :max_id,
                 "read_max_id" : read_max_id,
                 "comments" : comments,
-
-
-
-
-
-
-
-
+                "tg_group_user_id" :tg_group_user_id
             })
 
 
