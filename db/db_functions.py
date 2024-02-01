@@ -9,8 +9,9 @@ django.setup()
 from .models import *
 
 from dotenv import load_dotenv
+msg_len = os.getenv('MESSAGE_LEN')
 load_dotenv()
-msg_lenth = os.getenv('MESSAGE_LENTH')
+
 
 def all_keywords():
     data = Keyword.objects.values('pk', 'name', 'last_checked', "topic_id")
@@ -97,7 +98,7 @@ def get_user_id_form_tg_group_user(user_id):
 def get_title_from_user_and_message(msg_link:str):
     msg = TgGroupMessage.objects.get(message_private_link=msg_link)
     user_pk = msg.tg_group_user_id
-    content = msg.content
+
     try:
         user = TgGroupUser.objects.get(pk=user_pk)
         full_name = user.full_name
@@ -105,10 +106,12 @@ def get_title_from_user_and_message(msg_link:str):
         full_name = "NotFromUser"
 
     # title = f'{full_name}  |  {content}'
-    if len(content) <=50:
-        title = f'{full_name}  |  {content}'
+    if len(str(msg.content)) >=50:
+        title = f'{full_name}  |  {str(msg.content)[0:int(msg_len)]}'
+
     else:
-        title = f'{full_name}  |  {content[0:msg_lenth]}'
+        title = f'{full_name}  |  {str(msg.content)[0:int(msg_len)]}'
+
     return title
 
 def get_thread_id_and_title_from_report():

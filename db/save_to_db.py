@@ -189,9 +189,9 @@ def save_db_rss_group():
 
 
                             if msg.content_history == None:
-                                print(type(msg.content_history))
+
                                 msg.content_history = {}
-                            print(type(msg.content_history))
+
                             # ext_data.update(old)
                             msg.content_history.update({f"{message['edit_date']}" : msg.content})
 
@@ -280,36 +280,42 @@ def save_db_rss_channel():
 
 
 def save_to_report(msg_private_link):
-    # , thread_id
-    title = get_title_from_user_and_message(msg_private_link)
     try:
-        report = Report.objects.get(message_link=msg_private_link)
-        if report.thread_id == None:
+        title = get_title_from_user_and_message(msg_private_link)
+        print(title)
+        try:
+            report = Report.objects.get(message_link=msg_private_link)
+            if report.thread_id == None:
+                thread_id = creatTopic(title, chat_id_2)
+                report.thread_id = thread_id
+                report.thread_title = title
+                report.save()
+                print(f'report updated {title}')
+
+            print('this report already exists')
+
+        except Report.DoesNotExist:
             thread_id = creatTopic(title, chat_id_2)
-            report.thread_id = thread_id
-            report.thread_title = title
-            report.save()
-            print(f'report updated {title}')
+            report = get_message_from_group(msg_private_link)
+            peer_id = str(report[2])
+            chats_id = int(str(peer_id)[4:])
+            Report.objects.create(
+                message_link=msg_private_link,
+                topic_id=report[3],
+                message_id=report[1],
+                chat_id=chats_id,
+                tg_group_message_id=report[0],
+                replies_count=report[4],
+                thread_id=thread_id,
+                thread_title=title
 
-        print('this report already exists')
+            )
+            print(f'{title} saved to db!!!')
+    except Exception as e:
+            print(e)
+            title = None
 
-    except Report.DoesNotExist:
-        thread_id = creatTopic(title,chat_id_2)
-        report = get_message_from_group(msg_private_link)
-        peer_id = str(report[2])
-        chats_id = int(str(peer_id)[4:])
-        Report.objects.create(
-            message_link = msg_private_link,
-            topic_id = report[3],
-            message_id = report[1],
-            chat_id = chats_id,
-            tg_group_message_id = report[0],
-            replies_count = report[4],
-            thread_id=thread_id,
-            thread_title=title
 
-        )
-        print(f'{title} saved to db!!!')
     return title
 
 def save_to_rating():
