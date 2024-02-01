@@ -113,3 +113,6 @@ def save_dialogs_to_db():
             save_dialog_to_log.err(e)
     print(f"DB save process has been finished!")
     save_dialog_to_log.log(f"DB save process has been finished!")
+
+
+"<!> Oops! Something went wrong, check the log file: "
