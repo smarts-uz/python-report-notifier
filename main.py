@@ -36,8 +36,8 @@ command_line_log = Logger(f'{command_line_n}', "a")
 
 # Click - used to create CLI functionality
 @click.command()
-@click.argument('new_keyword', type=str)
-def add_keyword(new_keyword):
+def add_keyword():
+    new_keyword = input("Input your search keyword: ")
     create_topic = creatTopic(new_keyword,chat_id)
     topic_id = create_topic
     click.echo(f'Topic "{new_keyword}" has created successfully!')
@@ -54,8 +54,8 @@ def add_keyword(new_keyword):
 
 
 @click.command()
-@click.argument('new_report',type=str)
-def add_report(new_report):
+def add_report():
+    new_report = input("Put message private link: ")
     try:
         title = save_to_report(new_report)
         print(f'*****Progress successfully ended!!!***** ')
@@ -65,16 +65,6 @@ def add_report(new_report):
         command_line_log.err(e)
 
 
-@click.command()
-def add_repo():
-    new_report = input("Put message private link: ")
-    try:
-        save_to_report(new_report)
-        print(f'*****Progress successfully ended!!!***** ')
-    except Exception as e:
-        msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
-        print(msg)
-        command_line_log.err(e)
 
 @click.command()
 def show_keywords():
@@ -139,7 +129,7 @@ cli.add_command(add_report)
 cli.add_command(get_rating)
 cli.add_command(get_dialogs)
 cli.add_command(check_report)
-cli.add_command(add_repo)
+
 
 
 try:
