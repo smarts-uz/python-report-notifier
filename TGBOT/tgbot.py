@@ -100,7 +100,8 @@ def creatTopic(name,chat_id):
     try:
         a = bot.create_forum_topic(chat_id=chat_id,name=name)
         topic_id = a.message_thread_id
-        creatT.log(f'[Create Topic] : {a}')
+        topic_title = a.name
+        creatT.log(f'[Create Topic] : {topic_title}')
     except Exception as e:
         print(f'[Creat Topic Error]')
         creatT.err(f'[Error] : {e}')

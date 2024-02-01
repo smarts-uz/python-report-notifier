@@ -58,7 +58,7 @@ def add_keyword(new_keyword):
 def add_report(new_report):
     try:
         title = save_to_report(new_report)
-        print(title)
+        print(f'*****Progress successfully ended!!!***** ')
     except Exception as e:
         msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
         print(msg)
@@ -105,7 +105,7 @@ def get_dialogs():
 def check_report():
     try:
         foreach_report()
-        print('Topic created')
+        print('*****Progress successfully ended!!*****')
     except Exception as e:
         msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
         print(msg)

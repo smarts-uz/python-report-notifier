@@ -284,7 +284,7 @@ def save_to_report(msg_private_link):
     title = get_title_from_user_and_message(msg_private_link)
     try:
         report = Report.objects.get(message_link=msg_private_link)
-        if report['thread_id'] == None:
+        if report.thread_id == None:
             thread_id = creatTopic(title, chat_id_2)
             report.thread_id = thread_id
             report.thread_title = title
@@ -385,7 +385,7 @@ def foreach_report():
         report = get_message_from_group(msg_link)
         peer_id = str(report[2])
         chats_id = int(str(peer_id)[4:])
-        print(msg_link, title, thread_id, report[3], report[1])
+        print(f'****[ {title} ] topic created in group!!****')
         update_report = Report.objects.get(message_link=msg_link)
         update_report.topic_id = report[3]
         update_report.message_id = report[1]

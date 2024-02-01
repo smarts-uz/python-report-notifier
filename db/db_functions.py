@@ -98,8 +98,12 @@ def get_title_from_user_and_message(msg_link:str):
     msg = TgGroupMessage.objects.get(message_private_link=msg_link)
     user_pk = msg.tg_group_user_id
     content = msg.content
-    user = TgGroupUser.objects.get(pk=user_pk)
-    full_name = user.full_name
+    try:
+        user = TgGroupUser.objects.get(pk=user_pk)
+        full_name = user.full_name
+    except TgGroupUser.DoesNotExist:
+        full_name = "NotFromUser"
+
     # title = f'{full_name}  |  {content}'
     if len(content) <=50:
         title = f'{full_name}  |  {content}'
