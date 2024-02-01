@@ -31,7 +31,7 @@ def rss_group(peer_id, days):
             except Exception:
                 username = None
             if username is not None:
-                public_link = f't.me/{username}'
+                public_link = f'https://t.me/{username}'
             else:
                 public_link = None
 
@@ -128,9 +128,9 @@ def rss_group(peer_id, days):
                 forum_topic = None
                 reply_to = None
             if topic_id is not None:
-                message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{topic_id}/{id}"
+                message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{topic_id}/{id}"
             else:
-                message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{id}"
+                message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{id}"
             if public_link is not None:
                 if topic_id is not None:
                     message_public_link = f'{public_link}/{topic_id}/{id}'
@@ -199,7 +199,7 @@ def rss_channel(peer_id,days):
             except Exception:
                 username = None
             if username is not None:
-                public_link = f't.me/{username}'
+                public_link = f'https://t.me/{username}'
             else:
                 public_link = None
 
@@ -220,7 +220,7 @@ def rss_channel(peer_id,days):
             mtproto = message
             tg_channel_id = None
             pinned = message['pinned']
-            message_private_link = f"t.me/c/{int(str(peer_id)[4:])}/{id}"
+            message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{id}"
             if public_link is not None:
                 message_public_link = f'{public_link}/{id}'
             else:
