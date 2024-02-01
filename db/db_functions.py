@@ -40,7 +40,7 @@ def get_msg_id(msg_full_link):
 
 
 def get_all_group():
-    data = TgGroup.objects.values('pk','tg_id','is_active','days_count','name')
+    data = TgGroup.objects.values('pk','tg_id','is_active','days_count','name','forum')
     return list(data)
 
 def get_all_channel():

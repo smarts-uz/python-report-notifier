@@ -115,7 +115,7 @@ def save_db_rss_group():
             print(group)
             peer_id = int(str(f'-100{group["tg_id"]}'))
 
-            data = rss_group(peer_id, group['days_count'])
+            data = rss_group(peer_id, group['days_count'],group['forum'])
 
 
             messages = data[0]

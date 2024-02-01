@@ -11,7 +11,8 @@ import requests
 from pprint import pprint
 
 
-def rss_group(peer_id, days):
+def rss_group(peer_id, days,forum):
+    forum = forum
     messages, users, topics = [], [], []
     public_link = None
     pag = 0
@@ -130,7 +131,10 @@ def rss_group(peer_id, days):
             if topic_id is not None:
                 message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{topic_id}/{id}"
             else:
-                message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{id}"
+                if forum == False:
+                    message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/{id}"
+                else:
+                    message_private_link = f"https://t.me/c/{int(str(peer_id)[4:])}/1/{id}"
             if public_link is not None:
                 if topic_id is not None:
                     message_public_link = f'{public_link}/{topic_id}/{id}'
