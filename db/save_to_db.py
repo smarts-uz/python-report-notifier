@@ -349,7 +349,7 @@ def save_to_rating():
                         rate.replies_count = rpl_msg.replies_count
                         rate.save()
 
-                    #     this line for telegram function to send message
+
                         print(f'Reply Message Content has been updated to {rpl_msg.content}!')
                         save_to_rating_log.log(f'Reply Message Content has been updated to {rpl_msg.content}!')
 

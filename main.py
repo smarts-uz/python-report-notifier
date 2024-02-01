@@ -12,8 +12,7 @@ chat_id_2 = os.getenv("CHAT_ID_2")
 
 # Other packages
 import sys
-from Parsing.getdialogs import collect_dialogs
-from Parsing.userDialogs import save_dialogs_to_db
+
 from TGBOT.tgbot import creatTopic
 from datetime import datetime
 sys.dont_write_bytecode = True
@@ -57,7 +56,7 @@ def add_keyword():
 def add_report():
     new_report = input("Put message private link: ")
     try:
-        title = save_to_report(new_report)
+        save_to_report(new_report)
         print(f'*****Progress successfully ended!!!***** ')
     except Exception as e:
         msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
