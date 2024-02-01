@@ -174,10 +174,11 @@ def save_db_rss_group():
 
             try:
                 for message in messages:
+                    if message['from_id'] != None:
 
-                    message['tg_group_user_id'] = get_user_id_form_tg_group_user(message['from_id'])
+                        message['tg_group_user_id'] = get_user_id_form_tg_group_user(message['from_id'])[0]
+                        message['from_channel'] = get_user_id_form_tg_group_user(message['from_id'])[1]
                     message['tg_group_id'] = group['pk']
-
                     try:
                         msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
                         msg.tg_group_user_id = message['tg_group_user_id']

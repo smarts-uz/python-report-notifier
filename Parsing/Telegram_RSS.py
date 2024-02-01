@@ -68,6 +68,7 @@ def rss_group(peer_id, days):
 
         # ---- messages ----
         for message in response['messages']:
+            from_channel = None
             tdz = message['date']
             if message['_'] == 'messageService':
                 continue
@@ -163,7 +164,8 @@ def rss_group(peer_id, days):
                 "max_id": max_id,
                 "read_max_id": read_max_id,
                 "comments": comments,
-                "tg_group_user_id": tg_group_user_id
+                "tg_group_user_id": tg_group_user_id,
+                "from_channel" : from_channel
             })
 
             if timestamp >= tdz:
@@ -295,3 +297,9 @@ def rss_channel(peer_id,days):
         if timestamp >= tdz:
             break
     return messages
+
+
+#
+# a = rss_group(-1002116049831,10)
+# print(a[0])
+# # print(a[1])

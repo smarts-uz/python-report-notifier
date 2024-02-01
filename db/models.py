@@ -120,6 +120,8 @@ class TgChannel(models.Model):
     call_active = models.BooleanField(blank=True, null=True)
     photo = models.JSONField(blank=True, null=True)
     signatures = models.BooleanField(blank=True, null=True)
+    is_active = models.BooleanField(blank=True, null=True)
+    days_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -192,6 +194,8 @@ class TgGroup(models.Model):
     call_active = models.BooleanField(blank=True, null=True)
     has_geo = models.BooleanField(blank=True, null=True)
     photo = models.JSONField(blank=True, null=True)
+    is_active = models.BooleanField(blank=True, null=True)
+    days_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -225,6 +229,7 @@ class TgGroupMessage(models.Model):
     message_public_link = models.CharField(max_length=255, blank=True, null=True)
     tg_group_user = models.ForeignKey('TgGroupUser', models.DO_NOTHING, blank=True, null=True)
     tg_topic_id = models.IntegerField(blank=True, null=True)
+    from_channel = models.BooleanField(blank=True, null=True)
 
     class Meta:
         managed = False

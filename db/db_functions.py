@@ -79,8 +79,19 @@ def get_title_from_collect_group(chat_id):
     return chat.name
 
 def get_user_id_form_tg_group_user(user_id):
-    user = TgGroupUser.objects.get(tg_group_user_id=user_id)
-    return user.pk
+    try:
+
+        user = TgGroupUser.objects.get(tg_group_user_id=user_id)
+
+        from_channel = False
+    except TgGroupUser.DoesNotExist:
+        channel_id = str(user_id)[4:]
+        user = TgChannel.objects.get(tg_id=channel_id)
+        from_channel  = True
+
+
+
+    return user.pk,from_channel
 
 
 def get_title_from_user_and_message(msg_link:str):
