@@ -27,8 +27,8 @@ class Parser:
         self.q = q
 
     def parsing(self):
-        # url = f"http://{ip}:{port}/api/messages.searchGlobal"
-        url = "http://192.168.3.54:9503/api/messages.searchGlobal"
+        url = f"http://{IP}:{PORT}/api/messages.searchGlobal"
+        # url = "http://192.168.3.54:9503/api/messages.searchGlobal"
 
         payload = {"params": {
             "flags": 0,

@@ -58,14 +58,17 @@ def fwr_msg(user_id, user_fullname, chat_title, date, message_link, msg_id, peer
 📅  {date}"""
 
 
-
+   
     try:
+
         a = bot.forward_message(chat_id=chat_id, from_chat_id=peer_id, message_id=msg_id, timeout=10,message_thread_id=topic_id)
 
         fwr_id = a.json['message_id']
         print(f'[Message forward]  id {fwr_id}')
         forwM.log(f'[Forward Message]{a}')
     except Exception as e:
+        if 'telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: chat not found' == e:
+            print(f'Please add bot to this group: {peer_id}')
         forwM.err(f'[Forward Error] {e}')
         print(f'[Forward Error] {e}')
         retry_after(str(e))
@@ -108,9 +111,6 @@ def creatTopic(name,chat_id):
         topic_id = None
 
     return topic_id
-
-
-
 
 
 

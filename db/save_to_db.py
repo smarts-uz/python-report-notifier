@@ -98,8 +98,8 @@ Username: {user["username"]}""")
                 sendMsg(content=content, user_id=user_id, tg_id=tg_id,date=date,message_link=message_full_link,user_fullname=user_fullname, chat_title=chat_title, username=username,
                         topic_id=topic_id,chat_id=chat_id)
             else:
-                fwr_msg(user_id, user_fullname, chat_title, private_chat_link, date, message_full_link, msg_id, peer_id,
-                        username, topic_id,chat_id)
+                fwr_msg(user_id=user_id, user_fullname=user_fullname, chat_title=chat_title,date=date, message_link=message_full_link, msg_id=msg_id, peer_id=peer_id,
+                        username=username, topic_id=topic_id,chat_id=chat_id)
 
             print(
                 f"""✅ Message has been saved!
