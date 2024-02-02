@@ -37,19 +37,13 @@ command_line_log = Logger(f'{command_line_n}', "a")
 @click.command()
 def add_keyword():
     new_keyword = input("Input your search keyword: ")
-    create_topic = creatTopic(new_keyword,chat_id)
-    topic_id = create_topic
-    click.echo(f'Topic "{new_keyword}" has created successfully!')
     try:
-        Keyword.objects.get_or_create(name=new_keyword,
-                                      topic_id=topic_id,
-                                      last_checked=datetime(2015,1,1))
-        add_keyword_log.log(f'[DB]{new_keyword} created successfully ')
-        print(f'{new_keyword} created successfully in database ')
+        save_to_keyword(new_keyword)
+        print(f'*****Progress successfully ended!!!*****')
     except Exception as e:
-        print(f'<!> Oops! Something went wrong, check the log file: {add_keyword_n}.log')
-        add_keyword_log.err(e)
-    click.echo(f'Keyword "{new_keyword}" added successfully!')
+        msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
+        print(msg)
+        command_line_log.err(e)
 
 
 @click.command()
@@ -57,7 +51,7 @@ def add_report():
     new_report = input("Put message private link: ")
     try:
         save_to_report(new_report)
-        print(f'*****Progress successfully ended!!!***** ')
+        print(f'***** Progress successfully ended!!! ***** ')
     except Exception as e:
         msg = f"<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
         print(msg)

@@ -416,3 +416,26 @@ def foreach_report():
         update_report.thread_id=thread_id
         update_report.thread_title=title
         update_report.save()
+
+
+def save_to_keyword(keyword):
+    try:
+        key = Keyword.objects.get(name=keyword)
+        if key.topic_id == None:
+            topic_id = creatTopic(keyword,chat_id)
+            key.topic_id = topic_id
+            if key.last_checked == None:
+                key.last_checked = datetime(2015,1,1)
+                print(f'last checked time set to default {key.last_checked}')
+            key.save()
+            print(f'********** {keyword}\'s topic_id updated to {topic_id} **********')
+        else:
+            print(f'******* {keyword} is already exist *******')
+    except Keyword.DoesNotExist:
+        topic_id = creatTopic(keyword, chat_id)
+        Keyword.objects.create(
+            name = keyword,
+            last_checked = datetime(2015,1,1),
+            topic_id = topic_id
+        )
+        print(f'********** {keyword} created successfully! **********')
