@@ -392,7 +392,7 @@ def save_to_rating():
                     print(f'Saving Reply Message process with link {report["message_link"]} succesfully ended!')
             save_to_rating_log.log(f'Saving Reply Message process with link {report["message_link"]} succesfully ended!')
     except Exception as e:
-        print('<!> Oops! Something went wrong, check the log file: {save_to_rating_log}.log')
+        print(f'<!> Oops! Something went wrong, check the log file: {log_names[3]}.log')
         save_to_rating_log.err(e)
 
 
@@ -439,3 +439,25 @@ def save_to_keyword(keyword):
             topic_id = topic_id
         )
         print(f'********** {keyword} created successfully! **********')
+
+
+def foreach_keyword():
+    try:
+        keywords = get_name_from_keyword()
+        for keyword in keywords:
+            name = keyword.name
+            topic_id = creatTopic(name, chat_id_2)
+            key = Keyword.objects.get(name=name)
+            key.topic_id = topic_id
+            if key.last_checked == None:
+                key.last_checked = datetime(2015, 1, 1)
+                print(f'last checked time set to default {key.last_checked}')
+            key.save()
+            print(f'****[ {name} ] topic created in group!!****')
+    except Exception as e:
+        #loggin
+        print('<!> Oops! Something went wrong, check the log file: {save_to_rating_log}.log')
+        save_to_rating_log.err(e)
+
+
+

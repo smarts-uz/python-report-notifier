@@ -118,3 +118,7 @@ def get_thread_id_and_title_from_report():
     report = Report.objects.only("message_link").filter(thread_id=None)
     return report
 
+
+def get_name_from_keyword():
+    keyword = Keyword.objects.only('name').filter(topic_id=None)
+    return keyword

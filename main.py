@@ -105,6 +105,15 @@ def check_report():
         print(msg)
         command_line_log.err(e)
 
+@click.command()
+def check_keyword():
+    try:
+        foreach_keyword()
+        print('*****Progress successfully ended!!*****')
+    except Exception as e:
+        msg = "<!> Oops! Something went wrong, check the log file: {command_line_n}.log"
+        print(msg)
+        command_line_log.err(e)
 
 
 
@@ -121,6 +130,7 @@ cli.add_command(collect_msg_channel)
 cli.add_command(add_report)
 cli.add_command(get_rating)
 cli.add_command(get_dialogs)
+cli.add_command(check_keyword)
 cli.add_command(check_report)
 
 
