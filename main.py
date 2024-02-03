@@ -28,9 +28,9 @@ from db.models import Keyword
 # Logger
 from logx import Logger
 add_keyword_n, add_report_n, command_line_n = 'add_keyword', 'add_report', 'command_line'
-add_keyword_log = Logger(f'{add_keyword_n}', "a")
-add_report_log = Logger(f'{add_report_n}', "a")
-command_line_log = Logger(f'{command_line_n}', "a")
+add_keyword_log = Logger(f'{add_keyword_n}', "a",subdirectory='command_line')
+add_report_log = Logger(f'{add_report_n}', "a",subdirectory='command_line')
+command_line_log = Logger(f'{command_line_n}', "a",subdirectory='command_line')
 
 
 # Click - used to create CLI functionality

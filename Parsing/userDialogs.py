@@ -17,7 +17,7 @@ from db.models import TgUser
 # Logger functionality
 from logx import Logger
 log_file_name = 'user_dialog_log'
-save_dialog_to_log = Logger(log_file_name, 'a')
+save_dialog_to_log = Logger(log_file_name, 'a',subdirectory='parsing')
 
 # Receive .env data
 ip = os.getenv("IP")

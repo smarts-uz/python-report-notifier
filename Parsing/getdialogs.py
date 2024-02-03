@@ -18,7 +18,7 @@ from db.models import *
 # Logger
 from logx import Logger
 log_file_name = 'save_channel_chat_log'
-save_channel_chat_log = Logger(log_file_name, 'a')
+save_channel_chat_log = Logger(log_file_name, 'a',subdirectory='parsing')
 
 # Receive .env data
 ip = os.getenv("IP")

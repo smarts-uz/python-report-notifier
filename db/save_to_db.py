@@ -23,10 +23,10 @@ now =datetime.now()
 # Logger
 from logx import Logger
 log_names = ['save_to_db', 'save_to_report', 'rss_parsing_save_to_db', 'save_to_rating']
-save_to_db_log = Logger(log_names[0], 'a')
-save_to_report_log = Logger(log_names[1], 'a')
-rss_parsing_save_to_db = Logger(log_names[2],"a")
-save_to_rating_log = Logger(log_names[3], 'a')
+save_to_db_log = Logger(log_names[0], 'a',subdirectory='save_to_db')
+save_to_report_log = Logger(log_names[1], 'a',subdirectory='save_to_db')
+rss_parsing_save_to_db = Logger(log_names[2],"a",subdirectory='save_to_db')
+save_to_rating_log = Logger(log_names[3], 'a',subdirectory='save_to_db')
 
 def save_to_db():
     print("Parsing in progress...")
@@ -147,10 +147,11 @@ def save_db_rss_group():
                     try:
                         usr = TgGroupUser.objects.get(tg_group_user_id=user['tg_group_user_id'])
                         if user['full_name'] != usr.full_name:
+                            if usr.old_full_name == None:
+                                usr.old_full_name = {}
                             
                             old_name = {f"{now}:full_name": usr.full_name}
-                            ext_name = usr.old_full_name
-                            ext_name.update(old_name)
+                            usr.old_full_name.update(old_name)
                             usr.full_name = user['full_name']
                             
                             usr.save()
@@ -158,20 +159,23 @@ def save_db_rss_group():
                             rss_parsing_save_to_db.log(f"Group User Fullname updated: {user}")
 
                         if user['username'] != usr.username:
+                            if usr.old_username == None:
+                                usr.old_username = {}
                             
                             old_user = {f"{now}:username": usr.username}
-                            ext_username = usr.old_username
-                            ext_username.update(old_user)
+                            usr.old_username.update(old_user)
                             usr.username = user['username']
                             
                             usr.save()
                             print(f'Group User Username with ID {user["tg_group_user_id"]} has been updated!')
                             rss_parsing_save_to_db.log(f"Group User Username updated: {user}")
                         if user['phone'] != usr.phone:
+                            if usr.old_phones == None:
+                                usr.old_phones = {}
                             
                             old_phones = {f"{now}:phone": usr.phone}
-                            ext_phone = usr.old_phone
-                            ext_phone.update(old_phones)
+
+                            usr.old_phone.update(old_phones)
                             usr.phone = user['phone']
                             
                             usr.save()
@@ -187,7 +191,7 @@ def save_db_rss_group():
                         print(f'User with ID {user["tg_group_user_id"]} has been saved to db!')
                         rss_parsing_save_to_db.log(f"User has been saved to db: {user}!")
                 except Exception as e:
-                    print("<!> Oops! Something went wrong, check the log file: {log_names[2]}.log")
+                    print(f"<!> Oops! Something went wrong, check the log file: {log_names[2]}.log")
                     rss_parsing_save_to_db.err(e)
 
 

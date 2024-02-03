@@ -4,7 +4,7 @@ from datetime import datetime
 from logx import Logger
 
 parser_log = 'parser_log'
-save_parser_to_log = Logger(f'{parser_log}', 'a')
+save_parser_to_log = Logger(f'{parser_log}', 'a',subdirectory='parsing')
 import os
 from dotenv import load_dotenv
 load_dotenv()

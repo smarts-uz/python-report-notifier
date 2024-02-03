@@ -4,9 +4,9 @@ from telebot import TeleBot
 
 from dotenv import load_dotenv
 from logx import Logger
-sendM = Logger('sendMessage', 'a')
-forwM = Logger('forwardMessage', 'a')
-creatT = Logger('creatTopic', 'a')
+sendM = Logger('sendMessage', 'a',subdirectory='telegram_bot')
+forwM = Logger('forwardMessage', 'a',subdirectory='telegram_bot')
+creatT = Logger('creatTopic', 'a',subdirectory='telegram_bot')
 from regexF.regexFunction import retry_after
 
 load_dotenv()
