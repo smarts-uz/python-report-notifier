@@ -16,12 +16,11 @@ token = os.getenv("TOKEN")
 bot = TeleBot(token, parse_mode="HTML")
 
 
-def sendMsg(content,date,message_link,topic_id,chat_id,user_id,user_fullname,tg_id,chat_title,username=None):
+def sendMsg(content,date,message_link,topic_id,chat_id,user_id,chat_title,user_fullname,username=None,tg_id=None,):
     if username == None:
         text = f"""📝  {content}
 
 👉  <a href="{message_link}">Message</a>
-👥  <a href="t.me/c/{tg_id}">{chat_title}</a>
 👤  <a href="t.me/@id{user_id}">{user_fullname}</a>
 📅  {date}"""
     else:

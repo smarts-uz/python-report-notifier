@@ -80,15 +80,33 @@ def get_title_from_collect_group(chat_id):
     return chat.name
 
 def get_user_id_form_tg_group_user(user_id):
+    channel_id = str(user_id)[4:]
     try:
 
         user = TgGroupUser.objects.get(tg_group_user_id=user_id)
 
         from_channel = False
+    # except TgGroupUser.DoesNotExist:
+    #
+    #     user = TgGroupUser.objects.get(tg_group_user_id=channel_id)
+    #     from_channel  = False
     except TgGroupUser.DoesNotExist:
-        channel_id = str(user_id)[4:]
-        user = TgChannel.objects.get(tg_id=channel_id)
-        from_channel  = True
+
+        channel = TgChannel.objects.get(tg_id=channel_id)
+        from_channel = True
+        full_name = channel.name
+        try:
+            username = channel.username
+        except:
+            username = None
+        user = TgGroupUser.objects.create(
+            tg_group_user_id = user_id,
+            full_name = full_name,
+            username = username
+        )
+
+
+
 
 
 
@@ -103,9 +121,13 @@ def get_title_from_user_and_message(msg_link:str):
         user = TgGroupUser.objects.get(pk=user_pk)
         full_name = user.full_name
     except TgGroupUser.DoesNotExist:
+        channel = TgChannel.objects.get(pk=user_pk)
+        full_name = channel.name
+    except:
+
         full_name = "NotFromUser"
 
-    # title = f'{full_name}  |  {content}'
+
     if len(str(msg.content)) >=50:
         title = f'{full_name}  |  {str(msg.content)[0:int(msg_len)]}'
 
@@ -122,3 +144,24 @@ def get_thread_id_and_title_from_report():
 def get_name_from_keyword():
     keyword = Keyword.objects.only('name').filter(topic_id=None)
     return keyword
+
+def get_username_from_tggroupuser(from_id):
+    user = TgGroupUser.objects.get(tg_group_user_id=from_id)
+    return user.username
+
+def get_user_id_from_group(peer_id):
+    try:
+        user = TgGroupUser.objects.get(tg_group_user_id=peer_id)
+
+    except TgGroupUser.DoesNotExist:
+
+        chat_id = int(str(peer_id)[4:])
+        gr = TgGroup.objects.get(tg_id=chat_id)
+        full_name = gr.name
+        username = gr.username
+        user = TgGroupUser.objects.create(
+            tg_group_user_id=peer_id,
+            full_name=full_name,
+            username=username
+        )
+    return user.pk

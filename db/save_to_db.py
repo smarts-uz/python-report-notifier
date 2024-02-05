@@ -202,6 +202,9 @@ def save_db_rss_group():
 
                         message['tg_group_user_id'] = get_user_id_form_tg_group_user(message['from_id'])[0]
                         message['from_channel'] = get_user_id_form_tg_group_user(message['from_id'])[1]
+                    else:
+                        message['from_id'] = message['peer_id']
+                        message['tg_group_user_id'] = get_user_id_from_group(peer_id=message['from_id'])
                     message['tg_group_id'] = group['pk']
                     try:
                         msg = TgGroupMessage.objects.get(message_private_link=message['message_private_link'])
@@ -211,7 +214,7 @@ def save_db_rss_group():
                             if msg.content_history == None:
                                 msg.content_history = {}
 
-                            # ext_data.update(old)
+
                             msg.content_history.update({f"{message['edit_date']}" : msg.content})
                             msg.edit_date = message['edit_date']
                             msg.content = message["content"]
@@ -236,7 +239,7 @@ def save_db_rss_group():
             # --------------
 
             except Exception as e:
-                print('<!> Oops! Something went wrong, check the log file: {log_names[2]}.log')
+                print(f'<!> Oops! Something went wrong, check the log file: {log_names[2]}.log')
                 rss_parsing_save_to_db.err(e)
             print(f'Group with ID {peer_id} has been saved to DB!')
             rss_parsing_save_to_db.log(f'Group with ID {peer_id} has been saved to DB!')
@@ -378,18 +381,22 @@ def save_to_rating():
 
                     )
                     forward_bool = get_forward(rpl_msg.peer_id)
+
                     full_name = get_fullname_from_rating(rpl_msg.from_id)
 
                     tg_id = int(str(rpl_msg.peer_id)[4:])
 
                     chat_title =get_title_from_collect_group(tg_id)
+
+                    username = get_username_from_tggroupuser(from_id=rpl_msg.from_id)
+
                     if forward_bool != False:
                         sendMsg(content=rpl_msg.content, date=rpl_msg.date,
                                         message_link=rpl_msg.message_private_link,  topic_id=report['thread_id'],
-                                        chat_id=chat_id_2,user_id=rpl_msg.from_id,user_fullname=full_name,tg_id=tg_id,chat_title=chat_title)
+                                        chat_id=chat_id_2,user_id=rpl_msg.from_id,user_fullname=full_name,tg_id=tg_id,chat_title=chat_title,username=username)
                     else:
                         fwr_msg(user_id=rpl_msg.from_id,user_fullname=full_name, chat_title=chat_title,peer_id=rpl_msg.peer_id, date=rpl_msg.date, message_link=rpl_msg.message_private_link, msg_id=rpl_msg.msg_id,
-                                topic_id=report['thread_id'], chat_id=chat_id_2)
+                                topic_id=report['thread_id'], chat_id=chat_id_2,username=username)
 
 
                     print(f'{rpl_msg.message_private_link} added to rating table!')
