@@ -46,14 +46,15 @@ def sendMsg(content,date,message_link,topic_id,chat_id,user_id,user_fullname,tg_
 
 
 def fwr_msg(user_id, user_fullname, chat_title, date, message_link, msg_id, peer_id,topic_id,chat_id,username=None):
+    peer_chat_id = int(str(peer_id)[4:])
     if  username ==None:
         text = f"""👉  <a href="{message_link}">Message</a>
-👥  <a href="t.me/c/{peer_id}">{chat_title}</a>
+👥  <a href="t.me/c/{peer_chat_id}">{chat_title}</a>
 👤  <a href="t.me/@id{user_id}">{user_fullname}</a>
 📅  {date}"""
     else:
         text = f"""👉  <a href="{message_link}">Message</a>
-👥  <a href="t.me/c/{peer_id}">{chat_title}</a>
+👥  <a href="t.me/c/{peer_chat_id}">{chat_title}</a>
 👤  <a href="t.me/@{username}">{user_fullname}</a>
 📅  {date}"""
 
