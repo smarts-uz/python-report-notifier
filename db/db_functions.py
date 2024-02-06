@@ -54,7 +54,8 @@ def get_message_from_group(msg_link):
             msg.msg_id,
             msg.peer_id,
             msg.topic_id,
-            msg.replies_count)
+            msg.replies_count,
+            msg.message_public_link)
 
 def get_reply_messages(reply_msg_id):
     msg = TgGroupMessage.objects.all().filter(reply_to_msg_id=reply_msg_id)
@@ -109,8 +110,17 @@ def get_user_id_form_tg_group_user(user_id):
     return user.pk,from_channel
 
 
+
+
 def get_title_from_user_and_message(msg_link:str):
-    msg = TgGroupMessage.objects.get(message_private_link=msg_link)
+    try:
+        msg= TgGroupMessage.objects.get(message_public_link=msg_link)
+        msg_private_link = msg.message_private_link
+
+    except TgGroupMessage.DoesNotExist:
+        msg = TgGroupMessage.objects.get(message_private_link=msg_link)
+        msg_private_link = msg_link
+
     user_pk = msg.tg_group_user_id
 
     try:
@@ -130,7 +140,35 @@ def get_title_from_user_and_message(msg_link:str):
     else:
         title = f'{full_name}  |  {str(msg.content)[0:int(msg_len)]}'
 
-    return title
+    return title,msg_private_link
+
+
+
+
+#
+#
+# def get_title_from_user_and_message(msg_link:str):
+#     msg = TgGroupMessage.objects.get(message_private_link=msg_link)
+#     user_pk = msg.tg_group_user_id
+#
+#     try:
+#         user = TgGroupUser.objects.get(pk=user_pk)
+#         full_name = user.full_name
+#     except TgGroupUser.DoesNotExist:
+#         channel = TgChannel.objects.get(pk=user_pk)
+#         full_name = channel.name
+#     except:
+#
+#         full_name = "NotFromUser"
+#
+#
+#     if len(str(msg.content)) >=50:
+#         title = f'{full_name}  |  {str(msg.content)[0:int(msg_len)]}'
+#
+#     else:
+#         title = f'{full_name}  |  {str(msg.content)[0:int(msg_len)]}'
+#
+#     return title
 
 def get_thread_id_and_title_from_report():
     report = Report.objects.only("message_link").filter(thread_id=None)

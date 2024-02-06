@@ -48,7 +48,7 @@ def add_keyword():
 
 @click.command()
 def add_report():
-    new_report = input("Put message private link: ")
+    new_report = input("Put message link: ")
     try:
         save_to_report(new_report)
         print(f'***** Progress successfully ended!!! ***** ')

@@ -298,10 +298,10 @@ def save_db_rss_channel():
             rss_parsing_save_to_db.log(f'Channel with peerID {peer_id} has been saved to DB!')
 
 
-def save_to_report(msg_private_link):
+def save_to_report(msg_link):
     try:
-        title = get_title_from_user_and_message(msg_private_link)
-        print(title)
+        title = get_title_from_user_and_message(msg_link)[0]
+        msg_private_link = get_title_from_user_and_message(msg_link)[1]
         try:
             report = Report.objects.get(message_link=msg_private_link)
             if report.thread_id == None:
@@ -320,18 +320,54 @@ def save_to_report(msg_private_link):
             peer_id = str(report[2])
             chats_id = int(str(peer_id)[4:])
             Report.objects.create(
-                message_link=msg_private_link,
-                topic_id=report[3],
-                message_id=report[1],
-                chat_id=chats_id,
-                tg_group_message_id=report[0],
-                replies_count=report[4],
-                thread_id=thread_id,
-                thread_title=title
+                    message_link=msg_private_link,
+                    topic_id=report[3],
+                    message_id=report[1],
+                    chat_id=chats_id,
+                    tg_group_message_id=report[0],
+                    replies_count=report[4],
+                    thread_id=thread_id,
+                    thread_title=title,
+                    message_public_link=report[5]
 
-            )
+                )
             print(f'{title} has been saved to DB!')
             save_to_report_log.log(f'{title} has been saved to DB!')
+
+
+
+
+        # -----=-----------
+        # try:
+        #     report = Report.objects.get(message_link=msg_private_link)
+        #     if report.thread_id == None:
+        #         thread_id = creatTopic(title, chat_id_2)
+        #         report.thread_id = thread_id
+        #         report.thread_title = title
+        #         report.save()
+        #         print(f'Report has been updated to {title}!')
+        #
+        #     print('Report already exists!')
+        #     save_to_report_log.log('Report already exists!')
+        #
+        # except Report.DoesNotExist:
+        #     thread_id = creatTopic(title, chat_id_2)
+        #     report = get_message_from_group(msg_private_link)
+        #     peer_id = str(report[2])
+        #     chats_id = int(str(peer_id)[4:])
+        #     Report.objects.create(
+        #         message_link=msg_private_link,
+        #         topic_id=report[3],
+        #         message_id=report[1],
+        #         chat_id=chats_id,
+        #         tg_group_message_id=report[0],
+        #         replies_count=report[4],
+        #         thread_id=thread_id,
+        #         thread_title=title
+        #
+        #     )
+        #     print(f'{title} has been saved to DB!')
+        #     save_to_report_log.log(f'{title} has been saved to DB!')
     except Exception as e:
             print(e)
             save_to_report_log.err(e)

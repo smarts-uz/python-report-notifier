@@ -79,6 +79,7 @@ class Report(models.Model):
     replies_count = models.BigIntegerField(blank=True, null=True)
     thread_id = models.BigIntegerField(blank=True, null=True)
     thread_title = models.TextField(blank=True, null=True)
+    message_public_link = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
