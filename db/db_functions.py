@@ -86,19 +86,15 @@ def get_user_id_form_tg_group_user(user_id):
         user = TgGroupUser.objects.get(tg_group_user_id=user_id)
 
         from_channel = False
-    # except TgGroupUser.DoesNotExist:
-    #
-    #     user = TgGroupUser.objects.get(tg_group_user_id=channel_id)
-    #     from_channel  = False
+
     except TgGroupUser.DoesNotExist:
 
         channel = TgChannel.objects.get(tg_id=channel_id)
         from_channel = True
         full_name = channel.name
-        try:
-            username = channel.username
-        except:
-            username = None
+
+        username = channel.username
+
         user = TgGroupUser.objects.create(
             tg_group_user_id = user_id,
             full_name = full_name,

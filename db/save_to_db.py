@@ -467,7 +467,7 @@ def foreach_keyword():
             print(f'****[ {name} ] topic created in group!!****')
     except Exception as e:
         #loggin
-        print('<!> Oops! Something went wrong, check the log file: {save_to_rating_log}.log')
+        print(f'<!> Oops! Something went wrong, check the log file: {log_names[3]}.log')
         save_to_rating_log.err(e)
 
 

@@ -248,29 +248,12 @@ class TgGroupUser(models.Model):
     status = models.JSONField(blank=True, null=True)
     mtproto = models.JSONField(blank=True, null=True)
     old_full_name = models.JSONField(blank=True, null=True)
-    old_full_name_count = models.IntegerField(blank=True, null=True)
     old_username = models.JSONField(blank=True, null=True)
-    old_username_count = models.IntegerField(blank=True, null=True)
     old_phone = models.JSONField(blank=True, null=True)
-    old_phone_count = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'tg_group_user'
-
-
-class TgTopic(models.Model):
-    tg_topic_id = models.IntegerField(blank=True, null=True)
-    tg_group = models.ForeignKey(TgGroup, models.DO_NOTHING, blank=True, null=True)
-    created_time = models.DateTimeField(blank=True, null=True)
-    title = models.CharField(max_length=255, blank=True, null=True)
-    topic_creator_id = models.BigIntegerField(blank=True, null=True)
-    notify_settings = models.JSONField(blank=True, null=True)
-    closed = models.BooleanField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'tg_topic'
 
 
 class TgUser(models.Model):
