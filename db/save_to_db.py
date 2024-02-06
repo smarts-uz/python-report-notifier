@@ -343,7 +343,7 @@ def save_to_report(msg_private_link):
 def save_to_rating():
     try:
         for report in get_all_reports():
-            print(f'Report: {report}')
+
             reply_messages = get_reply_messages(report['message_id'])
             for rpl_msg in reply_messages:
                 # print(f'[Reply Message] : {rpl_msg.pk}:{rpl_msg.message_private_link}')

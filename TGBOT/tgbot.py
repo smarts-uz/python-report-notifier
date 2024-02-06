@@ -91,7 +91,7 @@ def fwr_msg(user_id, user_fullname, chat_title, date, message_link, msg_id, peer
         retry_after(str(e))
 
         bot.send_message(chat_id=chat_id,text=text, reply_to_message_id=fwr_id, timeout=10,message_thread_id=topic_id)
-        print('[Message sent]')
+        print(f'[Message reply] to {fwr_id}')
         forwM.log(f'[Reply Message] : {a}')
 
 
